@@ -1,0 +1,92 @@
+﻿@import "tailwindcss";
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #10261D;
+    color: #F3EBDD;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #B08D57;
+    color: #10261D;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #10261D;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #B08D57;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #D8C3A5;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-star {
+  animation: starTwinkle 3s ease-in-out infinite;
+}
+
+.animate-gentle-pulse {
+  animation: gentlePulse 4s ease-in-out infinite;
+}
+
+.gold-glow {
+  box-shadow: 0 0 30px rgba(176, 141, 87, 0.15), 0 0 60px rgba(176, 141, 87, 0.05);
+}
+
+.gold-glow-sm {
+  box-shadow: 0 0 12px rgba(176, 141, 87, 0.12);
+}
+
+.text-glow-gold {
+  text-shadow: 0 0 30px rgba(176, 141, 87, 0.5);
+}
+
+/* Print styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
