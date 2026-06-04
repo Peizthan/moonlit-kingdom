@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, KeyboardEvent, CSSProperties } from 'react';
+import { useState, useEffect, KeyboardEvent, CSSProperties, ElementType } from 'react';
 import { useAdmin } from '@/lib/AdminContext';
 
 interface EditableFieldProps {
@@ -11,7 +11,7 @@ interface EditableFieldProps {
   /** 'text' renders an <input>, 'textarea' renders a <textarea> */
   type?: 'text' | 'textarea' | 'number';
   /** Wrapper element rendered in view mode */
-  tag?: keyof JSX.IntrinsicElements;
+  tag?: ElementType;
   className?: string;
   style?: CSSProperties;
 }

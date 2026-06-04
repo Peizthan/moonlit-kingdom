@@ -9,7 +9,7 @@ import { Menu, X } from 'lucide-react';
 const navLinks = [
   { href: '/', label: 'Portada' },
   { href: '/presentation', label: 'Presentación' },
-  { href: '/dashboard', label: 'Panel' },
+  { href: '/login', label: 'Panel' },
 ];
 
 export function Navbar() {
