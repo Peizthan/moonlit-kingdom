@@ -127,13 +127,6 @@ export default function HomePage() {
             </span>
             <span style={{ color: '#D8C3A5' }}>{couple.location}</span>
           </div>
-          <div className="hidden md:block w-px h-8" style={{ background: 'rgba(176,141,87,0.25)' }} />
-          <div className="flex flex-col items-center">
-            <span className="text-xs uppercase tracking-widest mb-1" style={{ color: 'rgba(176,141,87,0.5)' }}>
-              Versión
-            </span>
-            <span style={{ color: '#D8C3A5' }}>v{couple.version}</span>
-          </div>
         </motion.div>
 
         {/* CTAs */}

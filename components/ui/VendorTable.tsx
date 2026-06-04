@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Vendor } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface VendorTableProps {
   vendors: Vendor[];
@@ -21,7 +23,16 @@ const statusText: Record<Vendor['status'], string> = {
   declined: 'Rechazado',
 };
 
+const statusOrder: Vendor['status'][] = ['enquiry', 'booked', 'confirmed', 'declined'];
+
 export function VendorTable({ vendors }: VendorTableProps) {
+  const { isEditMode, getOverride, setOverride } = useAdmin();
+
+  function cycleStatus(v: Vendor) {
+    const current = getOverride<Vendor['status']>(`vendor:${v.id}:status`, v.status);
+    const idx = statusOrder.indexOf(current);
+    setOverride(`vendor:${v.id}:status`, statusOrder[(idx + 1) % statusOrder.length]);
+  }
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm border-collapse">
@@ -53,27 +64,34 @@ export function VendorTable({ vendors }: VendorTableProps) {
                 {v.role}
               </td>
               <td className="py-3 px-4 font-medium" style={{ color: '#D8C3A5' }}>
-                {v.company}
+                <EditableField id={`vendor:${v.id}:company`} value={v.company} style={{ color: '#D8C3A5', fontWeight: '500' }} />
               </td>
               <td className="py-3 px-4" style={{ color: '#8E8A86' }}>
-                <div>{v.contact}</div>
+                <EditableField id={`vendor:${v.id}:contact`} value={v.contact} style={{ color: '#8E8A86' }} />
                 <div className="text-xs" style={{ color: 'rgba(176,141,87,0.7)' }}>{v.email}</div>
               </td>
               <td className="py-3 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                {v.phone}
+                <EditableField id={`vendor:${v.id}:phone`} value={v.phone} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
               </td>
               <td className="py-3 px-4">
-                <span
-                  className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
-                  style={{
-                    backgroundColor: `${statusColors[v.status]}40`,
-                    color: '#C7C0B6',
-                    border: `1px solid ${statusColors[v.status]}60`,
-                    fontSize: '0.65rem',
-                  }}
-                >
-                  {statusText[v.status]}
-                </span>
+                {(() => {
+                  const s = getOverride<Vendor['status']>(`vendor:${v.id}:status`, v.status);
+                  return (
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${isEditMode ? 'cursor-pointer' : ''}`}
+                      title={isEditMode ? 'Clic para cambiar estado' : undefined}
+                      onClick={isEditMode ? () => cycleStatus(v) : undefined}
+                      style={{
+                        backgroundColor: `${statusColors[s]}40`,
+                        color: '#C7C0B6',
+                        border: `1px solid ${statusColors[s]}60`,
+                        fontSize: '0.65rem',
+                      }}
+                    >
+                      {statusText[s]}
+                    </span>
+                  );
+                })()}
               </td>
               <td className="py-3 px-4 text-center text-sm">
                 <span style={{ color: v.contractSigned ? '#B08D57' : '#4E1F2D' }}>

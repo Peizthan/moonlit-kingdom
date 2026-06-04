@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
 import { useExchangeRate } from '@/lib/useExchangeRate';
+import { AdminProvider } from '@/lib/AdminContext';
+import { AdminToolbar } from '@/components/ui/AdminToolbar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
 import { MetricCard } from '@/components/ui/MetricCard';
@@ -72,6 +74,14 @@ const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
 ];
 
 export default function DashboardPage() {
+  return (
+    <AdminProvider>
+      <DashboardContent />
+    </AdminProvider>
+  );
+}
+
+function DashboardContent() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const { rate, updatedAt, loading: rateLoading, fallback: rateFallback } = useExchangeRate();
 
@@ -107,9 +117,6 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase tracking-widest px-3 py-1 rounded-full border" style={{ borderColor: 'rgba(176,141,87,0.25)', color: 'rgba(176,141,87,0.7)' }}>
-                  v{couple.version}
-                </span>
                 <span className="text-xs" style={{ color: '#8E8A86' }}>Actualizado {couple.lastUpdated}</span>
               </div>
             </div>
@@ -460,7 +467,11 @@ export default function DashboardPage() {
             </div>
           </motion.div>
         )}
+
+        {/* Bottom padding so content clears the fixed AdminToolbar */}
+        <div className="h-16" />
       </div>
+      <AdminToolbar />
     </div>
   );
 }

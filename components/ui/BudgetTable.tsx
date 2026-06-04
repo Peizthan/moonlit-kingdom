@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { BudgetCategory } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
 
 interface BudgetTableProps {
   items: BudgetCategory[];
@@ -38,9 +39,30 @@ function groupByCategory(items: BudgetCategory[]) {
   }, {});
 }
 
+const statusOrder: BudgetCategory['status'][] = ['pending', 'enquiry', 'confirmed', 'paid'];
+
 export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTableProps) {
   const grouped = groupByCategory(items);
-  const total = items.reduce((sum, i) => sum + i.estimated, 0);
+  const { isEditMode, getOverride, setOverride } = useAdmin();
+
+  function resolvedItem(item: BudgetCategory) {
+    return {
+      ...item,
+      estimated: getOverride<number>(`budget:${item.id}:estimated`, item.estimated),
+      actual: getOverride<number | undefined>(`budget:${item.id}:actual`, item.actual),
+      deposit: getOverride<number | undefined>(`budget:${item.id}:deposit`, item.deposit),
+      status: getOverride<BudgetCategory['status']>(`budget:${item.id}:status`, item.status),
+      vendor: getOverride<string>(`budget:${item.id}:vendor`, item.vendor ?? ''),
+    };
+  }
+
+  function cycleStatus(item: BudgetCategory) {
+    const current = getOverride<BudgetCategory['status']>(`budget:${item.id}:status`, item.status);
+    const idx = statusOrder.indexOf(current);
+    setOverride(`budget:${item.id}:status`, statusOrder[(idx + 1) % statusOrder.length]);
+  }
+
+  const total = items.reduce((sum, i) => sum + resolvedItem(i).estimated, 0);
 
   return (
     <div className="overflow-x-auto">
@@ -71,7 +93,9 @@ export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTable
                   {category}
                 </td>
               </tr>
-              {categoryItems.map((item, i) => (
+              {categoryItems.map((item, i) => {
+                const r = resolvedItem(item);
+                return (
                 <motion.tr
                   key={item.id}
                   initial={{ opacity: 0 }}
@@ -85,37 +109,69 @@ export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTable
                     {item.subcategory || item.category}
                   </td>
                   <td className="py-2.5 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                    {item.vendor || '—'}
+                    {isEditMode ? (
+                      <input
+                        style={{ background: 'rgba(176,141,87,0.06)', border: '1px solid rgba(176,141,87,0.3)', color: '#8E8A86', padding: '2px 6px', fontSize: '0.75rem', width: '100%' }}
+                        defaultValue={r.vendor}
+                        onBlur={(e) => setOverride(`budget:${item.id}:vendor`, e.target.value)}
+                      />
+                    ) : (r.vendor || '—')}
                   </td>
                   <td className="py-2.5 px-4 text-right font-mono" style={{ color: '#D8C3A5' }}>
-                    {formatCurrency(item.estimated, rate)}
+                    {isEditMode ? (
+                      <input
+                        type="number"
+                        style={{ background: 'rgba(176,141,87,0.06)', border: '1px solid rgba(176,141,87,0.3)', color: '#D8C3A5', padding: '2px 6px', fontSize: '0.8rem', width: '7rem', textAlign: 'right' }}
+                        defaultValue={r.estimated}
+                        onBlur={(e) => setOverride(`budget:${item.id}:estimated`, parseFloat(e.target.value) || r.estimated)}
+                      />
+                    ) : formatCurrency(r.estimated, rate)}
                   </td>
                   {showActual && (
                     <td className="py-2.5 px-4 text-right font-mono" style={{ color: '#8E8A86' }}>
-                      {formatCurrency(item.actual, rate)}
+                      {isEditMode ? (
+                        <input
+                          type="number"
+                          style={{ background: 'rgba(176,141,87,0.06)', border: '1px solid rgba(176,141,87,0.3)', color: '#8E8A86', padding: '2px 6px', fontSize: '0.8rem', width: '7rem', textAlign: 'right' }}
+                          defaultValue={r.actual ?? ''}
+                          onBlur={(e) => setOverride(`budget:${item.id}:actual`, parseFloat(e.target.value))}
+                        />
+                      ) : formatCurrency(r.actual, rate)}
                     </td>
                   )}
                   <td className="py-2.5 px-4 text-right font-mono text-xs" style={{ color: '#8E8A86' }}>
-                    {item.deposit ? formatCurrency(item.deposit, rate) : '—'}
-                    {item.depositPaid && (
-                      <span className="ml-1 text-xs" style={{ color: '#B08D57' }}>✓</span>
+                    {isEditMode ? (
+                      <input
+                        type="number"
+                        style={{ background: 'rgba(176,141,87,0.06)', border: '1px solid rgba(176,141,87,0.3)', color: '#8E8A86', padding: '2px 6px', fontSize: '0.8rem', width: '7rem', textAlign: 'right' }}
+                        defaultValue={r.deposit ?? ''}
+                        onBlur={(e) => setOverride(`budget:${item.id}:deposit`, parseFloat(e.target.value))}
+                      />
+                    ) : (
+                      <>
+                        {r.deposit ? formatCurrency(r.deposit, rate) : '—'}
+                        {r.depositPaid && <span className="ml-1 text-xs" style={{ color: '#B08D57' }}>✓</span>}
+                      </>
                     )}
                   </td>
                   <td className="py-2.5 px-4 text-center">
                     <span
-                      className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
+                      className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${isEditMode ? 'cursor-pointer' : ''}`}
+                      title={isEditMode ? 'Clic para cambiar estado' : undefined}
+                      onClick={isEditMode ? () => cycleStatus(item) : undefined}
                       style={{
-                        backgroundColor: `${statusColors[item.status]}40`,
-                        color: item.status === 'paid' ? '#B08D57' : '#C7C0B6',
-                        border: `1px solid ${statusColors[item.status]}60`,
+                        backgroundColor: `${statusColors[r.status]}40`,
+                        color: r.status === 'paid' ? '#B08D57' : '#C7C0B6',
+                        border: `1px solid ${statusColors[r.status]}60`,
                         fontSize: '0.65rem',
                       }}
                     >
-                      {statusText[item.status]}
+                      {statusText[r.status]}
                     </span>
                   </td>
                 </motion.tr>
-              ))}
+                );
+              })}
             </>
           ))}
           {/* Total row */}
