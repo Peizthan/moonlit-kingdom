@@ -167,23 +167,7 @@ export default function HomePage() {
           </Link>
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2 }}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs uppercase tracking-[0.3em]" style={{ color: 'rgba(176,141,87,0.35)' }}>
-            Deslizar
-          </span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-px h-10"
-            style={{ background: 'linear-gradient(to bottom, rgba(176,141,87,0.4), transparent)' }}
-          />
-        </motion.div>
+
       </section>
 
       {/* Below-fold intro */}
