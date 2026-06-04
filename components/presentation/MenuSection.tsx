@@ -7,10 +7,10 @@ import { weddingData } from '@/data/wedding-data';
 const { menu } = weddingData;
 
 const dietaryColors: Record<string, string> = {
-  Vegetarian: 'rgba(29,74,58,0.7)',
-  Vegan: 'rgba(16,38,29,0.8)',
-  'Gluten Free': 'rgba(176,141,87,0.15)',
-  'Contains Gluten': 'rgba(78,31,45,0.5)',
+  Vegetariano: 'rgba(29,74,58,0.7)',
+  Vegano: 'rgba(16,38,29,0.8)',
+  'Sin Gluten': 'rgba(176,141,87,0.15)',
+  'Contiene Gluten': 'rgba(78,31,45,0.5)',
 };
 
 export function MenuSection() {

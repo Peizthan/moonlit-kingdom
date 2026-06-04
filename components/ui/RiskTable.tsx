@@ -71,7 +71,7 @@ export function RiskTable({ risks }: RiskTableProps) {
                   fontSize: '0.65rem',
                 }}
               >
-                {risk.status}
+                {{ open: 'Abierto', mitigated: 'Mitigado', closed: 'Cerrado' }[risk.status] ?? risk.status}
               </span>
             </div>
           </div>

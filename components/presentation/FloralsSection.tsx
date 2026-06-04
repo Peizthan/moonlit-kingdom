@@ -120,7 +120,7 @@ export function FloralsSection() {
 
               {floral.notes && (
                 <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Note: {floral.notes}
+                  Nota: {floral.notes}
                 </p>
               )}
             </motion.div>

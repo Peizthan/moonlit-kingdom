@@ -29,7 +29,7 @@ export function TechnicalPlan({ items }: TechnicalPlanProps) {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr style={{ borderBottom: '1px solid rgba(176,141,87,0.2)' }}>
-            {['Category', 'Item', 'Qty', 'Supplier', 'Status', 'Notes'].map((h) => (
+            {['Categoría', 'Artículo', 'Cant.', 'Proveedor', 'Estado', 'Notas'].map((h) => (
               <th
                 key={h}
                 className="text-left py-3 px-4 text-xs uppercase tracking-widest"

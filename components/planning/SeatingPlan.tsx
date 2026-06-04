@@ -32,7 +32,7 @@ export function SeatingPlan({ tables }: SeatingPlanProps) {
                 {table.tableName}
               </h3>
               <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                Table {table.tableNumber}
+                Mesa {table.tableNumber}
               </p>
             </div>
             <div
@@ -40,7 +40,7 @@ export function SeatingPlan({ tables }: SeatingPlanProps) {
               style={{ color: '#8E8A86' }}
             >
               <span style={{ color: '#B08D57' }}>{table.guests.length}</span>
-              <span>/ {table.capacity} seats</span>
+              <span>/ {table.capacity} lugares</span>
             </div>
           </div>
 
