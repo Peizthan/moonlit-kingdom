@@ -33,17 +33,17 @@ export const weddingData: WeddingData = {
 
   venue: {
     name: 'Salón Veteranos',
-    address: 'Av. del Libertador 4750',
-    city: 'Buenos Aires',
-    country: 'Argentina',
-    capacity: 140,
+    address: 'Av. Mariscal López 2351',
+    city: 'Asunción',
+    country: 'Paraguay',
+    capacity: 450,
     indoorOutdoor: 'Interior y Exterior',
     description:
       'El Salón Veteranos del Club Centenario es un espacio de gran elegancia arquitectónica, con techos de roble labrado, ventanales que dan a los jardines históricos del club y una terraza rodeada de árboles centenarios. El salón cuenta con una capilla privada, un gran salón de recepción y jardines aterrazados perfectos para una recepción nocturna bajo las estrellas.',
-    coordinator: 'María Fernanda Ríos',
-    coordinatorEmail: 'eventos@clubcentenario.com.ar',
-    coordinatorPhone: '+54 11 4800-0210',
-    website: 'www.clubcentenario.com.ar',
+    coordinator: 'Verónica',
+    coordinatorEmail: 'info@clubcentenario.org.py',
+    coordinatorPhone: '(+595 21) 247 0000',
+    website: 'https://www.clubcentenario.org.py/',
   },
 
   colorPalette: [

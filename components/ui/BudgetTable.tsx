@@ -6,6 +6,7 @@ import { BudgetCategory } from '@/lib/types';
 interface BudgetTableProps {
   items: BudgetCategory[];
   showActual?: boolean;
+  rate?: number;
 }
 
 const statusColors: Record<BudgetCategory['status'], string> = {
@@ -22,9 +23,11 @@ const statusText: Record<BudgetCategory['status'], string> = {
   paid: 'Pagado',
 };
 
-function formatCurrency(amount: number | undefined): string {
+function formatCurrency(amount: number | undefined, rate: number): string {
   if (amount === undefined) return '—';
-  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
+  return new Intl.NumberFormat('es-PY', { style: 'currency', currency: 'PYG', maximumFractionDigits: 0 }).format(
+    Math.round(amount * rate),
+  );
 }
 
 function groupByCategory(items: BudgetCategory[]) {
@@ -35,7 +38,7 @@ function groupByCategory(items: BudgetCategory[]) {
   }, {});
 }
 
-export function BudgetTable({ items, showActual = false }: BudgetTableProps) {
+export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTableProps) {
   const grouped = groupByCategory(items);
   const total = items.reduce((sum, i) => sum + i.estimated, 0);
 
@@ -85,15 +88,15 @@ export function BudgetTable({ items, showActual = false }: BudgetTableProps) {
                     {item.vendor || '—'}
                   </td>
                   <td className="py-2.5 px-4 text-right font-mono" style={{ color: '#D8C3A5' }}>
-                    {formatCurrency(item.estimated)}
+                    {formatCurrency(item.estimated, rate)}
                   </td>
                   {showActual && (
                     <td className="py-2.5 px-4 text-right font-mono" style={{ color: '#8E8A86' }}>
-                      {formatCurrency(item.actual)}
+                      {formatCurrency(item.actual, rate)}
                     </td>
                   )}
                   <td className="py-2.5 px-4 text-right font-mono text-xs" style={{ color: '#8E8A86' }}>
-                    {item.deposit ? formatCurrency(item.deposit) : '—'}
+                    {item.deposit ? formatCurrency(item.deposit, rate) : '—'}
                     {item.depositPaid && (
                       <span className="ml-1 text-xs" style={{ color: '#B08D57' }}>✓</span>
                     )}
@@ -121,7 +124,7 @@ export function BudgetTable({ items, showActual = false }: BudgetTableProps) {
               Presupuesto Total Estimado
             </td>
             <td className="py-4 px-4 text-right text-lg font-light" style={{ color: '#B08D57', fontFamily: "'Georgia', serif" }}>
-              {formatCurrency(total)}
+              {formatCurrency(total, rate)}
             </td>
             {showActual && <td />}
             <td /><td />

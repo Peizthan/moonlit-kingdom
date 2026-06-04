@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
+import { useExchangeRate } from '@/lib/useExchangeRate';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
 import { MetricCard } from '@/components/ui/MetricCard';
@@ -37,8 +38,10 @@ const confirmedVendors = vendors.filter((v) => v.status === 'confirmed').length;
 const openActions = actionItems.filter((a) => a.status !== 'complete').length;
 const completedActions = actionItems.filter((a) => a.status === 'complete').length;
 
-function formatCurrency(n: number) {
-  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+function formatCurrency(n: number, rate: number = 1) {
+  return new Intl.NumberFormat('es-PY', { style: 'currency', currency: 'PYG', maximumFractionDigits: 0 }).format(
+    Math.round(n * rate),
+  );
 }
 
 type TabId =
@@ -70,6 +73,7 @@ const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const { rate, updatedAt, loading: rateLoading, fallback: rateFallback } = useExchangeRate();
 
   return (
     <div
@@ -163,8 +167,8 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               <MetricCard
                 label="Presupuesto Total"
-                value={formatCurrency(totalBudget)}
-                subValue="Estimado"
+                value={rateLoading ? '…' : formatCurrency(totalBudget, rate)}
+                subValue="Estimado en guaranías"
                 delay={0}
               />
               <MetricCard
@@ -301,8 +305,14 @@ export default function DashboardPage() {
                   className="text-2xl font-light"
                   style={{ fontFamily: "'Georgia', serif", color: '#B08D57' }}
                 >
-                  {formatCurrency(totalBudget)}
+                  {rateLoading ? '…' : formatCurrency(totalBudget, rate)}
                 </p>
+                {!rateLoading && (
+                  <p className="text-xs mt-1" style={{ color: 'rgba(142,138,134,0.5)' }}>
+                    ₳{rate.toLocaleString('es-PY')} / USD
+                    {rateFallback ? ' (estimado)' : updatedAt ? ' · actualizado' : ''}
+                  </p>
+                )}
               </div>
             </div>
             <div
@@ -312,7 +322,7 @@ export default function DashboardPage() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <BudgetTable items={budget} />
+              <BudgetTable items={budget} rate={rate} />
             </div>
           </motion.div>
         )}
