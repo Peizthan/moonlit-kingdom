@@ -25,7 +25,7 @@ export function TimelineSection() {
           className="text-center text-xs uppercase tracking-[0.35em] mb-8"
           style={{ color: 'rgba(176,141,87,0.7)' }}
         >
-          Capítulo Cuatro
+          Capítulo Tres
         </motion.p>
 
         <motion.h2

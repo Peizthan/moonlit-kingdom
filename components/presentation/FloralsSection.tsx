@@ -33,7 +33,7 @@ export function FloralsSection() {
           className="text-center text-xs uppercase tracking-[0.35em] mb-8"
           style={{ color: 'rgba(176,141,87,0.7)' }}
         >
-          Capítulo Cinco
+          Capítulo Cuatro
         </motion.p>
 
         <motion.h2
@@ -77,7 +77,6 @@ export function FloralsSection() {
 
               <div className="mb-3">
                 <p className="text-xs uppercase tracking-widest mb-2" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Follaje
                   Flores
                 </p>
                 <div className="flex flex-wrap gap-1">

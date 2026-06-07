@@ -1,7 +1,6 @@
 'use client';
 
 import { PresentationNav } from '@/components/layout/PresentationNav';
-import { StorySection } from '@/components/presentation/StorySection';
 import { VisionSection } from '@/components/presentation/VisionSection';
 import { VenueSection } from '@/components/presentation/VenueSection';
 import { TimelineSection } from '@/components/presentation/TimelineSection';
@@ -10,7 +9,6 @@ import { MenuSection } from '@/components/presentation/MenuSection';
 import { FinalVisionSection } from '@/components/presentation/FinalVisionSection';
 
 const sections = [
-  { id: 'story', label: 'Historia' },
   { id: 'vision', label: 'Visión' },
   { id: 'palette', label: 'Paleta' },
   { id: 'venue', label: 'Salón' },
@@ -58,7 +56,6 @@ export default function PresentationPage() {
       </div>
 
       {/* Sections */}
-      <StorySection />
       <VisionSection />
       <VenueSection />
       <TimelineSection />
