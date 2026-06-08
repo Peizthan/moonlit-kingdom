@@ -77,6 +77,16 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
 export function useAdmin(): AdminContextValue {
   const ctx = useContext(AdminContext);
-  if (!ctx) throw new Error('useAdmin must be used within AdminProvider');
+  if (!ctx) {
+    // Outside AdminProvider (e.g. presentation page) — return safe no-op defaults
+    return {
+      isEditMode: false,
+      toggleEditMode: () => {},
+      getOverride: <T,>(_id: string, fallback: T) => fallback,
+      setOverride: () => {},
+      resetOverrides: () => {},
+      overrideCount: 0,
+    };
+  }
   return ctx;
 }
