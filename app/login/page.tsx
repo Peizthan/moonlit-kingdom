@@ -3,6 +3,7 @@
 import { useEffect, useState, FormEvent, CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Eye, EyeOff } from 'lucide-react';
 import { StarField } from '@/components/layout/StarField';
 
 export default function LoginPage() {
@@ -17,6 +18,9 @@ export default function LoginPage() {
   const [profileExists, setProfileExists] = useState(false);
   const [profileUsername, setProfileUsername] = useState<string | null>(null);
   const [showRecovery, setShowRecovery] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRecoveryCode, setShowRecoveryCode] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/profile')
@@ -96,11 +100,53 @@ export default function LoginPage() {
     color: '#D8C3A5',
     outline: 'none',
     width: '100%',
-    padding: '12px 16px',
+    padding: '12px 40px 12px 16px',
     fontSize: '0.875rem',
     letterSpacing: '0.02em',
     fontFamily: "'Georgia', 'Times New Roman', serif",
-  } as React.CSSProperties;
+  };
+
+  function PasswordInput({
+    value,
+    onChange,
+    show,
+    onToggle,
+    autoComplete = 'current-password',
+    placeholder,
+    required,
+  }: {
+    value: string;
+    onChange: (v: string) => void;
+    show: boolean;
+    onToggle: () => void;
+    autoComplete?: string;
+    placeholder?: string;
+    required?: boolean;
+  }) {
+    return (
+      <div className="relative">
+        <input
+          type={show ? 'text' : 'password'}
+          autoComplete={autoComplete}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={inputStyle}
+          placeholder={placeholder}
+          required={required}
+        />
+        <button
+          type="button"
+          onClick={onToggle}
+          tabIndex={-1}
+          className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
+          style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+        >
+          {show ? <EyeOff size={15} /> : <Eye size={15} />}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -202,12 +248,12 @@ export default function LoginPage() {
               >
                 Contraseña
               </label>
-              <input
-                type="password"
-                autoComplete="current-password"
+              <PasswordInput
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={inputStyle}
+                onChange={setPassword}
+                show={showPassword}
+                onToggle={() => setShowPassword((v) => !v)}
+                autoComplete="current-password"
                 required
               />
             </div>
@@ -219,12 +265,12 @@ export default function LoginPage() {
               >
                 Código de recuperación
               </label>
-              <input
-                type="password"
-                autoComplete="off"
+              <PasswordInput
                 value={recoveryCode}
-                onChange={(e) => setRecoveryCode(e.target.value)}
-                style={inputStyle}
+                onChange={setRecoveryCode}
+                show={showRecoveryCode}
+                onToggle={() => setShowRecoveryCode((v) => !v)}
+                autoComplete="off"
                 placeholder="Usalo para crear perfil y recuperar acceso"
               />
             </div>
@@ -237,12 +283,12 @@ export default function LoginPage() {
                 >
                   Nueva contraseña
                 </label>
-                <input
-                  type="password"
-                  autoComplete="new-password"
+                <PasswordInput
                   value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  style={inputStyle}
+                  onChange={setNewPassword}
+                  show={showNewPassword}
+                  onToggle={() => setShowNewPassword((v) => !v)}
+                  autoComplete="new-password"
                   placeholder="Ingresá la nueva contraseña"
                 />
               </div>
