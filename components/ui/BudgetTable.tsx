@@ -79,7 +79,7 @@ export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTable
         </thead>
         <tbody>
           {Object.entries(grouped).map(([category, categoryItems], gi) => (
-            <>
+            <tbody key={`grp-${gi}`}>
               <tr key={`cat-${gi}`}>
                 <td
                   colSpan={showActual ? 6 : 5}
@@ -172,7 +172,7 @@ export function BudgetTable({ items, showActual = false, rate = 1 }: BudgetTable
                 </motion.tr>
                 );
               })}
-            </>
+            </tbody>
           ))}
           {/* Total row */}
           <tr style={{ borderTop: '1px solid rgba(176,141,87,0.3)' }}>

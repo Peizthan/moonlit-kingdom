@@ -96,7 +96,7 @@ export function TechnicalPlan({ items }: TechnicalPlanProps) {
                   </td>
                 </motion.tr>
               ))}
-            </>
+            </React.Fragment>
           ))}
         </tbody>
       </table>

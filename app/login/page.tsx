@@ -1,10 +1,70 @@
 'use client';
 
-import { useEffect, useState, FormEvent, CSSProperties } from 'react';
+import { useEffect, useState, FormEvent, CSSProperties, useCallback, memo } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { StarField } from '@/components/layout/StarField';
+
+const inputStyle: CSSProperties = {
+  background: 'rgba(18,28,46,0.6)',
+  border: '1px solid rgba(176,141,87,0.25)',
+  color: '#D8C3A5',
+  outline: 'none',
+  width: '100%',
+  padding: '12px 40px 12px 16px',
+  fontSize: '0.875rem',
+  letterSpacing: '0.02em',
+  fontFamily: "'Georgia', 'Times New Roman', serif",
+};
+
+const PasswordInput = memo(function PasswordInput({
+  id,
+  name,
+  value,
+  onChange,
+  show,
+  onToggle,
+  autoComplete = 'current-password',
+  placeholder,
+  required,
+}: {
+  id?: string;
+  name?: string;
+  value: string;
+  onChange: (v: string) => void;
+  show: boolean;
+  onToggle: () => void;
+  autoComplete?: string;
+  placeholder?: string;
+  required?: boolean;
+}) {
+  return (
+    <div className="relative">
+      <input
+        id={id}
+        name={name}
+        type={show ? 'text' : 'password'}
+        autoComplete={autoComplete}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={inputStyle}
+        placeholder={placeholder}
+        required={required}
+      />
+      <button
+        type="button"
+        onClick={onToggle}
+        tabIndex={-1}
+        className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
+        style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+        aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+      >
+        {show ? <EyeOff size={15} /> : <Eye size={15} />}
+      </button>
+    </div>
+  );
+});
 
 export default function LoginPage() {
   const router = useRouter();
@@ -21,6 +81,10 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showRecoveryCode, setShowRecoveryCode] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+
+  const handleTogglePassword = useCallback(() => setShowPassword((v) => !v), []);
+  const handleToggleRecoveryCode = useCallback(() => setShowRecoveryCode((v) => !v), []);
+  const handleToggleNewPassword = useCallback(() => setShowNewPassword((v) => !v), []);
 
   useEffect(() => {
     fetch('/api/auth/profile')
@@ -46,10 +110,18 @@ export default function LoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const data = await res.json();
+
+      // Safely parse — server may return empty body on 500/redirect
+      const text = await res.text();
+      let data: any = {};
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        throw new Error(`Error del servidor (${res.status})`);
+      }
 
       if (!res.ok || data.ok === false) {
-        throw new Error(data.error ?? 'Operación fallida');
+        throw new Error(data.error ?? `Error del servidor (${res.status})`);
       }
 
       onOk(data);
@@ -91,60 +163,6 @@ export default function LoginPage() {
         setPassword(newPassword);
         setShowRecovery(false);
       },
-    );
-  }
-
-  const inputStyle: CSSProperties = {
-    background: 'rgba(18,28,46,0.6)',
-    border: '1px solid rgba(176,141,87,0.25)',
-    color: '#D8C3A5',
-    outline: 'none',
-    width: '100%',
-    padding: '12px 40px 12px 16px',
-    fontSize: '0.875rem',
-    letterSpacing: '0.02em',
-    fontFamily: "'Georgia', 'Times New Roman', serif",
-  };
-
-  function PasswordInput({
-    value,
-    onChange,
-    show,
-    onToggle,
-    autoComplete = 'current-password',
-    placeholder,
-    required,
-  }: {
-    value: string;
-    onChange: (v: string) => void;
-    show: boolean;
-    onToggle: () => void;
-    autoComplete?: string;
-    placeholder?: string;
-    required?: boolean;
-  }) {
-    return (
-      <div className="relative">
-        <input
-          type={show ? 'text' : 'password'}
-          autoComplete={autoComplete}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          style={inputStyle}
-          placeholder={placeholder}
-          required={required}
-        />
-        <button
-          type="button"
-          onClick={onToggle}
-          tabIndex={-1}
-          className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
-          style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-          aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-        >
-          {show ? <EyeOff size={15} /> : <Eye size={15} />}
-        </button>
-      </div>
     );
   }
 
@@ -218,7 +236,7 @@ export default function LoginPage() {
               </>
             ) : (
               <>
-                No hay perfil admin guardado todavía. Creá uno con usuario, contraseña y código de recuperación.
+                No hay perfil admin guardado todavía. Usá "Crear perfil" con usuario y contraseña.
               </>
             )}
           </div>
@@ -232,6 +250,8 @@ export default function LoginPage() {
                 Usuario
               </label>
               <input
+                id="username"
+                name="username"
                 type="text"
                 autoComplete="username"
                 value={username}
@@ -249,48 +269,55 @@ export default function LoginPage() {
                 Contraseña
               </label>
               <PasswordInput
+                id="password"
+                name="password"
                 value={password}
                 onChange={setPassword}
                 show={showPassword}
-                onToggle={() => setShowPassword((v) => !v)}
+                onToggle={handleTogglePassword}
                 autoComplete="current-password"
                 required
               />
             </div>
 
-            <div>
-              <label
-                className="block text-xs uppercase tracking-widest mb-2"
-                style={{ color: 'rgba(176,141,87,0.5)' }}
-              >
-                Código de recuperación
-              </label>
-              <PasswordInput
-                value={recoveryCode}
-                onChange={setRecoveryCode}
-                show={showRecoveryCode}
-                onToggle={() => setShowRecoveryCode((v) => !v)}
-                autoComplete="off"
-                placeholder="Usalo para crear perfil y recuperar acceso"
-              />
-            </div>
-
             {showRecovery && (
-              <div>
-                <label
-                  className="block text-xs uppercase tracking-widest mb-2"
-                  style={{ color: 'rgba(176,141,87,0.5)' }}
-                >
-                  Nueva contraseña
-                </label>
-                <PasswordInput
-                  value={newPassword}
-                  onChange={setNewPassword}
-                  show={showNewPassword}
-                  onToggle={() => setShowNewPassword((v) => !v)}
-                  autoComplete="new-password"
-                  placeholder="Ingresá la nueva contraseña"
-                />
+              <div className="space-y-4">
+                <div>
+                  <label
+                    className="block text-xs uppercase tracking-widest mb-2"
+                    style={{ color: 'rgba(176,141,87,0.5)' }}
+                  >
+                    Código de recuperación
+                  </label>
+                  <PasswordInput
+                    id="recovery-code"
+                    name="recoveryCode"
+                    value={recoveryCode}
+                    onChange={setRecoveryCode}
+                    show={showRecoveryCode}
+                    onToggle={handleToggleRecoveryCode}
+                    autoComplete="off"
+                    placeholder="Código de recuperación de emergencia"
+                  />
+                </div>
+                <div>
+                  <label
+                    className="block text-xs uppercase tracking-widest mb-2"
+                    style={{ color: 'rgba(176,141,87,0.5)' }}
+                  >
+                    Nueva contraseña
+                  </label>
+                  <PasswordInput
+                    id="new-password"
+                    name="newPassword"
+                    value={newPassword}
+                    onChange={setNewPassword}
+                    show={showNewPassword}
+                    onToggle={handleToggleNewPassword}
+                    autoComplete="new-password"
+                    placeholder="Ingresá la nueva contraseña"
+                  />
+                </div>
               </div>
             )}
 
