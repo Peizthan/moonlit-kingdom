@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { TimelineEvent } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface TimelineBlockProps {
   events: TimelineEvent[];
@@ -24,6 +26,7 @@ const categoryLabels: Record<TimelineEvent['category'], string> = {
 };
 
 export function TimelineBlock({ events }: TimelineBlockProps) {
+  const { isEditMode, getOverride } = useAdmin();
   return (
     <div className="relative">
       {/* Vertical line */}
@@ -47,7 +50,7 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
               className="w-16 text-right flex-shrink-0 pt-1"
               style={{ color: '#B08D57', fontFamily: "'Georgia', serif", fontSize: '0.875rem' }}
             >
-              {event.time}
+              <EditableField id={`timeline:${event.id}:time`} value={event.time} style={{ color: '#B08D57', fontFamily: "'Georgia', serif", fontSize: '0.875rem', textAlign: 'right' }} />
             </div>
             {/* Dot */}
             <div className="relative flex-shrink-0 hidden md:flex items-start pt-2">
@@ -66,7 +69,7 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
                   className="font-medium text-sm"
                   style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
                 >
-                  {event.title}
+                  <EditableField id={`timeline:${event.id}:title`} value={event.title} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
                 </h4>
                 <span
                   className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
@@ -81,11 +84,11 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
                 </span>
               </div>
               <p className="text-sm mb-1" style={{ color: '#8E8A86' }}>
-                {event.description}
+                <EditableField id={`timeline:${event.id}:description`} value={event.description} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
               </p>
-              {event.location && (
+              {(event.location || isEditMode) && (
                 <p className="text-xs" style={{ color: 'rgba(176,141,87,0.6)' }}>
-                  ◎ {event.location}
+                  ◎ <EditableField id={`timeline:${event.id}:location`} value={event.location ?? ''} style={{ color: 'rgba(176,141,87,0.6)', fontSize: '0.75rem' }} />
                 </p>
               )}
             </div>

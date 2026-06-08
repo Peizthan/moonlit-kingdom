@@ -280,7 +280,7 @@ function DashboardContent() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <VendorTable vendors={vendors} readOnly />
+              <VendorTable vendors={vendors} />
             </div>
           </motion.div>
         )}

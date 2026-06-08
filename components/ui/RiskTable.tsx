@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { RiskItem } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface RiskTableProps {
   risks: RiskItem[];
@@ -19,7 +21,18 @@ const statusColors = {
   closed: '#8E8A86',
 };
 
+const statusLabels = { open: 'Abierto', mitigated: 'Mitigado', closed: 'Cerrado' };
+const statusOrder: RiskItem['status'][] = ['open', 'mitigated', 'closed'];
+
 export function RiskTable({ risks }: RiskTableProps) {
+  const { isEditMode, getOverride, setOverride } = useAdmin();
+
+  function cycleStatus(risk: RiskItem) {
+    const current = getOverride<RiskItem['status']>(`risk:${risk.id}:status`, risk.status);
+    const idx = statusOrder.indexOf(current);
+    setOverride(`risk:${risk.id}:status`, statusOrder[(idx + 1) % statusOrder.length]);
+  }
+
   return (
     <div className="space-y-3">
       {risks.map((risk, i) => (
@@ -37,7 +50,7 @@ export function RiskTable({ risks }: RiskTableProps) {
         >
           <div className="flex flex-wrap items-start gap-3 mb-3">
             <h4 className="flex-1 font-medium text-sm" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-              {risk.risk}
+              <EditableField id={`risk:${risk.id}:risk`} value={risk.risk} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
             </h4>
             <div className="flex gap-2 flex-shrink-0">
               <span
@@ -62,22 +75,29 @@ export function RiskTable({ risks }: RiskTableProps) {
               >
                 Probabilidad: {risk.likelihood}
               </span>
-              <span
-                className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
-                style={{
-                  backgroundColor: `${statusColors[risk.status]}60`,
-                  color: '#C7C0B6',
-                  border: `1px solid ${statusColors[risk.status]}`,
-                  fontSize: '0.65rem',
-                }}
-              >
-                {{ open: 'Abierto', mitigated: 'Mitigado', closed: 'Cerrado' }[risk.status] ?? risk.status}
-              </span>
+              {(() => {
+                const s = getOverride<RiskItem['status']>(`risk:${risk.id}:status`, risk.status);
+                return (
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${isEditMode ? 'cursor-pointer' : ''}`}
+                    title={isEditMode ? 'Clic para cambiar estado' : undefined}
+                    onClick={isEditMode ? () => cycleStatus(risk) : undefined}
+                    style={{
+                      backgroundColor: `${statusColors[s]}60`,
+                      color: '#C7C0B6',
+                      border: `1px solid ${statusColors[s]}`,
+                      fontSize: '0.65rem',
+                    }}
+                  >
+                    {statusLabels[s]}
+                  </span>
+                );
+              })()}
             </div>
           </div>
           <p className="text-sm mb-2" style={{ color: '#8E8A86' }}>
             <span className="text-xs uppercase tracking-wide" style={{ color: 'rgba(176,141,87,0.6)' }}>Mitigación: </span>
-            {risk.mitigation}
+            <EditableField id={`risk:${risk.id}:mitigation`} value={risk.mitigation} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
           </p>
           <p className="text-xs" style={{ color: 'rgba(176,141,87,0.5)' }}>
             Responsable: {risk.owner} · Categoría: {risk.category}
