@@ -7,6 +7,7 @@ import { EditableField } from '@/components/ui/EditableField';
 
 interface VendorTableProps {
   vendors: Vendor[];
+  readOnly?: boolean;
 }
 
 const statusColors: Record<Vendor['status'], string> = {
@@ -25,8 +26,9 @@ const statusText: Record<Vendor['status'], string> = {
 
 const statusOrder: Vendor['status'][] = ['enquiry', 'booked', 'confirmed', 'declined'];
 
-export function VendorTable({ vendors }: VendorTableProps) {
+export function VendorTable({ vendors, readOnly = false }: VendorTableProps) {
   const { isEditMode, getOverride, setOverride } = useAdmin();
+  const canEdit = isEditMode && !readOnly;
 
   function cycleStatus(v: Vendor) {
     const current = getOverride<Vendor['status']>(`vendor:${v.id}:status`, v.status);
@@ -64,23 +66,23 @@ export function VendorTable({ vendors }: VendorTableProps) {
                 {v.role}
               </td>
               <td className="py-3 px-4 font-medium" style={{ color: '#D8C3A5' }}>
-                <EditableField id={`vendor:${v.id}:company`} value={v.company} style={{ color: '#D8C3A5', fontWeight: '500' }} />
+                {canEdit ? <EditableField id={`vendor:${v.id}:company`} value={v.company} style={{ color: '#D8C3A5', fontWeight: '500' }} /> : <span style={{ color: '#D8C3A5', fontWeight: 500 }}>{getOverride<string>(`vendor:${v.id}:company`, v.company)}</span>}
               </td>
               <td className="py-3 px-4" style={{ color: '#8E8A86' }}>
-                <EditableField id={`vendor:${v.id}:contact`} value={v.contact} style={{ color: '#8E8A86' }} />
+                {canEdit ? <EditableField id={`vendor:${v.id}:contact`} value={v.contact} style={{ color: '#8E8A86' }} /> : <span style={{ color: '#8E8A86' }}>{getOverride<string>(`vendor:${v.id}:contact`, v.contact)}</span>}
                 <div className="text-xs" style={{ color: 'rgba(176,141,87,0.7)' }}>{v.email}</div>
               </td>
               <td className="py-3 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                <EditableField id={`vendor:${v.id}:phone`} value={v.phone} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
+                {canEdit ? <EditableField id={`vendor:${v.id}:phone`} value={v.phone} style={{ color: '#8E8A86', fontSize: '0.75rem' }} /> : <span style={{ color: '#8E8A86', fontSize: '0.75rem' }}>{getOverride<string>(`vendor:${v.id}:phone`, v.phone)}</span>}
               </td>
               <td className="py-3 px-4">
                 {(() => {
                   const s = getOverride<Vendor['status']>(`vendor:${v.id}:status`, v.status);
                   return (
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${isEditMode ? 'cursor-pointer' : ''}`}
-                      title={isEditMode ? 'Clic para cambiar estado' : undefined}
-                      onClick={isEditMode ? () => cycleStatus(v) : undefined}
+                      className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${canEdit ? 'cursor-pointer' : ''}`}
+                      title={canEdit ? 'Clic para cambiar estado' : undefined}
+                      onClick={canEdit ? () => cycleStatus(v) : undefined}
                       style={{
                         backgroundColor: `${statusColors[s]}40`,
                         color: '#C7C0B6',

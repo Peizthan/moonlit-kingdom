@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { TechnicalItem } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface TechnicalPlanProps {
   items: TechnicalItem[];
@@ -13,6 +15,14 @@ const statusColors: Record<TechnicalItem['status'], string> = {
   tbc: '#121C2E',
 };
 
+const statusLabels: Record<TechnicalItem['status'], string> = {
+  confirmed: 'Confirmado',
+  pending: 'Pendiente',
+  tbc: 'Por confirmar',
+};
+
+const statusOrder: TechnicalItem['status'][] = ['pending', 'tbc', 'confirmed'];
+
 function groupByCategory(items: TechnicalItem[]) {
   return items.reduce<Record<string, TechnicalItem[]>>((acc, item) => {
     if (!acc[item.category]) acc[item.category] = [];
@@ -23,6 +33,13 @@ function groupByCategory(items: TechnicalItem[]) {
 
 export function TechnicalPlan({ items }: TechnicalPlanProps) {
   const grouped = groupByCategory(items);
+  const { isEditMode, getOverride, setOverride } = useAdmin();
+
+  function cycleStatus(item: TechnicalItem) {
+    const current = getOverride<TechnicalItem['status']>(`tech:${item.id}:status`, item.status);
+    const idx = statusOrder.indexOf(current);
+    setOverride(`tech:${item.id}:status`, statusOrder[(idx + 1) % statusOrder.length]);
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -70,29 +87,36 @@ export function TechnicalPlan({ items }: TechnicalPlanProps) {
                     {item.category}
                   </td>
                   <td className="py-2.5 px-4" style={{ color: '#D8C3A5' }}>
-                    {item.item}
+                    <EditableField id={`tech:${item.id}:item`} value={item.item} style={{ color: '#D8C3A5', fontSize: '0.875rem' }} />
                   </td>
                   <td className="py-2.5 px-4 text-center" style={{ color: '#B08D57' }}>
                     {item.quantity}
                   </td>
                   <td className="py-2.5 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                    {item.supplier ?? '—'}
+                    <EditableField id={`tech:${item.id}:supplier`} value={item.supplier ?? '—'} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
                   </td>
                   <td className="py-2.5 px-4">
-                    <span
-                      className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
-                      style={{
-                        background: `${statusColors[item.status]}50`,
-                        color: '#C7C0B6',
-                        border: `1px solid ${statusColors[item.status]}`,
-                        fontSize: '0.6rem',
-                      }}
-                    >
-                      {item.status}
-                    </span>
+                    {(() => {
+                      const s = getOverride<TechnicalItem['status']>(`tech:${item.id}:status`, item.status);
+                      return (
+                        <span
+                          className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wide ${isEditMode ? 'cursor-pointer' : ''}`}
+                          title={isEditMode ? 'Clic para cambiar estado' : undefined}
+                          onClick={isEditMode ? () => cycleStatus(item) : undefined}
+                          style={{
+                            background: `${statusColors[s]}50`,
+                            color: '#C7C0B6',
+                            border: `1px solid ${statusColors[s]}`,
+                            fontSize: '0.6rem',
+                          }}
+                        >
+                          {statusLabels[s]}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td className="py-2.5 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                    {item.notes ?? '—'}
+                    <EditableField id={`tech:${item.id}:notes`} value={item.notes ?? ''} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
                   </td>
                 </motion.tr>
               ))}

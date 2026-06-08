@@ -2,12 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { LightingScene } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface LightingPlanProps {
   scenes: LightingScene[];
 }
 
 export function LightingPlan({ scenes }: LightingPlanProps) {
+  const { isEditMode } = useAdmin();
   return (
     <div className="space-y-4">
       {scenes.map((scene, i) => (
@@ -27,13 +30,13 @@ export function LightingPlan({ scenes }: LightingPlanProps) {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs uppercase tracking-widest" style={{ color: 'rgba(176,141,87,0.55)' }}>
-                  {scene.area}
+                  <EditableField id={`lighting:${scene.id}:area`} value={scene.area} style={{ color: 'rgba(176,141,87,0.55)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }} />
                 </span>
                 <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
                 <span className="text-xs" style={{ color: '#8E8A86' }}>{scene.timing}</span>
               </div>
               <h4 className="font-medium text-sm" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-                {scene.scene}
+                <EditableField id={`lighting:${scene.id}:scene`} value={scene.scene} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
               </h4>
             </div>
             <div className="flex gap-2 flex-shrink-0">
@@ -67,7 +70,7 @@ export function LightingPlan({ scenes }: LightingPlanProps) {
           </div>
 
           <p className="text-sm mb-3" style={{ color: '#8E8A86' }}>
-            {scene.description}
+            <EditableField id={`lighting:${scene.id}:description`} value={scene.description} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
           </p>
 
           {scene.equipment && scene.equipment.length > 0 && (

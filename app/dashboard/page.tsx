@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
 import { useExchangeRate } from '@/lib/useExchangeRate';
+import { useBudget } from '@/lib/useBudget';
 import { AdminProvider } from '@/lib/AdminContext';
 import { AdminToolbar } from '@/components/ui/AdminToolbar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
@@ -32,13 +33,10 @@ import {
   Lightbulb,
 } from 'lucide-react';
 
-const { couple, budget, vendors, actionItems, meetingNotes, decisions, risks, seating, lighting, technical, timeline } =
+const { couple, vendors, actionItems, meetingNotes, decisions, risks, seating, lighting, technical, timeline } =
   weddingData;
 
-const totalBudget = budget.reduce((s, b) => s + b.estimated, 0);
-const confirmedVendors = vendors.filter((v) => v.status === 'confirmed').length;
-const openActions = actionItems.filter((a) => a.status !== 'complete').length;
-const completedActions = actionItems.filter((a) => a.status === 'complete').length;
+// These are static fallback values; live totals are computed inside DashboardContent from useBudget
 
 function formatCurrency(n: number, rate: number = 1) {
   return new Intl.NumberFormat('es-PY', { style: 'currency', currency: 'PYG', maximumFractionDigits: 0 }).format(
@@ -84,6 +82,12 @@ export default function DashboardPage() {
 function DashboardContent() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const { rate, updatedAt, loading: rateLoading, fallback: rateFallback } = useExchangeRate();
+  const { budget, loading: budgetLoading, error: budgetError, fromSheet } = useBudget();
+
+  const totalBudget = budget.reduce((s, b) => s + b.estimated, 0);
+  const confirmedVendors = vendors.filter((v) => v.status === 'confirmed').length;
+  const openActions = actionItems.filter((a) => a.status !== 'complete').length;
+  const completedActions = actionItems.filter((a) => a.status === 'complete').length;
 
   return (
     <div
@@ -276,7 +280,7 @@ function DashboardContent() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <VendorTable vendors={vendors} />
+              <VendorTable vendors={vendors} readOnly />
             </div>
           </motion.div>
         )}
@@ -312,7 +316,7 @@ function DashboardContent() {
                   className="text-2xl font-light"
                   style={{ fontFamily: "'Georgia', serif", color: '#B08D57' }}
                 >
-                  {rateLoading ? '…' : formatCurrency(totalBudget, rate)}
+                  {rateLoading || budgetLoading ? '…' : formatCurrency(totalBudget, rate)}
                 </p>
                 {!rateLoading && (
                   <p className="text-xs mt-1" style={{ color: 'rgba(142,138,134,0.5)' }}>
@@ -320,6 +324,9 @@ function DashboardContent() {
                     {rateFallback ? ' (estimado)' : updatedAt ? ' · actualizado' : ''}
                   </p>
                 )}
+                <p className="text-xs mt-1" style={{ color: fromSheet ? 'rgba(176,141,87,0.5)' : 'rgba(142,138,134,0.4)' }}>
+                  {budgetLoading ? 'Cargando planilla…' : fromSheet ? '✓ Desde Google Sheets' : budgetError ? '⚠ Usando datos locales' : ''}
+                </p>
               </div>
             </div>
             <div

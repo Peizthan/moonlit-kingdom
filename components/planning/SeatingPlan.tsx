@@ -2,12 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { SeatingTable } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface SeatingPlanProps {
   tables: SeatingTable[];
 }
 
 export function SeatingPlan({ tables }: SeatingPlanProps) {
+  const { isEditMode, getOverride } = useAdmin();
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
       {tables.map((table, i) => (
@@ -29,7 +32,7 @@ export function SeatingPlan({ tables }: SeatingPlanProps) {
                 className="text-base font-medium"
                 style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
               >
-                {table.tableName}
+                <EditableField id={`seating:${table.id}:tableName`} value={table.tableName} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
               </h3>
               <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'rgba(176,141,87,0.5)' }}>
                 Mesa {table.tableNumber}
@@ -59,21 +62,21 @@ export function SeatingPlan({ tables }: SeatingPlanProps) {
           </div>
 
           <ul className="space-y-1">
-            {table.guests.map((guest) => (
+            {table.guests.map((guest, gi) => (
               <li
-                key={guest}
+                key={gi}
                 className="flex items-center gap-2 text-sm"
                 style={{ color: '#C7C0B6' }}
               >
                 <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
-                {guest}
+                <EditableField id={`seating:${table.id}:guest:${gi}`} value={guest} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
               </li>
             ))}
           </ul>
 
-          {table.notes && (
+          {(table.notes || isEditMode) && (
             <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.4)' }}>
-              {table.notes}
+              <EditableField id={`seating:${table.id}:notes`} value={table.notes ?? ''} type="textarea" style={{ color: 'rgba(176,141,87,0.4)', fontSize: '0.75rem', fontStyle: 'italic' }} />
             </p>
           )}
         </motion.div>

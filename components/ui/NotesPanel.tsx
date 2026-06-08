@@ -2,12 +2,15 @@
 
 import { motion } from 'framer-motion';
 import { MeetingNote } from '@/lib/types';
+import { useAdmin } from '@/lib/AdminContext';
+import { EditableField } from '@/components/ui/EditableField';
 
 interface NotesPanelProps {
   notes: MeetingNote[];
 }
 
 export function NotesPanel({ notes }: NotesPanelProps) {
+  const { isEditMode, getOverride } = useAdmin();
   return (
     <div className="space-y-6">
       {notes.map((note, i) => (
@@ -26,7 +29,7 @@ export function NotesPanel({ notes }: NotesPanelProps) {
           <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
             <div>
               <h3 className="font-medium mb-1" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-                {note.title}
+                <EditableField id={`note:${note.id}:title`} value={note.title} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
               </h3>
               <p className="text-xs uppercase tracking-widest" style={{ color: 'rgba(176,141,87,0.6)' }}>
                 {note.date}
@@ -38,7 +41,7 @@ export function NotesPanel({ notes }: NotesPanelProps) {
           </div>
 
           <p className="text-sm mb-4 leading-relaxed" style={{ color: '#8E8A86' }}>
-            {note.summary}
+            <EditableField id={`note:${note.id}:summary`} value={note.summary} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
           </p>
 
           {note.decisions.length > 0 && (
@@ -50,7 +53,7 @@ export function NotesPanel({ notes }: NotesPanelProps) {
                 {note.decisions.map((d, di) => (
                   <li key={di} className="flex gap-2 text-sm" style={{ color: '#C7C0B6' }}>
                     <span style={{ color: 'rgba(176,141,87,0.5)' }}>◆</span>
-                    {d}
+                    <EditableField id={`note:${note.id}:decision:${di}`} value={d} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
                   </li>
                 ))}
               </ul>
@@ -66,7 +69,7 @@ export function NotesPanel({ notes }: NotesPanelProps) {
                 {note.actionItems.map((a, ai) => (
                   <li key={ai} className="flex gap-2 text-sm" style={{ color: '#C7C0B6' }}>
                     <span style={{ color: 'rgba(176,141,87,0.5)' }}>→</span>
-                    {a}
+                    <EditableField id={`note:${note.id}:action:${ai}`} value={a} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
                   </li>
                 ))}
               </ul>
