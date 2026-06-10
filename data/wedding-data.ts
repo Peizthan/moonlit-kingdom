@@ -35,7 +35,7 @@ export const weddingData: WeddingData = {
     capacity: 700,
     indoorOutdoor: 'Interior y Exterior',
     description:
-      'El Salón Pérez Uribe del Club Centenario es un espacio de gran elegancia arquitectónica, con techos de roble labrado, ventanales que dan a los jardines históricos del club y una terraza rodeada de árboles centenarios. El salón cuenta con una capilla privada, un gran salón de recepción y jardines aterrazados perfectos para una recepción nocturna bajo las estrellas.',,
+      'El Salón Pérez Uribe del Club Centenario es un espacio de gran elegancia arquitectónica, con techos de roble labrado, ventanales que dan a los jardines históricos del club y una terraza rodeada de árboles centenarios. El salón cuenta con una capilla privada, un gran salón de recepción y jardines aterrazados perfectos para una recepción nocturna bajo las estrellas.',
     coordinator: 'Verónica',
     coordinatorEmail: 'info@clubcentenario.org.py',
     coordinatorPhone: '(+595 21) 247 0000',
@@ -452,7 +452,7 @@ export const weddingData: WeddingData = {
       date: '10 de marzo de 2026',
       title: 'Reunión Inicial de Planificación',
       attendees: ['Constanza Martinez', 'Ivan Kostianovsky', 'Sofía Pereyra (Planner)', 'María Fernanda Ríos (Salón)'],
-      summary: 'Primera reunión de planificación completa en el Club Centenario. Recorrida del salón, confirmación del Salón Pérez Uribe para ceremonia y recepción. Se estableció la visión general: Moonlit Kingdom – Boda en el Bosque Celestial.',,
+      summary: 'Primera reunión de planificación completa en el Club Centenario. Recorrida del salón, confirmación del Salón Pérez Uribe para ceremonia y recepción. Se estableció la visión general: Moonlit Kingdom – Boda en el Bosque Celestial.',
       decisions: ['Reserva del salón confirmada', 'Dirección de la paleta de colores establecida', 'Acordado aprox. 120 invitados de día, 60 de noche'],
       actionItems: ['Contratar florista', 'Comenzar preselección de proveedores', 'Establecer marco presupuestario'],
     },
