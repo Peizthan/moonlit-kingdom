@@ -11,6 +11,8 @@ export const weddingData: WeddingData = {
   },
 
   story: {
+    howWeMet: '',
+    proposal: '',
     vision:
       'Imaginamos nuestra boda como un viaje encantado a través de un bosque celestial — un mundo suspendido entre el crepúsculo y la luz de las estrellas, donde la nobleza del mundo antiguo se encuentra con el misterio de la naturaleza, y donde cada detalle parece haber sido descubierto en lugar de diseñado. Queremos que nuestros invitados sientan que han ingresado a un cuento de hadas vivo: uno de romance, maravilla y elegancia atemporal.',
     moodKeywords: [
