@@ -141,10 +141,18 @@ export default function LoginPage() {
   }
 
   async function handleCreateProfile() {
-    await postAction('/api/auth/profile', { username, password, recoveryCode }, () => {
+    await postAction('/api/auth/profile', { username, password, recoveryCode }, (data) => {
       setProfileExists(true);
       setProfileUsername(username.trim());
-      setSuccess('Perfil admin creado. Ya podés ingresar con esas credenciales.');
+      if (data.recoveryCode) {
+        setRecoveryCode(data.recoveryCode);
+        setShowRecoveryCode(true);
+        setSuccess(
+          `Perfil admin creado. Guardá este código de recuperación (no volverá a mostrarse): ${data.recoveryCode}`,
+        );
+      } else {
+        setSuccess('Perfil admin creado/actualizado. Ya podés ingresar con esas credenciales.');
+      }
     });
   }
 
@@ -280,44 +288,47 @@ export default function LoginPage() {
               />
             </div>
 
+            <div>
+              <label
+                className="block text-xs uppercase tracking-widest mb-2"
+                style={{ color: 'rgba(176,141,87,0.5)' }}
+              >
+                Código de recuperación (opcional al crear perfil)
+              </label>
+              <PasswordInput
+                id="recovery-code"
+                name="recoveryCode"
+                value={recoveryCode}
+                onChange={setRecoveryCode}
+                show={showRecoveryCode}
+                onToggle={handleToggleRecoveryCode}
+                autoComplete="off"
+                placeholder="Dejalo vacío y te generamos uno al crear el perfil"
+              />
+              <p className="mt-2 text-[0.65rem] leading-relaxed" style={{ color: '#8E8A86' }}>
+                Se usa para restablecer la contraseña si la olvidás. Si lo dejás vacío al crear el
+                perfil, se genera uno automáticamente y te lo mostramos una única vez.
+              </p>
+            </div>
+
             {showRecovery && (
-              <div className="space-y-4">
-                <div>
-                  <label
-                    className="block text-xs uppercase tracking-widest mb-2"
-                    style={{ color: 'rgba(176,141,87,0.5)' }}
-                  >
-                    Código de recuperación
-                  </label>
-                  <PasswordInput
-                    id="recovery-code"
-                    name="recoveryCode"
-                    value={recoveryCode}
-                    onChange={setRecoveryCode}
-                    show={showRecoveryCode}
-                    onToggle={handleToggleRecoveryCode}
-                    autoComplete="off"
-                    placeholder="Código de recuperación de emergencia"
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-xs uppercase tracking-widest mb-2"
-                    style={{ color: 'rgba(176,141,87,0.5)' }}
-                  >
-                    Nueva contraseña
-                  </label>
-                  <PasswordInput
-                    id="new-password"
-                    name="newPassword"
-                    value={newPassword}
-                    onChange={setNewPassword}
-                    show={showNewPassword}
-                    onToggle={handleToggleNewPassword}
-                    autoComplete="new-password"
-                    placeholder="Ingresá la nueva contraseña"
-                  />
-                </div>
+              <div>
+                <label
+                  className="block text-xs uppercase tracking-widest mb-2"
+                  style={{ color: 'rgba(176,141,87,0.5)' }}
+                >
+                  Nueva contraseña
+                </label>
+                <PasswordInput
+                  id="new-password"
+                  name="newPassword"
+                  value={newPassword}
+                  onChange={setNewPassword}
+                  show={showNewPassword}
+                  onToggle={handleToggleNewPassword}
+                  autoComplete="new-password"
+                  placeholder="Ingresá la nueva contraseña"
+                />
               </div>
             )}
 
