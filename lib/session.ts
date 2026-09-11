@@ -1,4 +1,4 @@
-import { createHash } from 'crypto';
+import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'crypto';
 import { SessionOptions } from 'iron-session';
 
 export interface SessionData {
@@ -25,5 +25,30 @@ export const sessionOptions: SessionOptions = {
 };
 
 export function hashSecret(value: string) {
-  return createHash('sha256').update(value).digest('hex');
+  const salt = randomBytes(16).toString('hex');
+  const derivedKey = scryptSync(value, salt, 64).toString('hex');
+  return `scrypt$${salt}$${derivedKey}`;
+}
+
+export function verifySecret(value: string, storedHash?: string) {
+  if (!storedHash) {
+    return false;
+  }
+
+  if (!storedHash.startsWith('scrypt$')) {
+    return createHash('sha256').update(value).digest('hex') === storedHash;
+  }
+
+  const [, salt, expected] = storedHash.split('$');
+  if (!salt || !expected) {
+    return false;
+  }
+
+  const derivedKey = scryptSync(value, salt, expected.length / 2);
+
+  try {
+    return timingSafeEqual(derivedKey, Buffer.from(expected, 'hex'));
+  } catch {
+    return false;
+  }
 }
