@@ -144,7 +144,7 @@ export default function LoginPage() {
     await postAction('/api/auth/profile', { username, password, recoveryCode }, () => {
       setProfileExists(true);
       setProfileUsername(username.trim());
-      setSuccess('Perfil admin creado. Ya podés ingresar con esas credenciales.');
+      setSuccess('Perfil admin guardado. Ya podés ingresar con esas credenciales.');
     });
   }
 
@@ -232,11 +232,12 @@ export default function LoginPage() {
             {profileExists ? (
               <>
                 Perfil admin detectado{profileUsername ? ` para ${profileUsername}` : ''}. Si querés cambiarlo,
-                usá <span style={{ color: '#B08D57' }}>Crear/actualizar perfil</span>.
+                usá <span style={{ color: '#B08D57' }}>Crear/actualizar perfil</span> con una nueva contraseña y
+                código de recuperación.
               </>
             ) : (
               <>
-                No hay perfil admin guardado todavía. Usá "Crear perfil" con usuario y contraseña.
+                No hay perfil admin guardado todavía. Creá uno con usuario, contraseña y código de recuperación.
               </>
             )}
           </div>
@@ -280,26 +281,27 @@ export default function LoginPage() {
               />
             </div>
 
+            <div>
+              <label
+                className="block text-xs uppercase tracking-widest mb-2"
+                style={{ color: 'rgba(176,141,87,0.5)' }}
+              >
+                Código de recuperación
+              </label>
+              <PasswordInput
+                id="recovery-code"
+                name="recoveryCode"
+                value={recoveryCode}
+                onChange={setRecoveryCode}
+                show={showRecoveryCode}
+                onToggle={handleToggleRecoveryCode}
+                autoComplete="off"
+                placeholder="Necesario para crear, actualizar o recuperar el perfil"
+              />
+            </div>
+
             {showRecovery && (
-              <div className="space-y-4">
-                <div>
-                  <label
-                    className="block text-xs uppercase tracking-widest mb-2"
-                    style={{ color: 'rgba(176,141,87,0.5)' }}
-                  >
-                    Código de recuperación
-                  </label>
-                  <PasswordInput
-                    id="recovery-code"
-                    name="recoveryCode"
-                    value={recoveryCode}
-                    onChange={setRecoveryCode}
-                    show={showRecoveryCode}
-                    onToggle={handleToggleRecoveryCode}
-                    autoComplete="off"
-                    placeholder="Código de recuperación de emergencia"
-                  />
-                </div>
+              <div>
                 <div>
                   <label
                     className="block text-xs uppercase tracking-widest mb-2"
@@ -315,7 +317,7 @@ export default function LoginPage() {
                     show={showNewPassword}
                     onToggle={handleToggleNewPassword}
                     autoComplete="new-password"
-                    placeholder="Ingresá la nueva contraseña"
+                    placeholder="Ingresá la nueva contraseña para recuperar acceso"
                   />
                 </div>
               </div>
@@ -401,7 +403,7 @@ export default function LoginPage() {
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >
-              {showRecovery ? 'Cancelar recuperación' : 'Olvidé mi contraseña'}
+              {showRecovery ? 'Cancelar recuperación' : 'Recuperar con nueva contraseña'}
             </button>
 
             {showRecovery && (

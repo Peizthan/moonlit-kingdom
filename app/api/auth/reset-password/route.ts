@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
-import { AdminProfileData, adminProfileOptions, hashSecret } from '@/lib/session';
+import { hashSecret } from '@/lib/session';
+import { matchesRecoveryCode, readAdminProfile, writeAdminProfile } from '@/lib/admin-profile';
 
 export async function POST(req: Request) {
   const body = (await req.json()) as {
@@ -21,12 +20,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const profile = await getIronSession<AdminProfileData>(await cookies(), adminProfileOptions);
-
-  const recoveryMatches =
-    Boolean(profile.username && profile.recoveryHash) &&
-    profile.username === username &&
-    profile.recoveryHash === hashSecret(recoveryCode);
+  const profile = await readAdminProfile();
+  const recoveryMatches = matchesRecoveryCode(profile, { username, recoveryCode });
 
   if (!recoveryMatches) {
     return NextResponse.json(
@@ -35,9 +30,12 @@ export async function POST(req: Request) {
     );
   }
 
-  profile.passwordHash = hashSecret(newPassword);
-  profile.createdAt = profile.createdAt ?? new Date().toISOString();
-  await profile.save();
+  await writeAdminProfile({
+    username,
+    passwordHash: hashSecret(newPassword),
+    recoveryHash: profile!.recoveryHash!,
+    createdAt: profile!.createdAt ?? new Date().toISOString(),
+  });
 
   return NextResponse.json({ ok: true });
 }

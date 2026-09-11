@@ -24,16 +24,6 @@ export const sessionOptions: SessionOptions = {
   },
 };
 
-export const adminProfileOptions: SessionOptions = {
-  password: sessionSecret,
-  cookieName: 'moonlit-admin-profile',
-  cookieOptions: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    sameSite: 'lax',
-  },
-};
-
 export function hashSecret(value: string) {
   return createHash('sha256').update(value).digest('hex');
 }

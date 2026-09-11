@@ -1,16 +1,15 @@
 import { NextResponse } from 'next/server';
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
-import { AdminProfileData, adminProfileOptions, hashSecret } from '@/lib/session';
+import { hashSecret } from '@/lib/session';
+import { readAdminProfile, writeAdminProfile } from '@/lib/admin-profile';
 
 export async function GET() {
-  const profile = await getIronSession<AdminProfileData>(await cookies(), adminProfileOptions);
-  const hasProfile = Boolean(profile.username && profile.passwordHash);
+  const profile = await readAdminProfile();
+  const hasProfile = Boolean(profile?.username && profile.passwordHash);
 
   return NextResponse.json({
     hasProfile,
-    username: profile.username ?? null,
-    createdAt: profile.createdAt ?? null,
+    username: profile?.username ?? null,
+    createdAt: profile?.createdAt ?? null,
   });
 }
 
@@ -32,12 +31,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const profile = await getIronSession<AdminProfileData>(await cookies(), adminProfileOptions);
-  profile.username = username;
-  profile.passwordHash = hashSecret(password);
-  profile.recoveryHash = hashSecret(recoveryCode);
-  profile.createdAt = profile.createdAt ?? new Date().toISOString();
-  await profile.save();
+  const existingProfile = await readAdminProfile();
+  await writeAdminProfile({
+    username,
+    passwordHash: hashSecret(password),
+    recoveryHash: hashSecret(recoveryCode),
+    createdAt: existingProfile?.createdAt ?? new Date().toISOString(),
+  });
 
   return NextResponse.json({ ok: true });
 }
