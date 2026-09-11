@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'fs/promises';
 import path from 'path';
-import { AdminProfileData, hashSecret } from '@/lib/session';
+import { AdminProfileData, verifySecret } from '@/lib/session';
 
 const adminProfilePath = path.join(process.cwd(), 'data', 'admin-profile.json');
 
@@ -36,7 +36,7 @@ export function matchesAdminProfile(
     return false;
   }
 
-  return profile.username === credentials.username && profile.passwordHash === hashSecret(credentials.password);
+  return profile.username === credentials.username && verifySecret(credentials.password, profile.passwordHash);
 }
 
 export function matchesRecoveryCode(
@@ -47,5 +47,5 @@ export function matchesRecoveryCode(
     return false;
   }
 
-  return profile.username === credentials.username && profile.recoveryHash === hashSecret(credentials.recoveryCode);
+  return profile.username === credentials.username && verifySecret(credentials.recoveryCode, profile.recoveryHash);
 }
