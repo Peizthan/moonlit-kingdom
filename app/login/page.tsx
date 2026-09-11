@@ -18,6 +18,11 @@ const inputStyle: CSSProperties = {
   fontFamily: "'Georgia', 'Times New Roman', serif",
 };
 
+type AuthActionResponse = {
+  ok?: boolean;
+  error?: string;
+};
+
 const PasswordInput = memo(function PasswordInput({
   id,
   name,
@@ -99,7 +104,11 @@ export default function LoginPage() {
       });
   }, []);
 
-  async function postAction(endpoint: string, payload: Record<string, string>, onOk: (data: any) => void) {
+  async function postAction(
+    endpoint: string,
+    payload: Record<string, string>,
+    onOk: (data: AuthActionResponse) => void,
+  ) {
     setError('');
     setSuccess('');
     setLoading(true);
@@ -111,9 +120,8 @@ export default function LoginPage() {
         body: JSON.stringify(payload),
       });
 
-      // Safely parse — server may return empty body on 500/redirect
       const text = await res.text();
-      let data: any = {};
+      let data: AuthActionResponse = {};
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
