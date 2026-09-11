@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getIronSession } from 'iron-session';
-import { cookies } from 'next/headers';
-import { AdminProfileData, adminProfileOptions, hashSecret } from '@/lib/session';
+import { matchesAdminProfile, readAdminProfile } from '@/lib/admin-profile';
 
 export async function POST(req: Request) {
   const body = (await req.json()) as { username?: string; password?: string };
@@ -15,11 +13,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const profile = await getIronSession<AdminProfileData>(await cookies(), adminProfileOptions);
-  const profileMatches =
-    Boolean(profile.username && profile.passwordHash) &&
-    profile.username === username &&
-    profile.passwordHash === hashSecret(password);
+  const profile = await readAdminProfile();
+  const profileMatches = matchesAdminProfile(profile, { username, password });
 
   const envMatches =
     username === process.env.ADMIN_USER &&
@@ -27,6 +22,6 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     ok: profileMatches || envMatches,
-    hasProfile: Boolean(profile.username && profile.passwordHash),
+    hasProfile: Boolean(profile?.username && profile.passwordHash),
   });
 }
