@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
 import { useExchangeRate } from '@/lib/useExchangeRate';
 import { useBudget } from '@/lib/useBudget';
-import { AdminProvider } from '@/lib/AdminContext';
+import { AdminProvider, useEditableList, genId } from '@/lib/AdminContext';
 import { AdminToolbar } from '@/components/ui/AdminToolbar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
@@ -18,7 +18,6 @@ import { DecisionLogTable } from '@/components/ui/DecisionLogTable';
 import { NotesPanel } from '@/components/ui/NotesPanel';
 import { ActionItemsPanel } from '@/components/planning/ActionItemsPanel';
 import { SeatingPlan } from '@/components/planning/SeatingPlan';
-import { LightingPlan } from '@/components/planning/LightingPlan';
 import { TechnicalPlan } from '@/components/planning/TechnicalPlan';
 import {
   Calendar,
@@ -30,10 +29,10 @@ import {
   AlertTriangle,
   Zap,
   Layout,
-  Lightbulb,
 } from 'lucide-react';
+import type { Vendor, BudgetCategory, ActionItem, MeetingNote, Decision, RiskItem, SeatingTable, TechnicalItem } from '@/lib/types';
 
-const { couple, vendors, actionItems, meetingNotes, decisions, risks, seating, lighting, technical, timeline } =
+const { couple, vendors, actionItems, meetingNotes, decisions, risks, seating, technical, timeline } =
   weddingData;
 
 // These are static fallback values; live totals are computed inside DashboardContent from useBudget
@@ -54,7 +53,6 @@ type TabId =
   | 'decisions'
   | 'risks'
   | 'seating'
-  | 'lighting'
   | 'technical';
 
 const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
@@ -67,7 +65,6 @@ const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
   { id: 'decisions', label: 'Decisiones', icon: <BookOpen size={14} /> },
   { id: 'risks', label: 'Riesgos', icon: <AlertTriangle size={14} /> },
   { id: 'seating', label: 'Ubicación', icon: <Users size={14} /> },
-  { id: 'lighting', label: 'Iluminación', icon: <Lightbulb size={14} /> },
   { id: 'technical', label: 'Técnico', icon: <Zap size={14} /> },
 ];
 
@@ -82,12 +79,114 @@ export default function DashboardPage() {
 function DashboardContent() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const { rate, updatedAt, loading: rateLoading, fallback: rateFallback } = useExchangeRate();
-  const { budget, loading: budgetLoading, error: budgetError, fromSheet } = useBudget();
+  const { budget: budgetSource, loading: budgetLoading, error: budgetError, fromSheet } = useBudget();
 
-  const totalBudget = budget.reduce((s, b) => s + b.estimated, 0);
-  const confirmedVendors = vendors.filter((v) => v.status === 'confirmed').length;
-  const openActions = actionItems.filter((a) => a.status !== 'complete').length;
-  const completedActions = actionItems.filter((a) => a.status === 'complete').length;
+  const vendorsList = useEditableList<Vendor>('vendors', vendors);
+  const budgetList = useEditableList<BudgetCategory>('budget', budgetSource);
+  const actionsList = useEditableList<ActionItem>('actions', actionItems);
+  const notesList = useEditableList<MeetingNote>('notes', meetingNotes);
+  const decisionsList = useEditableList<Decision>('decisions', decisions);
+  const risksList = useEditableList<RiskItem>('risks', risks);
+  const seatingList = useEditableList<SeatingTable>('seating', seating);
+  const technicalList = useEditableList<TechnicalItem>('technical', technical);
+
+  function addVendor() {
+    vendorsList.addItem({
+      id: genId('vendor'),
+      role: 'Nuevo rol',
+      company: 'Nueva empresa',
+      contact: '',
+      email: '',
+      phone: '',
+      status: 'enquiry',
+      contractSigned: false,
+      depositPaid: false,
+    });
+  }
+
+  function addBudgetItem() {
+    budgetList.addItem({
+      id: genId('budget'),
+      category: 'Nueva categoría',
+      subcategory: 'Nuevo ítem',
+      estimated: 0,
+      status: 'pending',
+    });
+  }
+
+  function addAction() {
+    actionsList.addItem({
+      id: genId('action'),
+      title: 'Nueva acción',
+      owner: '',
+      dueDate: '',
+      priority: 'medium',
+      status: 'not-started',
+      category: 'General',
+    });
+  }
+
+  function addNote() {
+    notesList.addItem({
+      id: genId('note'),
+      date: new Date().toLocaleDateString('es-PY'),
+      title: 'Nueva acta',
+      attendees: [],
+      summary: '',
+      decisions: [],
+      actionItems: [],
+    });
+  }
+
+  function addDecision() {
+    decisionsList.addItem({
+      id: genId('decision'),
+      date: new Date().toLocaleDateString('es-PY'),
+      category: 'General',
+      decision: 'Nueva decisión',
+      decidedBy: '',
+      status: 'provisional',
+    });
+  }
+
+  function addRisk() {
+    risksList.addItem({
+      id: genId('risk'),
+      risk: 'Nuevo riesgo',
+      category: 'General',
+      likelihood: 'medium',
+      impact: 'medium',
+      mitigation: '',
+      owner: '',
+      status: 'open',
+    });
+  }
+
+  function addTable() {
+    const nextNumber = seatingList.items.reduce((max, t) => Math.max(max, t.tableNumber), 0) + 1;
+    seatingList.addItem({
+      id: genId('seating'),
+      tableName: 'Nueva mesa',
+      tableNumber: nextNumber,
+      capacity: 8,
+      guests: [],
+    });
+  }
+
+  function addTechnicalItem() {
+    technicalList.addItem({
+      id: genId('tech'),
+      category: 'General',
+      item: 'Nuevo ítem',
+      quantity: 1,
+      status: 'tbc',
+    });
+  }
+
+  const totalBudget = budgetList.items.reduce((s, b) => s + b.estimated, 0);
+  const confirmedVendors = vendorsList.items.filter((v) => v.status === 'confirmed').length;
+  const openActions = actionsList.items.filter((a) => a.status !== 'complete').length;
+  const completedActions = actionsList.items.filter((a) => a.status === 'complete').length;
 
   return (
     <div
@@ -214,7 +313,8 @@ function DashboardContent() {
                 Acciones de Alta Prioridad
               </h3>
               <ActionItemsPanel
-                items={actionItems.filter((a) => a.priority === 'high' && a.status !== 'complete')}
+                items={actionsList.items.filter((a) => a.priority === 'high' && a.status !== 'complete')}
+                onDelete={actionsList.removeItem}
               />
             </div>
 
@@ -228,7 +328,7 @@ function DashboardContent() {
               >
                 Riesgos Abiertos
               </h3>
-              <RiskTable risks={risks.filter((r) => r.status === 'open')} />
+              <RiskTable risks={risksList.items.filter((r) => r.status === 'open')} onDelete={risksList.removeItem} />
             </div>
           </motion.div>
         )}
@@ -280,7 +380,7 @@ function DashboardContent() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <VendorTable vendors={vendors} />
+              <VendorTable vendors={vendorsList.items} onAdd={addVendor} onDelete={vendorsList.removeItem} />
             </div>
           </motion.div>
         )}
@@ -336,7 +436,7 @@ function DashboardContent() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <BudgetTable items={budget} rate={rate} />
+              <BudgetTable items={budgetList.items} rate={rate} onAdd={addBudgetItem} onDelete={budgetList.removeItem} />
             </div>
           </motion.div>
         )}
@@ -355,7 +455,7 @@ function DashboardContent() {
               subtitle={`${openActions} acciones abiertas · ${completedActions} completadas`}
               align="left"
             />
-            <ActionItemsPanel items={actionItems} />
+            <ActionItemsPanel items={actionsList.items} onAdd={addAction} onDelete={actionsList.removeItem} />
           </motion.div>
         )}
 
@@ -370,10 +470,10 @@ function DashboardContent() {
             <SectionHeader
               eyebrow="Documentación"
               title="Actas de Reunión"
-              subtitle={`${meetingNotes.length} reuniones registradas`}
+              subtitle={`${notesList.items.length} reuniones registradas`}
               align="left"
             />
-            <NotesPanel notes={meetingNotes} />
+            <NotesPanel notes={notesList.items} onAdd={addNote} onDelete={notesList.removeItem} />
           </motion.div>
         )}
 
@@ -391,7 +491,7 @@ function DashboardContent() {
               subtitle="Todas las decisiones clave registradas con fundamento y estado."
               align="left"
             />
-            <DecisionLogTable decisions={decisions} />
+            <DecisionLogTable decisions={decisionsList.items} onAdd={addDecision} onDelete={decisionsList.removeItem} />
           </motion.div>
         )}
 
@@ -406,10 +506,10 @@ function DashboardContent() {
             <SectionHeader
               eyebrow="Registro de Riesgos"
               title="Gestión de Riesgos"
-              subtitle={`${risks.filter((r) => r.status === 'open').length} riesgos abiertos · ${risks.filter((r) => r.status === 'mitigated').length} mitigados`}
+              subtitle={`${risksList.items.filter((r) => r.status === 'open').length} riesgos abiertos · ${risksList.items.filter((r) => r.status === 'mitigated').length} mitigados`}
               align="left"
             />
-            <RiskTable risks={risks} />
+            <RiskTable risks={risksList.items} onAdd={addRisk} onDelete={risksList.removeItem} />
           </motion.div>
         )}
 
@@ -424,28 +524,10 @@ function DashboardContent() {
             <SectionHeader
               eyebrow="Gestión de Invitados"
               title="Plan de Ubicación"
-              subtitle={`${seating.length} mesas · ${seating.reduce((s, t) => s + t.guests.length, 0)} invitados ubicados`}
+              subtitle={`${seatingList.items.length} mesas · ${seatingList.items.reduce((s, t) => s + t.guests.length, 0)} invitados ubicados`}
               align="left"
             />
-            <SeatingPlan tables={seating} />
-          </motion.div>
-        )}
-
-        {/* LIGHTING */}
-        {activeTab === 'lighting' && (
-          <motion.div
-            key="lighting"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <SectionHeader
-              eyebrow="Diseño de Producción"
-              title="Diseño de Iluminación"
-              subtitle="Plan de iluminación por escena, área y horario."
-              align="left"
-            />
-            <LightingPlan scenes={lighting} />
+            <SeatingPlan tables={seatingList.items} onAdd={addTable} onDelete={seatingList.removeItem} />
           </motion.div>
         )}
 
@@ -460,7 +542,7 @@ function DashboardContent() {
             <SectionHeader
               eyebrow="Producción"
               title="Producción Técnica"
-              subtitle="Cronograma completo de AV, iluminación, electricidad y equipamiento del equipo."
+              subtitle="Cronograma completo de AV, electricidad y equipamiento del equipo."
               align="left"
             />
             <div
@@ -470,7 +552,7 @@ function DashboardContent() {
                 background: 'rgba(18,28,46,0.3)',
               }}
             >
-              <TechnicalPlan items={technical} />
+              <TechnicalPlan items={technicalList.items} onAdd={addTechnicalItem} onDelete={technicalList.removeItem} />
             </div>
           </motion.div>
         )}

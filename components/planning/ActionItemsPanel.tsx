@@ -5,9 +5,12 @@ import { ActionItem } from '@/lib/types';
 import { CheckCircle, Clock, AlertCircle, Circle } from 'lucide-react';
 import { useAdmin } from '@/lib/AdminContext';
 import { EditableField } from '@/components/ui/EditableField';
+import { AddButton, DeleteButton } from '@/components/ui/ListControls';
 
 interface ActionItemsPanelProps {
   items: ActionItem[];
+  onAdd?: () => void;
+  onDelete?: (id: string) => void;
 }
 
 const priorityColors: Record<ActionItem['priority'], string> = {
@@ -32,7 +35,7 @@ const statusBg: Record<ActionItem['status'], string> = {
 
 const statusOrder: ActionItem['status'][] = ['not-started', 'in-progress', 'complete', 'blocked'];
 
-export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
+export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelProps) {
   const { isEditMode, getOverride, setOverride } = useAdmin();
 
   // In edit mode show flat list; in view mode group by status
@@ -65,6 +68,11 @@ export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
 
   return (
     <div className="space-y-2">
+      {isEditMode && onAdd && (
+        <div className="flex justify-end mb-2">
+          <AddButton label="Agregar acción" onClick={onAdd} />
+        </div>
+      )}
       {displayList.map((item, i) => (
         <motion.div
           key={item.id}
@@ -170,6 +178,10 @@ export function ActionItemsPanel({ items }: ActionItemsPanelProps) {
               </span>
             </div>
           </div>
+
+          {isEditMode && onDelete && (
+            <DeleteButton onClick={() => onDelete(item.id)} title="Eliminar acción" confirmMessage="¿Eliminar esta acción?" />
+          )}
         </motion.div>
       ))}
     </div>

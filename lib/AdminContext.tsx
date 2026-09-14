@@ -90,3 +90,40 @@ export function useAdmin(): AdminContextValue {
   }
   return ctx;
 }
+
+/** Generates a reasonably unique id for newly created items (client-side only). */
+export function genId(prefix: string): string {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+/**
+ * Layers create/delete capability on top of a static list coming from data/wedding-data.ts
+ * (or a live source such as the budget sheet). Additions and deletions are stored as admin
+ * overrides, keyed by `listKey`, so they persist in localStorage just like field edits.
+ */
+export function useEditableList<T extends { id: string }>(listKey: string, baseItems: T[]) {
+  const { getOverride, setOverride } = useAdmin();
+
+  const deletedIds = getOverride<string[]>(`list:${listKey}:deleted`, []);
+  const addedItems = getOverride<T[]>(`list:${listKey}:added`, []);
+
+  const items = [...baseItems, ...addedItems].filter((item) => !deletedIds.includes(item.id));
+
+  const addItem = useCallback(
+    (item: T) => {
+      setOverride(`list:${listKey}:added`, [...addedItems, item]);
+    },
+    [listKey, addedItems, setOverride],
+  );
+
+  const removeItem = useCallback(
+    (id: string) => {
+      if (!deletedIds.includes(id)) {
+        setOverride(`list:${listKey}:deleted`, [...deletedIds, id]);
+      }
+    },
+    [listKey, deletedIds, setOverride],
+  );
+
+  return { items, addItem, removeItem };
+}

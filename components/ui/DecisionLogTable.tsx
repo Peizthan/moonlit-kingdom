@@ -4,9 +4,12 @@ import { motion } from 'framer-motion';
 import { Decision } from '@/lib/types';
 import { useAdmin } from '@/lib/AdminContext';
 import { EditableField } from '@/components/ui/EditableField';
+import { AddButton, DeleteButton } from '@/components/ui/ListControls';
 
 interface DecisionLogTableProps {
   decisions: Decision[];
+  onAdd?: () => void;
+  onDelete?: (id: string) => void;
 }
 
 const statusColors: Record<Decision['status'], string> = {
@@ -23,7 +26,7 @@ const statusLabels: Record<Decision['status'], string> = {
 
 const statusOrder: Decision['status'][] = ['provisional', 'under-review', 'final'];
 
-export function DecisionLogTable({ decisions }: DecisionLogTableProps) {
+export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTableProps) {
   const { isEditMode, getOverride, setOverride } = useAdmin();
 
   function cycleStatus(d: Decision) {
@@ -34,6 +37,11 @@ export function DecisionLogTable({ decisions }: DecisionLogTableProps) {
 
   return (
     <div className="space-y-3">
+      {isEditMode && onAdd && (
+        <div className="flex justify-end">
+          <AddButton label="Agregar decisión" onClick={onAdd} />
+        </div>
+      )}
       {decisions.map((d, i) => (
         <motion.div
           key={d.id}
@@ -71,6 +79,9 @@ export function DecisionLogTable({ decisions }: DecisionLogTableProps) {
                 </span>
               );
             })()}
+            {isEditMode && onDelete && (
+              <DeleteButton onClick={() => onDelete(d.id)} title="Eliminar decisión" confirmMessage="¿Eliminar esta decisión?" />
+            )}
           </div>
           {d.rationale && (
             <p className="text-sm mb-2" style={{ color: '#8E8A86' }}>

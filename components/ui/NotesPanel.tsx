@@ -4,15 +4,23 @@ import { motion } from 'framer-motion';
 import { MeetingNote } from '@/lib/types';
 import { useAdmin } from '@/lib/AdminContext';
 import { EditableField } from '@/components/ui/EditableField';
+import { AddButton, DeleteButton } from '@/components/ui/ListControls';
 
 interface NotesPanelProps {
   notes: MeetingNote[];
+  onAdd?: () => void;
+  onDelete?: (id: string) => void;
 }
 
-export function NotesPanel({ notes }: NotesPanelProps) {
+export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
   const { isEditMode, getOverride } = useAdmin();
   return (
     <div className="space-y-6">
+      {isEditMode && onAdd && (
+        <div className="flex justify-end">
+          <AddButton label="Agregar acta" onClick={onAdd} />
+        </div>
+      )}
       {notes.map((note, i) => (
         <motion.div
           key={note.id}
@@ -35,8 +43,13 @@ export function NotesPanel({ notes }: NotesPanelProps) {
                 {note.date}
               </p>
             </div>
-            <div className="text-xs" style={{ color: '#8E8A86' }}>
-              {note.attendees.join(' · ')}
+            <div className="flex items-center gap-3">
+              <div className="text-xs" style={{ color: '#8E8A86' }}>
+                {note.attendees.join(' · ')}
+              </div>
+              {isEditMode && onDelete && (
+                <DeleteButton onClick={() => onDelete(note.id)} title="Eliminar acta" confirmMessage="¿Eliminar esta acta?" />
+              )}
             </div>
           </div>
 

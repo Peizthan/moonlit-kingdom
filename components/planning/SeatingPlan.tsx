@@ -4,83 +4,98 @@ import { motion } from 'framer-motion';
 import { SeatingTable } from '@/lib/types';
 import { useAdmin } from '@/lib/AdminContext';
 import { EditableField } from '@/components/ui/EditableField';
+import { AddButton, DeleteButton } from '@/components/ui/ListControls';
 
 interface SeatingPlanProps {
   tables: SeatingTable[];
+  onAdd?: () => void;
+  onDelete?: (id: string) => void;
 }
 
-export function SeatingPlan({ tables }: SeatingPlanProps) {
+export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
   const { isEditMode, getOverride } = useAdmin();
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-      {tables.map((table, i) => (
-        <motion.div
-          key={table.id}
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: i * 0.08 }}
-          className="rounded-sm border p-5"
-          style={{
-            borderColor: 'rgba(176,141,87,0.2)',
-            background: 'linear-gradient(135deg, rgba(29,74,58,0.2) 0%, rgba(18,28,46,0.3) 100%)',
-          }}
-        >
-          <div className="flex items-start justify-between mb-4">
-            <div>
-              <h3
-                className="text-base font-medium"
-                style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
-              >
-                <EditableField id={`seating:${table.id}:tableName`} value={table.tableName} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
-              </h3>
-              <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                Mesa {table.tableNumber}
-              </p>
-            </div>
-            <div
-              className="flex flex-col items-end text-xs"
-              style={{ color: '#8E8A86' }}
-            >
-              <span style={{ color: '#B08D57' }}>{table.guests.length}</span>
-              <span>/ {table.capacity} lugares</span>
-            </div>
-          </div>
-
-          {/* Guest capacity bar */}
-          <div
-            className="h-1 rounded-full mb-4 overflow-hidden"
-            style={{ background: 'rgba(176,141,87,0.1)' }}
+    <div>
+      {isEditMode && onAdd && (
+        <div className="flex justify-end mb-4">
+          <AddButton label="Agregar mesa" onClick={onAdd} />
+        </div>
+      )}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {tables.map((table, i) => (
+          <motion.div
+            key={table.id}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.08 }}
+            className="rounded-sm border p-5"
+            style={{
+              borderColor: 'rgba(176,141,87,0.2)',
+              background: 'linear-gradient(135deg, rgba(29,74,58,0.2) 0%, rgba(18,28,46,0.3) 100%)',
+            }}
           >
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3
+                  className="text-base font-medium"
+                  style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
+                >
+                  <EditableField id={`seating:${table.id}:tableName`} value={table.tableName} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
+                </h3>
+                <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'rgba(176,141,87,0.5)' }}>
+                  Mesa {table.tableNumber}
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div
+                  className="flex flex-col items-end text-xs"
+                  style={{ color: '#8E8A86' }}
+                >
+                  <span style={{ color: '#B08D57' }}>{table.guests.length}</span>
+                  <span>/ {table.capacity} lugares</span>
+                </div>
+                {isEditMode && onDelete && (
+                  <DeleteButton onClick={() => onDelete(table.id)} title="Eliminar mesa" confirmMessage="¿Eliminar esta mesa?" />
+                )}
+              </div>
+            </div>
+
+            {/* Guest capacity bar */}
             <div
-              className="h-full rounded-full"
-              style={{
-                width: `${(table.guests.length / table.capacity) * 100}%`,
-                background: 'linear-gradient(to right, #B08D57, #8C6A3C)',
-              }}
-            />
-          </div>
+              className="h-1 rounded-full mb-4 overflow-hidden"
+              style={{ background: 'rgba(176,141,87,0.1)' }}
+            >
+              <div
+                className="h-full rounded-full"
+                style={{
+                  width: `${(table.guests.length / table.capacity) * 100}%`,
+                  background: 'linear-gradient(to right, #B08D57, #8C6A3C)',
+                }}
+              />
+            </div>
 
-          <ul className="space-y-1">
-            {table.guests.map((guest, gi) => (
-              <li
-                key={gi}
-                className="flex items-center gap-2 text-sm"
-                style={{ color: '#C7C0B6' }}
-              >
-                <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
-                <EditableField id={`seating:${table.id}:guest:${gi}`} value={guest} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
-              </li>
-            ))}
-          </ul>
+            <ul className="space-y-1">
+              {table.guests.map((guest, gi) => (
+                <li
+                  key={gi}
+                  className="flex items-center gap-2 text-sm"
+                  style={{ color: '#C7C0B6' }}
+                >
+                  <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
+                  <EditableField id={`seating:${table.id}:guest:${gi}`} value={guest} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
+                </li>
+              ))}
+            </ul>
 
-          {(table.notes || isEditMode) && (
-            <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.4)' }}>
-              <EditableField id={`seating:${table.id}:notes`} value={table.notes ?? ''} type="textarea" style={{ color: 'rgba(176,141,87,0.4)', fontSize: '0.75rem', fontStyle: 'italic' }} />
-            </p>
-          )}
-        </motion.div>
-      ))}
+            {(table.notes || isEditMode) && (
+              <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.4)' }}>
+                <EditableField id={`seating:${table.id}:notes`} value={table.notes ?? ''} type="textarea" style={{ color: 'rgba(176,141,87,0.4)', fontSize: '0.75rem', fontStyle: 'italic' }} />
+              </p>
+            )}
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

@@ -4,9 +4,12 @@ import { motion } from 'framer-motion';
 import { RiskItem } from '@/lib/types';
 import { useAdmin } from '@/lib/AdminContext';
 import { EditableField } from '@/components/ui/EditableField';
+import { AddButton, DeleteButton } from '@/components/ui/ListControls';
 
 interface RiskTableProps {
   risks: RiskItem[];
+  onAdd?: () => void;
+  onDelete?: (id: string) => void;
 }
 
 const impactColors = {
@@ -24,7 +27,7 @@ const statusColors = {
 const statusLabels = { open: 'Abierto', mitigated: 'Mitigado', closed: 'Cerrado' };
 const statusOrder: RiskItem['status'][] = ['open', 'mitigated', 'closed'];
 
-export function RiskTable({ risks }: RiskTableProps) {
+export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
   const { isEditMode, getOverride, setOverride } = useAdmin();
 
   function cycleStatus(risk: RiskItem) {
@@ -35,6 +38,11 @@ export function RiskTable({ risks }: RiskTableProps) {
 
   return (
     <div className="space-y-3">
+      {isEditMode && onAdd && (
+        <div className="flex justify-end">
+          <AddButton label="Agregar riesgo" onClick={onAdd} />
+        </div>
+      )}
       {risks.map((risk, i) => (
         <motion.div
           key={risk.id}
@@ -93,6 +101,9 @@ export function RiskTable({ risks }: RiskTableProps) {
                   </span>
                 );
               })()}
+              {isEditMode && onDelete && (
+                <DeleteButton onClick={() => onDelete(risk.id)} title="Eliminar riesgo" confirmMessage="¿Eliminar este riesgo?" />
+              )}
             </div>
           </div>
           <p className="text-sm mb-2" style={{ color: '#8E8A86' }}>
