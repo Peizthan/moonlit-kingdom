@@ -68,7 +68,7 @@ export default function HomePage() {
           className="text-xs uppercase tracking-[0.4em] mb-6"
           style={{ color: 'rgba(176,141,87,0.7)' }}
         >
-          Una Boda en el Bosque Celestial
+          Nuestra Boda en un bosque celestial
         </motion.p>
 
         {/* Title */}
@@ -84,18 +84,7 @@ export default function HomePage() {
           <span style={{ color: '#B08D57' }}>Kingdom</span>
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-sm md:text-base uppercase tracking-[0.25em] mb-12"
-          style={{ color: '#8E8A86' }}
-        >
-          Visión y Plan de Producción de la Boda
-        </motion.p>
-
-        <OrnamentalDivider variant="moon" className="max-w-xs mx-auto" />
+        <OrnamentalDivider variant="moon" className="max-w-xs mx-auto mb-12" />
 
         {/* Metadata */}
         <motion.div

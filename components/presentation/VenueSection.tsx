@@ -49,7 +49,7 @@ export function VenueSection() {
             transition={{ duration: 0.8, delay: 0.15 }}
           >
             <ImagePlaceholder
-              label="Salón Veteranos"
+              label={venue.name}
               aspectRatio="landscape"
               gradientFrom="#10261D"
               gradientTo="#121C2E"

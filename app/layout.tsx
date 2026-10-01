@@ -4,9 +4,9 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Moonlit Kingdom — Visión y Plan de Producción de la Boda',
+  title: 'Moonlit Kingdom — Visión y Plan de Producción de Boda',
   description:
-    'Una boda en el bosque celestial. Constanza & Ivan · 21 de agosto de 2027 · Salón Veteranos, Club Centenario, Buenos Aires.',
+    'Nuestra boda en un bosque celestial. Constanza & Ivan · 28 de agosto de 2027 · Salón Oscar Pérez Uribe, Club Centenario, Asunción, Paraguay.',
 };
 
 export default function RootLayout({

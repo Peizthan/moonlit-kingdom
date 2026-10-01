@@ -5,8 +5,10 @@ import { VisionSection } from '@/components/presentation/VisionSection';
 import { VenueSection } from '@/components/presentation/VenueSection';
 import { TimelineSection } from '@/components/presentation/TimelineSection';
 import { FloralsSection } from '@/components/presentation/FloralsSection';
-import { MenuSection } from '@/components/presentation/MenuSection';
 import { FinalVisionSection } from '@/components/presentation/FinalVisionSection';
+import { weddingData } from '@/data/wedding-data';
+
+const { couple } = weddingData;
 
 const sections = [
   { id: 'vision', label: 'Visión' },
@@ -14,7 +16,6 @@ const sections = [
   { id: 'venue', label: 'Salón' },
   { id: 'timeline', label: 'Programa' },
   { id: 'florals', label: 'Flores' },
-  { id: 'menu', label: 'Menú' },
   { id: 'final-vision', label: 'Visión Final' },
 ];
 
@@ -50,7 +51,7 @@ export default function PresentationPage() {
             Moonlit Kingdom
           </h1>
           <p className="mt-3 text-sm uppercase tracking-[0.2em]" style={{ color: '#8E8A86' }}>
-            Constanza & Ivan · 21 de agosto de 2027
+            {couple.partner1} & {couple.partner2} · {couple.weddingDate}
           </p>
         </div>
       </div>
@@ -60,7 +61,6 @@ export default function PresentationPage() {
       <VenueSection />
       <TimelineSection />
       <FloralsSection />
-      <MenuSection />
       <FinalVisionSection />
     </div>
   );

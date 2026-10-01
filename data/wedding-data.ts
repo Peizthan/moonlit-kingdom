@@ -4,10 +4,10 @@ export const weddingData: WeddingData = {
   couple: {
     partner1: 'Constanza Martinez',
     partner2: 'Ivan Kostianovsky',
-    weddingDate: '21 de agosto de 2027',
+    weddingDate: '28 de agosto de 2027',
     location: 'Salón Oscar Pérez Uribe, Club Centenario',
-    version: '3.4',
-    lastUpdated: 'junio de 2026',
+    version: '3.5',
+    lastUpdated: 'octubre de 2026',
   },
 
   story: {
@@ -34,7 +34,7 @@ export const weddingData: WeddingData = {
     address: 'Av. Mariscal López 2351',
     city: 'Asunción',
     country: 'Paraguay',
-    capacity: 700,
+    capacity: 500,
     indoorOutdoor: 'Interior y Exterior',
     description:
       'El Salón Pérez Uribe del Club Centenario es un espacio de gran elegancia arquitectónica, con techos de roble labrado, ventanales que dan a los jardines históricos del club y una terraza rodeada de árboles centenarios. El salón cuenta con una capilla privada, un gran salón de recepción y jardines aterrazados perfectos para una recepción nocturna bajo las estrellas.',
@@ -388,7 +388,7 @@ export const weddingData: WeddingData = {
   ],
 
   budget: [
-    { id: 'b1', category: 'Salón', subcategory: 'Alquiler del Salón Veteranos', estimated: 28000, actual: 28000, deposit: 8000, depositPaid: true, vendor: 'Club Centenario', status: 'confirmed' },
+    { id: 'b1', category: 'Salón', subcategory: 'Alquiler del Salón Pérez Uribe', estimated: 28000, actual: 28000, deposit: 8000, depositPaid: true, vendor: 'Club Centenario', status: 'confirmed' },
     { id: 'b2', category: 'Salón', subcategory: 'Personal y Servicio', estimated: 6500, vendor: 'Club Centenario', status: 'confirmed' },
     { id: 'b3', category: 'Gastronomía', subcategory: 'Cena de Bodas (120 personas)', estimated: 18000, vendor: 'Talleyrand', status: 'confirmed' },
     { id: 'b4', category: 'Gastronomía', subcategory: 'Canápes Nocturnos', estimated: 4200, vendor: 'Talleyrand', status: 'confirmed' },

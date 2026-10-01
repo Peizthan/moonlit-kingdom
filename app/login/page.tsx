@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { StarField } from '@/components/layout/StarField';
+import { weddingData } from '@/data/wedding-data';
+
+const { couple } = weddingData;
 
 const inputStyle: CSSProperties = {
   background: 'rgba(18,28,46,0.6)',
@@ -438,7 +441,7 @@ export default function LoginPage() {
           className="text-center text-xs mt-6"
           style={{ color: 'rgba(142,138,134,0.4)' }}
         >
-          Constanza & Ivan · 21 de agosto de 2027
+          {couple.partner1} & {couple.partner2} · {couple.weddingDate}
         </p>
       </motion.div>
     </div>

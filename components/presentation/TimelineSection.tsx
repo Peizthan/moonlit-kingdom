@@ -5,7 +5,7 @@ import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
 import { TimelineBlock } from '@/components/ui/TimelineBlock';
 import { weddingData } from '@/data/wedding-data';
 
-const { timeline } = weddingData;
+const { timeline, couple } = weddingData;
 
 export function TimelineSection() {
   return (
@@ -47,7 +47,7 @@ export function TimelineSection() {
           className="text-center text-sm uppercase tracking-[0.2em] mb-16"
           style={{ color: '#8E8A86' }}
         >
-          Sábado, 21 de agosto de 2027 · Salón Veteranos, Club Centenario
+          {couple.weddingDate} · {couple.location}
         </motion.p>
 
         <div

@@ -296,8 +296,8 @@ function DashboardContent() {
               />
               <MetricCard
                 label="Días para la Boda"
-                value={getDaysUntil('2027-08-21')}
-                subValue="21 de agosto de 2027"
+                value={getDaysUntil('2027-08-28')}
+                subValue={couple.weddingDate}
                 delay={0.24}
               />
             </div>
@@ -344,7 +344,7 @@ function DashboardContent() {
             <SectionHeader
               eyebrow="Programa del Día"
               title="Cronograma de la Boda"
-              subtitle="Programa completo para el 21 de agosto de 2027 en Salón Veteranos, Club Centenario."
+              subtitle={`Programa completo para el ${couple.weddingDate} en ${couple.location}.`}
               align="left"
             />
             <div

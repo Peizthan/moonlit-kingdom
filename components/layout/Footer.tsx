@@ -1,5 +1,9 @@
 'use client';
 
+import { weddingData } from '@/data/wedding-data';
+
+const { couple } = weddingData;
+
 export function Footer() {
   return (
     <footer
@@ -11,10 +15,7 @@ export function Footer() {
           ☽ Moonlit Kingdom ☽
         </p>
         <p className="text-xs" style={{ color: '#8E8A86' }}>
-          Constanza & Ivan · 21 de agosto de 2027 · Salón Veteranos, Club Centenario
-        </p>
-        <p className="text-xs mt-3" style={{ color: 'rgba(142,138,134,0.4)' }}>
-          Visión y Plan de Producción de la Boda — Confidencial
+          {couple.partner1} & {couple.partner2} · {couple.weddingDate} · {couple.location}
         </p>
       </div>
     </footer>
