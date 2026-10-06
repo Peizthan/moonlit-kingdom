@@ -52,10 +52,19 @@ function mergeListValue(key: string, existing: unknown, incoming: unknown): unkn
 
 export async function writeOverrides(changes: Record<string, unknown>): Promise<Record<string, unknown>> {
   const keys = Object.keys(changes);
-  if (keys.length > 0) {
+  // JSON null can't be stored (PostgREST maps it to SQL NULL), so it means "remove this override"
+  const removed = keys.filter((k) => changes[k] === null || changes[k] === undefined);
+  const upserted = keys.filter((k) => !removed.includes(k));
+
+  if (removed.length > 0) {
+    const list = removed.map((k) => `"${k.replace(/"/g, '""')}"`).join(',');
+    await rest(`${TABLE}?key=in.(${encodeURIComponent(list)})`, { method: 'DELETE', prefer: 'return=minimal' });
+  }
+
+  if (upserted.length > 0) {
     const current = await readOverrides();
     const now = new Date().toISOString();
-    const rows = keys.map((key) => ({
+    const rows = upserted.map((key) => ({
       key,
       value: mergeListValue(key, current[key], changes[key]),
       updated_at: now,

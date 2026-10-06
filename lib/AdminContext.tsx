@@ -180,7 +180,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const getOverride = useCallback(
     <T,>(id: string, fallback: T): T =>
-      id in overrides ? (overrides[id] as T) : fallback,
+      id in overrides && overrides[id] != null ? (overrides[id] as T) : fallback,
     [overrides],
   );
 
