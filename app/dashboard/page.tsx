@@ -3,15 +3,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
-import { useExchangeRate } from '@/lib/useExchangeRate';
-import { useBudget } from '@/lib/useBudget';
+import { useSheet } from '@/lib/useSheet';
 import { AdminProvider, useEditableList, genId } from '@/lib/AdminContext';
 import { AdminToolbar } from '@/components/ui/AdminToolbar';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
 import { MetricCard } from '@/components/ui/MetricCard';
 import { TimelineBlock } from '@/components/ui/TimelineBlock';
-import { BudgetTable } from '@/components/ui/BudgetTable';
+import { SheetViewer } from '@/components/ui/SheetViewer';
 import { VendorTable } from '@/components/ui/VendorTable';
 import { RiskTable } from '@/components/ui/RiskTable';
 import { DecisionLogTable } from '@/components/ui/DecisionLogTable';
@@ -30,18 +29,10 @@ import {
   Zap,
   Layout,
 } from 'lucide-react';
-import type { Vendor, BudgetCategory, ActionItem, MeetingNote, Decision, RiskItem, SeatingTable, TechnicalItem } from '@/lib/types';
+import type { Vendor, ActionItem, MeetingNote, Decision, RiskItem, SeatingTable, TechnicalItem } from '@/lib/types';
 
 const { couple, vendors, actionItems, meetingNotes, decisions, risks, seating, technical, timeline } =
   weddingData;
-
-// These are static fallback values; live totals are computed inside DashboardContent from useBudget
-
-function formatCurrency(n: number, rate: number = 1) {
-  return new Intl.NumberFormat('es-PY', { style: 'currency', currency: 'PYG', maximumFractionDigits: 0 }).format(
-    Math.round(n * rate),
-  );
-}
 
 type TabId =
   | 'overview'
@@ -78,11 +69,9 @@ export default function DashboardPage() {
 
 function DashboardContent() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
-  const { rate, updatedAt, loading: rateLoading, fallback: rateFallback } = useExchangeRate();
-  const { budget: budgetSource, loading: budgetLoading, error: budgetError, fromSheet } = useBudget();
+  const sheet = useSheet();
 
   const vendorsList = useEditableList<Vendor>('vendors', vendors);
-  const budgetList = useEditableList<BudgetCategory>('budget', budgetSource);
   const actionsList = useEditableList<ActionItem>('actions', actionItems);
   const notesList = useEditableList<MeetingNote>('notes', meetingNotes);
   const decisionsList = useEditableList<Decision>('decisions', decisions);
@@ -101,16 +90,6 @@ function DashboardContent() {
       status: 'enquiry',
       contractSigned: false,
       depositPaid: false,
-    });
-  }
-
-  function addBudgetItem() {
-    budgetList.addItem({
-      id: genId('budget'),
-      category: 'Nueva categoría',
-      subcategory: 'Nuevo ítem',
-      estimated: 0,
-      status: 'pending',
     });
   }
 
@@ -183,7 +162,6 @@ function DashboardContent() {
     });
   }
 
-  const totalBudget = budgetList.items.reduce((s, b) => s + b.estimated, 0);
   const confirmedVendors = vendorsList.items.filter((v) => v.status === 'confirmed').length;
   const openActions = actionsList.items.filter((a) => a.status !== 'complete').length;
   const completedActions = actionsList.items.filter((a) => a.status === 'complete').length;
@@ -276,9 +254,9 @@ function DashboardContent() {
             {/* Metric cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
               <MetricCard
-                label="Presupuesto Total"
-                value={rateLoading ? '…' : formatCurrency(totalBudget, rate)}
-                subValue="Estimado en guaranías"
+                label="Planilla de Presupuesto"
+                value={sheet.data ? `${sheet.data.tabs.length} hojas` : sheet.loading ? '…' : 'Sin datos'}
+                subValue={sheet.error ? 'No se pudo cargar' : 'Sincronizada con Google Sheets'}
                 delay={0}
               />
               <MetricCard
@@ -393,51 +371,18 @@ function DashboardContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] mb-2" style={{ color: 'rgba(176,141,87,0.6)' }}>
-                  Resumen Financiero
-                </p>
-                <h2
-                  className="text-3xl font-light"
-                  style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-                >
-                  Desglose del Presupuesto
-                </h2>
-              </div>
-              <div
-                className="text-right px-6 py-3 rounded-sm border"
-                style={{ borderColor: 'rgba(176,141,87,0.25)', background: 'rgba(176,141,87,0.06)' }}
+            <div className="mb-10">
+              <p className="text-xs uppercase tracking-[0.3em] mb-2" style={{ color: 'rgba(176,141,87,0.6)' }}>
+                Resumen Financiero
+              </p>
+              <h2
+                className="text-3xl font-light"
+                style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
               >
-                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Total Estimado
-                </p>
-                <p
-                  className="text-2xl font-light"
-                  style={{ fontFamily: "'Georgia', serif", color: '#B08D57' }}
-                >
-                  {rateLoading || budgetLoading ? '…' : formatCurrency(totalBudget, rate)}
-                </p>
-                {!rateLoading && (
-                  <p className="text-xs mt-1" style={{ color: 'rgba(142,138,134,0.5)' }}>
-                    ₳{rate.toLocaleString('es-PY')} / USD
-                    {rateFallback ? ' (estimado)' : updatedAt ? ' · actualizado' : ''}
-                  </p>
-                )}
-                <p className="text-xs mt-1" style={{ color: fromSheet ? 'rgba(176,141,87,0.5)' : 'rgba(142,138,134,0.4)' }}>
-                  {budgetLoading ? 'Cargando planilla…' : fromSheet ? '✓ Desde Google Sheets' : budgetError ? '⚠ Usando datos locales' : ''}
-                </p>
-              </div>
+                Planilla de Presupuesto
+              </h2>
             </div>
-            <div
-              className="rounded-sm border overflow-hidden"
-              style={{
-                borderColor: 'rgba(176,141,87,0.15)',
-                background: 'rgba(18,28,46,0.3)',
-              }}
-            >
-              <BudgetTable items={budgetList.items} rate={rate} onAdd={addBudgetItem} onDelete={budgetList.removeItem} />
-            </div>
+            <SheetViewer data={sheet.data} loading={sheet.loading} error={sheet.error} onRefresh={sheet.refresh} />
           </motion.div>
         )}
 

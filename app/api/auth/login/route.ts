@@ -1,41 +1,36 @@
 import { NextResponse } from 'next/server';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
-import { AdminProfileData, SessionData, adminProfileOptions, hashSecret, sessionOptions } from '@/lib/session';
+import { createHash, timingSafeEqual } from 'crypto';
+import { SessionData, sessionOptions } from '@/lib/session';
+
+function digest(value: string) {
+  return createHash('sha256').update(value).digest();
+}
 
 export async function POST(req: Request) {
-  const body = await req.json() as { username?: string; password?: string };
-  const username = body.username?.trim();
-  const password = body.password?.trim();
-
-  const profile = await getIronSession<AdminProfileData>(await cookies(), adminProfileOptions);
-  const hasProfile = Boolean(profile.username && profile.passwordHash);
-
-  const profileMatches =
-    hasProfile &&
-    profile.username === username &&
-    profile.passwordHash === hashSecret(password ?? '');
-
-  const envMatches =
-    username === process.env.ADMIN_USER &&
-    password === process.env.ADMIN_PASSWORD;
-
-  if (profileMatches || envMatches) {
-    const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
-    session.isAdmin = true;
-    await session.save();
-    return NextResponse.json({ ok: true });
+  let password = '';
+  try {
+    const body = (await req.json()) as { password?: unknown };
+    password = typeof body.password === 'string' ? body.password.trim() : '';
+  } catch {
+    return NextResponse.json({ ok: false, error: 'Solicitud inválida' }, { status: 400 });
   }
 
-  if (!hasProfile) {
+  const expected = process.env.ADMIN_PASSWORD?.trim();
+  if (!expected) {
     return NextResponse.json(
-      { ok: false, error: 'No hay perfil admin todavía. Crealo primero con el botón correspondiente.' },
-      { status: 401 },
+      { ok: false, error: 'ADMIN_PASSWORD no está configurada en el servidor.' },
+      { status: 500 },
     );
   }
 
-  return NextResponse.json(
-    { ok: false, error: 'Credenciales incorrectas' },
-    { status: 401 },
-  );
+  if (!password || !timingSafeEqual(digest(password), digest(expected))) {
+    return NextResponse.json({ ok: false, error: 'Contraseña incorrecta' }, { status: 401 });
+  }
+
+  const session = await getIronSession<SessionData>(await cookies(), sessionOptions);
+  session.isAdmin = true;
+  await session.save();
+  return NextResponse.json({ ok: true });
 }

@@ -58,19 +58,6 @@ export interface MenuOption {
   dietary?: string[];
 }
 
-export interface BudgetCategory {
-  id: string;
-  category: string;
-  subcategory?: string;
-  estimated: number;
-  actual?: number;
-  deposit?: number;
-  depositPaid?: boolean;
-  vendor?: string;
-  notes?: string;
-  status: 'confirmed' | 'pending' | 'enquiry' | 'paid';
-}
-
 export interface Vendor {
   id: string;
   role: string;
@@ -170,7 +157,6 @@ export interface WeddingData {
   florals: FloralCategory[];
   timeline: TimelineEvent[];
   menu: MenuCourse[];
-  budget: BudgetCategory[];
   vendors: Vendor[];
   actionItems: ActionItem[];
   meetingNotes: MeetingNote[];

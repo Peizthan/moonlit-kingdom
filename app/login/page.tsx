@@ -1,13 +1,10 @@
 'use client';
 
-import { useEffect, useState, FormEvent, CSSProperties, useCallback, memo } from 'react';
+import { useState, FormEvent, CSSProperties } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { StarField } from '@/components/layout/StarField';
-import { weddingData } from '@/data/wedding-data';
-
-const { couple } = weddingData;
 
 const inputStyle: CSSProperties = {
   background: 'rgba(18,28,46,0.6)',
@@ -21,102 +18,26 @@ const inputStyle: CSSProperties = {
   fontFamily: "'Georgia', 'Times New Roman', serif",
 };
 
-const PasswordInput = memo(function PasswordInput({
-  id,
-  name,
-  value,
-  onChange,
-  show,
-  onToggle,
-  autoComplete = 'current-password',
-  placeholder,
-  required,
-}: {
-  id?: string;
-  name?: string;
-  value: string;
-  onChange: (v: string) => void;
-  show: boolean;
-  onToggle: () => void;
-  autoComplete?: string;
-  placeholder?: string;
-  required?: boolean;
-}) {
-  return (
-    <div className="relative">
-      <input
-        id={id}
-        name={name}
-        type={show ? 'text' : 'password'}
-        autoComplete={autoComplete}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        style={inputStyle}
-        placeholder={placeholder}
-        required={required}
-      />
-      <button
-        type="button"
-        onClick={onToggle}
-        tabIndex={-1}
-        className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
-        style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-        aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-      >
-        {show ? <EyeOff size={15} /> : <Eye size={15} />}
-      </button>
-    </div>
-  );
-});
-
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [recoveryCode, setRecoveryCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [profileExists, setProfileExists] = useState(false);
-  const [profileUsername, setProfileUsername] = useState<string | null>(null);
-  const [showRecovery, setShowRecovery] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showRecoveryCode, setShowRecoveryCode] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleTogglePassword = useCallback(() => setShowPassword((v) => !v), []);
-  const handleToggleRecoveryCode = useCallback(() => setShowRecoveryCode((v) => !v), []);
-  const handleToggleNewPassword = useCallback(() => setShowNewPassword((v) => !v), []);
-
-  useEffect(() => {
-    fetch('/api/auth/profile')
-      .then((res) => res.json())
-      .then((data) => {
-        setProfileExists(Boolean(data.hasProfile));
-        setProfileUsername(data.username ?? null);
-      })
-      .catch(() => {
-        setProfileExists(false);
-        setProfileUsername(null);
-      });
-  }, []);
-
-  async function postAction(endpoint: string, payload: Record<string, string>, onOk: (data: any) => void) {
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
     setError('');
-    setSuccess('');
     setLoading(true);
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ password }),
       });
-
-      // Safely parse — server may return empty body on 500/redirect
       const text = await res.text();
-      let data: any = {};
+      let data: { ok?: boolean; error?: string } = {};
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
@@ -127,54 +48,13 @@ export default function LoginPage() {
         throw new Error(data.error ?? `Error del servidor (${res.status})`);
       }
 
-      onOk(data);
+      router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Operación fallida');
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    await postAction('/api/auth/login', { username, password }, () => {
-      router.push('/dashboard');
-      router.refresh();
-    });
-  }
-
-  async function handleCreateProfile() {
-    await postAction('/api/auth/profile', { username, password, recoveryCode }, (data) => {
-      setProfileExists(true);
-      setProfileUsername(username.trim());
-      if (data.recoveryCode) {
-        setRecoveryCode(data.recoveryCode);
-        setShowRecoveryCode(true);
-        setSuccess(
-          `Perfil admin creado. Guardá este código de recuperación (no volverá a mostrarse): ${data.recoveryCode}`,
-        );
-      } else {
-        setSuccess('Perfil admin creado/actualizado. Ya podés ingresar con esas credenciales.');
-      }
-    });
-  }
-
-  async function handleCheckPassword() {
-    await postAction('/api/auth/check-password', { username, password }, () => {
-      setSuccess('La contraseña coincide con el perfil guardado.');
-    });
-  }
-
-  async function handleResetPassword() {
-    await postAction(
-      '/api/auth/reset-password',
-      { username, recoveryCode, newPassword },
-      () => {
-        setSuccess('Contraseña restablecida. Ya podés ingresar con la nueva contraseña.');
-        setPassword(newPassword);
-        setShowRecovery(false);
-      },
-    );
   }
 
   return (
@@ -197,7 +77,6 @@ export default function LoginPage() {
         transition={{ duration: 0.8, ease: 'easeOut' }}
         className="relative w-full max-w-sm"
       >
-        {/* Crescent moon */}
         <div className="flex justify-center mb-8">
           <svg width="52" height="52" viewBox="0 0 80 80" fill="none">
             <path
@@ -210,7 +89,6 @@ export default function LoginPage() {
           </svg>
         </div>
 
-        {/* Card */}
         <div
           className="rounded-sm border px-8 py-10"
           style={{
@@ -232,108 +110,39 @@ export default function LoginPage() {
             Moonlit Kingdom
           </h1>
 
-          <div
-            className="rounded-sm border px-4 py-3 mb-6 text-xs leading-relaxed"
-            style={{
-              borderColor: 'rgba(176,141,87,0.18)',
-              background: 'rgba(176,141,87,0.06)',
-              color: '#C7C0B6',
-            }}
-          >
-            {profileExists ? (
-              <>
-                Perfil admin detectado{profileUsername ? ` para ${profileUsername}` : ''}. Si querés cambiarlo,
-                usá <span style={{ color: '#B08D57' }}>Crear/actualizar perfil</span>.
-              </>
-            ) : (
-              <>
-                No hay perfil admin guardado todavía. Usá "Crear perfil" con usuario y contraseña.
-              </>
-            )}
-          </div>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
-                className="block text-xs uppercase tracking-widest mb-2"
-                style={{ color: 'rgba(176,141,87,0.5)' }}
-              >
-                Usuario
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                autoComplete="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                style={inputStyle}
-                required
-              />
-            </div>
-
-            <div>
-              <label
+                htmlFor="password"
                 className="block text-xs uppercase tracking-widest mb-2"
                 style={{ color: 'rgba(176,141,87,0.5)' }}
               >
                 Contraseña
               </label>
-              <PasswordInput
-                id="password"
-                name="password"
-                value={password}
-                onChange={setPassword}
-                show={showPassword}
-                onToggle={handleTogglePassword}
-                autoComplete="current-password"
-                required
-              />
-            </div>
-
-            <div>
-              <label
-                className="block text-xs uppercase tracking-widest mb-2"
-                style={{ color: 'rgba(176,141,87,0.5)' }}
-              >
-                Código de recuperación (opcional al crear perfil)
-              </label>
-              <PasswordInput
-                id="recovery-code"
-                name="recoveryCode"
-                value={recoveryCode}
-                onChange={setRecoveryCode}
-                show={showRecoveryCode}
-                onToggle={handleToggleRecoveryCode}
-                autoComplete="off"
-                placeholder="Dejalo vacío y te generamos uno al crear el perfil"
-              />
-              <p className="mt-2 text-[0.65rem] leading-relaxed" style={{ color: '#8E8A86' }}>
-                Se usa para restablecer la contraseña si la olvidás. Si lo dejás vacío al crear el
-                perfil, se genera uno automáticamente y te lo mostramos una única vez.
-              </p>
-            </div>
-
-            {showRecovery && (
-              <div>
-                <label
-                  className="block text-xs uppercase tracking-widest mb-2"
-                  style={{ color: 'rgba(176,141,87,0.5)' }}
-                >
-                  Nueva contraseña
-                </label>
-                <PasswordInput
-                  id="new-password"
-                  name="newPassword"
-                  value={newPassword}
-                  onChange={setNewPassword}
-                  show={showNewPassword}
-                  onToggle={handleToggleNewPassword}
-                  autoComplete="new-password"
-                  placeholder="Ingresá la nueva contraseña"
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="current-password"
+                  autoFocus
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  style={inputStyle}
+                  required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  tabIndex={-1}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
+                  style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
               </div>
-            )}
+            </div>
 
             {error && (
               <motion.p
@@ -343,17 +152,6 @@ export default function LoginPage() {
                 style={{ color: '#D8C3A5', background: 'rgba(78,31,45,0.4)', border: '1px solid rgba(78,31,45,0.6)' }}
               >
                 {error}
-              </motion.p>
-            )}
-
-            {success && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-xs text-center py-2 px-3 rounded-sm"
-                style={{ color: '#D8C3A5', background: 'rgba(29,74,58,0.35)', border: '1px solid rgba(29,74,58,0.55)' }}
-              >
-                {success}
               </motion.p>
             )}
 
@@ -370,79 +168,8 @@ export default function LoginPage() {
             >
               {loading ? 'Ingresando…' : 'Ingresar'}
             </button>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <button
-                type="button"
-                disabled={loading}
-                onClick={handleCreateProfile}
-                className="py-3 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
-                style={{
-                  background: 'rgba(176,141,87,0.12)',
-                  border: '1px solid rgba(176,141,87,0.28)',
-                  color: '#B08D57',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                }}
-              >
-                Crear/actualizar perfil
-              </button>
-
-              <button
-                type="button"
-                disabled={loading}
-                onClick={handleCheckPassword}
-                className="py-3 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
-                style={{
-                  background: 'rgba(18,28,46,0.45)',
-                  border: '1px solid rgba(176,141,87,0.2)',
-                  color: '#D8C3A5',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                }}
-              >
-                Verificar contraseña
-              </button>
-            </div>
-
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => setShowRecovery((value) => !value)}
-              className="w-full py-3 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
-              style={{
-                background: 'transparent',
-                border: '1px dashed rgba(176,141,87,0.25)',
-                color: '#8E8A86',
-                cursor: loading ? 'not-allowed' : 'pointer',
-              }}
-            >
-              {showRecovery ? 'Cancelar recuperación' : 'Olvidé mi contraseña'}
-            </button>
-
-            {showRecovery && (
-              <button
-                type="button"
-                disabled={loading}
-                onClick={handleResetPassword}
-                className="w-full py-3 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
-                style={{
-                  background: 'rgba(78,31,45,0.26)',
-                  border: '1px solid rgba(78,31,45,0.55)',
-                  color: '#D8C3A5',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                }}
-              >
-                Restablecer contraseña
-              </button>
-            )}
           </form>
         </div>
-
-        <p
-          className="text-center text-xs mt-6"
-          style={{ color: 'rgba(142,138,134,0.4)' }}
-        >
-          {couple.partner1} & {couple.partner2} · {couple.weddingDate}
-        </p>
       </motion.div>
     </div>
   );
