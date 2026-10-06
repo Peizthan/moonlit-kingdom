@@ -27,7 +27,7 @@ Más que una boda temática, queremos crear una noche que se sienta como un recu
     moodKeywords: [
       'Encantado',
       'Nocturno',
-      'Celestial',
+      'Lunar',
       'Botánico',
       'Romántico',
       'Misterioso',
@@ -104,7 +104,7 @@ Nuestro objetivo será hacer que, al caer la luz, el salón deje de sentirse com
       name: 'Bronce Añejo',
       hex: '#8C6A3C',
       role: 'accent',
-      description: 'Oro más profundo y terroso para una cualidad celestial arraigada.',
+      description: 'Oro más profundo y terroso para una cualidad nocturna arraigada.',
     },
     {
       name: 'Champán',
@@ -399,7 +399,7 @@ Nuestro objetivo será hacer que, al caer la luz, el salón deje de sentirse com
         {
           name: 'Torta Moonlit Kingdom',
           description:
-            'Torta de cinco pisos naked: champán y flor de saúco, limón y lavanda, chocolate negro y frutos del bosque. Decorada con flores frescas, pan de oro y detalles celestiales pintados a mano.',
+            'Torta de cinco pisos naked: champán y flor de saúco, limón y lavanda, chocolate negro y frutos del bosque. Decorada con flores frescas, pan de oro y detalles botánicos pintados a mano.',
           dietary: ['Contiene Gluten', 'Vegetariano'],
         },
       ],
