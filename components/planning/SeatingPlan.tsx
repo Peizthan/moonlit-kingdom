@@ -13,13 +13,33 @@ interface SeatingPlanProps {
 }
 
 export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
-  const { isEditMode, getOverride } = useAdmin();
+  const { isEditMode, getOverride, setOverride } = useAdmin();
+
+  const guestsKey = (t: SeatingTable) => `seating:${t.id}:guests`;
+  const guestsOf = (t: SeatingTable) => getOverride<string[]>(guestsKey(t), t.guests);
+  const capacityOf = (t: SeatingTable) => getOverride<number>(`seating:${t.id}:capacity`, t.capacity);
+
+  function addGuest(t: SeatingTable) {
+    setOverride(guestsKey(t), [...guestsOf(t), '']);
+  }
+  function updateGuest(t: SeatingTable, index: number, name: string) {
+    setOverride(guestsKey(t), guestsOf(t).map((g, i) => (i === index ? name : g)));
+  }
+  function removeGuest(t: SeatingTable, index: number) {
+    setOverride(guestsKey(t), guestsOf(t).filter((_, i) => i !== index));
+  }
+
   return (
     <div>
       {isEditMode && onAdd && (
         <div className="flex justify-end mb-4">
           <AddButton label="Agregar mesa" onClick={onAdd} />
         </div>
+      )}
+      {tables.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay mesas. Activ? el modo edici?n para agregar.
+        </p>
       )}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         {tables.map((table, i) => (
@@ -52,8 +72,17 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
                   className="flex flex-col items-end text-xs"
                   style={{ color: '#8E8A86' }}
                 >
-                  <span style={{ color: '#B08D57' }}>{table.guests.length}</span>
-                  <span>/ {table.capacity} lugares</span>
+                  <span style={{ color: '#B08D57' }}>{guestsOf(table).length}</span>
+                  <span className="flex items-center gap-1">
+                    /{' '}
+                    <EditableField
+                      id={`seating:${table.id}:capacity`}
+                      value={table.capacity}
+                      type="number"
+                      style={{ color: '#8E8A86', fontSize: '0.75rem', width: '3.5rem' }}
+                    />{' '}
+                    lugares
+                  </span>
                 </div>
                 {isEditMode && onDelete && (
                   <DeleteButton onClick={() => onDelete(table.id)} title="Eliminar mesa" confirmMessage="¿Eliminar esta mesa?" />
@@ -69,24 +98,53 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
               <div
                 className="h-full rounded-full"
                 style={{
-                  width: `${(table.guests.length / table.capacity) * 100}%`,
+                  width: `${capacityOf(table) > 0 ? Math.min(100, (guestsOf(table).length / capacityOf(table)) * 100) : 0}%`,
                   background: 'linear-gradient(to right, #B08D57, #8C6A3C)',
                 }}
               />
             </div>
 
             <ul className="space-y-1">
-              {table.guests.map((guest, gi) => (
+              {guestsOf(table).map((guest, gi) => (
                 <li
                   key={gi}
                   className="flex items-center gap-2 text-sm"
                   style={{ color: '#C7C0B6' }}
                 >
                   <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
-                  <EditableField id={`seating:${table.id}:guest:${gi}`} value={guest} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
+                  {isEditMode ? (
+                    <>
+                      <input
+                        type="text"
+                        defaultValue={guest}
+                        placeholder="Nombre del invitado"
+                        onBlur={(e) => updateGuest(table, gi, e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLElement).blur()}
+                        className="flex-1 min-w-0"
+                        style={{
+                          background: 'rgba(176,141,87,0.06)',
+                          border: '1px solid rgba(176,141,87,0.4)',
+                          borderRadius: '2px',
+                          padding: '2px 6px',
+                          outline: 'none',
+                          color: '#C7C0B6',
+                          fontSize: '0.875rem',
+                        }}
+                      />
+                      <DeleteButton onClick={() => removeGuest(table, gi)} title="Quitar invitado" confirmMessage="¿Quitar este invitado?" />
+                    </>
+                  ) : (
+                    <span>{guest}</span>
+                  )}
                 </li>
               ))}
             </ul>
+
+            {isEditMode && (
+              <div className="mt-3">
+                <AddButton label="Agregar invitado" onClick={() => addGuest(table)} />
+              </div>
+            )}
 
             {(table.notes || isEditMode) && (
               <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.4)' }}>

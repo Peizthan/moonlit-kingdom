@@ -261,7 +261,7 @@ function DashboardContent() {
               />
               <MetricCard
                 label="Proveedores Confirmados"
-                value={`${confirmedVendors}/${vendors.length}`}
+                value={`${confirmedVendors}/${vendorsList.items.length}`}
                 subValue="Firmados y confirmados"
                 delay={0.08}
               />

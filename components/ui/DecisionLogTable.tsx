@@ -42,6 +42,11 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
           <AddButton label="Agregar decisión" onClick={onAdd} />
         </div>
       )}
+      {decisions.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay decisiones. Activ? el modo edici?n para agregar.
+        </p>
+      )}
       {decisions.map((d, i) => (
         <motion.div
           key={d.id}

@@ -39,11 +39,6 @@ export function VendorTable({ vendors, readOnly = false, onAdd, onDelete }: Vend
     setOverride(`vendor:${v.id}:status`, statusOrder[(idx + 1) % statusOrder.length]);
   }
 
-  function toggleBool(v: Vendor, field: 'contractSigned' | 'depositPaid') {
-    const current = getOverride<boolean>(`vendor:${v.id}:${field}`, v[field]);
-    setOverride(`vendor:${v.id}:${field}`, !current);
-  }
-
   return (
     <div>
       {canEdit && onAdd && (
@@ -55,7 +50,7 @@ export function VendorTable({ vendors, readOnly = false, onAdd, onDelete }: Vend
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(176,141,87,0.2)' }}>
-              {['Rol', 'Empresa', 'Contacto', 'Teléfono', 'Estado', 'Contrato', 'Seña', ''].map((h) => (
+              {['Rol', 'Empresa', 'Contacto', 'Teléfono', 'Estado', ''].map((h) => (
                 <th
                   key={h}
                   className="text-left py-3 px-4 text-xs uppercase tracking-widest"
@@ -114,36 +109,6 @@ export function VendorTable({ vendors, readOnly = false, onAdd, onDelete }: Vend
                     );
                   })()}
                 </td>
-                <td className="py-3 px-4 text-center text-sm">
-                  {(() => {
-                    const signed = getOverride<boolean>(`vendor:${v.id}:contractSigned`, v.contractSigned);
-                    return (
-                      <span
-                        className={canEdit ? 'cursor-pointer' : ''}
-                        title={canEdit ? 'Clic para alternar' : undefined}
-                        onClick={canEdit ? () => toggleBool(v, 'contractSigned') : undefined}
-                        style={{ color: signed ? '#B08D57' : '#4E1F2D' }}
-                      >
-                        {signed ? '✓' : '○'}
-                      </span>
-                    );
-                  })()}
-                </td>
-                <td className="py-3 px-4 text-center text-sm">
-                  {(() => {
-                    const paid = getOverride<boolean>(`vendor:${v.id}:depositPaid`, v.depositPaid);
-                    return (
-                      <span
-                        className={canEdit ? 'cursor-pointer' : ''}
-                        title={canEdit ? 'Clic para alternar' : undefined}
-                        onClick={canEdit ? () => toggleBool(v, 'depositPaid') : undefined}
-                        style={{ color: paid ? '#B08D57' : '#4E1F2D' }}
-                      >
-                        {paid ? '✓' : '○'}
-                      </span>
-                    );
-                  })()}
-                </td>
                 <td className="py-3 px-4 text-center">
                   {canEdit && onDelete && <DeleteButton onClick={() => onDelete(v.id)} title="Eliminar proveedor" confirmMessage="¿Eliminar este proveedor?" />}
                 </td>
@@ -152,6 +117,11 @@ export function VendorTable({ vendors, readOnly = false, onAdd, onDelete }: Vend
           </tbody>
         </table>
       </div>
+      {vendors.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay proveedores. Activ? el modo edici?n para agregar.
+        </p>
+      )}
     </div>
   );
 }

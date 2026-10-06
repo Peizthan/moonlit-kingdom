@@ -139,6 +139,11 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
           </tbody>
         </table>
       </div>
+      {items.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todavía no hay ítems técnicos. Activá el modo edición para agregar.
+        </p>
+      )}
     </div>
   );
 }

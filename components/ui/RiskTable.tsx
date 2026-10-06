@@ -43,6 +43,11 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
           <AddButton label="Agregar riesgo" onClick={onAdd} />
         </div>
       )}
+      {risks.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay riesgos. Activ? el modo edici?n para agregar.
+        </p>
+      )}
       {risks.map((risk, i) => (
         <motion.div
           key={risk.id}

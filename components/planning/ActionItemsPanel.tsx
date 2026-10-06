@@ -73,6 +73,11 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
           <AddButton label="Agregar acción" onClick={onAdd} />
         </div>
       )}
+      {displayList.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay acciones. Activ? el modo edici?n para agregar.
+        </p>
+      )}
       {displayList.map((item, i) => (
         <motion.div
           key={item.id}

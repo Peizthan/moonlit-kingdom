@@ -21,6 +21,11 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
           <AddButton label="Agregar acta" onClick={onAdd} />
         </div>
       )}
+      {notes.length === 0 && (
+        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+          Todav?a no hay actas. Activ? el modo edici?n para agregar.
+        </p>
+      )}
       {notes.map((note, i) => (
         <motion.div
           key={note.id}
