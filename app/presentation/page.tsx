@@ -4,8 +4,6 @@ import { PresentationNav } from '@/components/layout/PresentationNav';
 import { VisionSection } from '@/components/presentation/VisionSection';
 import { VenueSection } from '@/components/presentation/VenueSection';
 import { TimelineSection } from '@/components/presentation/TimelineSection';
-import { FloralsSection } from '@/components/presentation/FloralsSection';
-import { FinalVisionSection } from '@/components/presentation/FinalVisionSection';
 import { weddingData } from '@/data/wedding-data';
 
 const { couple } = weddingData;
@@ -15,8 +13,6 @@ const sections = [
   { id: 'palette', label: 'Paleta' },
   { id: 'venue', label: 'Salón' },
   { id: 'timeline', label: 'Programa' },
-  { id: 'florals', label: 'Flores' },
-  { id: 'final-vision', label: 'Visión Final' },
 ];
 
 export default function PresentationPage() {
@@ -60,8 +56,6 @@ export default function PresentationPage() {
       <VisionSection />
       <VenueSection />
       <TimelineSection />
-      <FloralsSection />
-      <FinalVisionSection />
     </div>
   );
 }
