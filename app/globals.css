@@ -79,6 +79,21 @@
   text-shadow: 0 0 30px rgba(176, 141, 87, 0.5);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Print styles */
 @media print {
   body {
@@ -89,4 +104,3 @@
     display: none !important;
   }
 }
-

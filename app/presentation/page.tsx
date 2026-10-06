@@ -4,6 +4,7 @@ import { PresentationNav } from '@/components/layout/PresentationNav';
 import { VisionSection } from '@/components/presentation/VisionSection';
 import { VenueSection } from '@/components/presentation/VenueSection';
 import { TimelineSection } from '@/components/presentation/TimelineSection';
+import { MotionConfig } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
 
 const { couple } = weddingData;
@@ -17,45 +18,49 @@ const sections = [
 
 export default function PresentationPage() {
   return (
-    <div
-      className="relative"
-      style={{ background: '#10261D' }}
-    >
-      <PresentationNav sections={sections} />
+    <MotionConfig reducedMotion="user">
+      <div className="relative" style={{ background: '#10261D' }}>
+        <PresentationNav sections={sections} />
 
-      {/* Hero banner */}
-      <div
-        className="relative h-64 md:h-80 flex items-center justify-center text-center overflow-hidden"
-        style={{
-          background: 'linear-gradient(160deg, #10261D 0%, #121C2E 60%, #10261D 100%)',
-        }}
-      >
-        <div
-          className="absolute inset-0"
+        <header
+          className="relative flex min-h-[22rem] items-center justify-center overflow-hidden px-6 pb-10 pt-24 text-center md:min-h-[26rem]"
           style={{
-            background: 'radial-gradient(ellipse 80% 70% at 50% 100%, rgba(176,141,87,0.08) 0%, transparent 70%)',
+            background: 'linear-gradient(160deg, #10261D 0%, #121C2E 60%, #10261D 100%)',
           }}
-        />
-        <div className="relative pt-20 px-6">
-          <p className="text-xs uppercase tracking-[0.4em] mb-4" style={{ color: 'rgba(176,141,87,0.6)' }}>
-            Visión y Plan de Producción de la Boda
-          </p>
-          <h1
-            className="text-3xl md:text-5xl font-light"
-            style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-          >
-            Moonlit Kingdom
-          </h1>
-          <p className="mt-3 text-sm uppercase tracking-[0.2em]" style={{ color: '#8E8A86' }}>
-            {couple.partner1} & {couple.partner2} · {couple.weddingDate}
-          </p>
-        </div>
-      </div>
+        >
+          <div
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse 80% 70% at 50% 100%, rgba(176,141,87,0.08) 0%, transparent 70%)',
+            }}
+          />
+          <div className="relative max-w-3xl">
+            <p className="mb-4 text-xs uppercase tracking-[0.4em]" style={{ color: 'rgba(176,141,87,0.7)' }}>
+              Moonlit Kingdom
+            </p>
+            <h1
+              className="text-4xl font-light leading-tight sm:text-5xl md:text-6xl"
+              style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+            >
+              Una noche fuera del tiempo
+            </h1>
+            <p className="mt-6 text-sm leading-relaxed sm:text-base" style={{ color: '#D8C3A5' }}>
+              {couple.partner1} & {couple.partner2}
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.2em]" style={{ color: '#8E8A86' }}>
+              {couple.weddingDate}
+            </p>
+            <p className="mt-6 text-xs uppercase tracking-[0.25em]" style={{ color: 'rgba(176,141,87,0.75)' }}>
+              Visión · Atmósfera · Experiencia
+            </p>
+          </div>
+        </header>
 
-      {/* Sections */}
-      <VisionSection />
-      <VenueSection />
-      <TimelineSection />
-    </div>
+        <VisionSection />
+        <VenueSection />
+        <TimelineSection />
+      </div>
+    </MotionConfig>
   );
 }

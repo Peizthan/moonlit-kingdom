@@ -15,6 +15,10 @@ export interface VenueDetails {
   capacity: number;
   indoorOutdoor: string;
   description: string;
+  area?: string;
+  capacityNote?: string;
+  dimensions?: string;
+  productionNotes?: string[];
   coordinator: string;
   coordinatorEmail: string;
   coordinatorPhone: string;
@@ -150,6 +154,8 @@ export interface WeddingData {
     howWeMet: string;
     proposal: string;
     vision: string;
+    principle: string;
+    manifesto?: string;
     moodKeywords: string[];
   };
   venue: VenueDetails;

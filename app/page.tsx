@@ -1,15 +1,17 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { MotionConfig, motion } from 'framer-motion';
 import { StarField } from '@/components/layout/StarField';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
 import { weddingData } from '@/data/wedding-data';
 
 const { couple } = weddingData;
+const visionParagraphs = weddingData.story.vision.split('\n\n');
 
 export default function HomePage() {
   return (
+    <MotionConfig reducedMotion="user">
     <div
       className="relative min-h-screen flex flex-col"
       style={{
@@ -31,8 +33,8 @@ export default function HomePage() {
       <section className="relative flex-1 flex flex-col items-center justify-center text-center px-6 pt-32 pb-24 min-h-screen">
         {/* Crescent moon */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           className="mb-10 animate-float"
         >
@@ -68,7 +70,7 @@ export default function HomePage() {
           className="text-xs uppercase tracking-[0.4em] mb-6"
           style={{ color: 'rgba(176,141,87,0.7)' }}
         >
-          Nuestra Boda en un bosque celestial
+          Una noche fuera del tiempo
         </motion.p>
 
         {/* Title */}
@@ -85,6 +87,16 @@ export default function HomePage() {
         </motion.h1>
 
         <OrnamentalDivider variant="moon" className="max-w-xs mx-auto mb-12" />
+
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.85 }}
+          className="mb-10 text-base italic leading-relaxed sm:text-lg"
+          style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
+        >
+          {weddingData.story.principle.replace('\n', ' ')}
+        </motion.p>
 
         {/* Metadata */}
         <motion.div
@@ -127,32 +139,25 @@ export default function HomePage() {
         >
           <Link
             href="/presentation"
-            className="group relative px-10 py-4 text-xs uppercase tracking-[0.25em] transition-all duration-400 overflow-hidden"
+            className="group relative border-b px-3 py-4 text-xs uppercase tracking-[0.25em] transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
             style={{
-              border: '1px solid rgba(176,141,87,0.6)',
+              borderColor: 'rgba(176,141,87,0.6)',
               color: '#D8C3A5',
+              outlineColor: '#B08D57',
             }}
           >
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-              style={{ background: 'rgba(176,141,87,0.1)' }}
-            />
-            <span className="relative">Ver Presentación</span>
+            <span>Ver Presentación <span aria-hidden="true">→</span></span>
           </Link>
           <Link
             href="/dashboard"
-            className="group relative px-10 py-4 text-xs uppercase tracking-[0.25em] transition-all duration-400 overflow-hidden"
+            className="group relative border-b px-3 py-4 text-xs uppercase tracking-[0.25em] transition-colors duration-300 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
             style={{
-              background: 'rgba(176,141,87,0.15)',
-              border: '1px solid rgba(176,141,87,0.3)',
+              borderColor: 'rgba(176,141,87,0.3)',
               color: '#B08D57',
+              outlineColor: '#B08D57',
             }}
           >
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400"
-              style={{ background: 'rgba(176,141,87,0.1)' }}
-            />
-            <span className="relative">Abrir Panel de Planificación</span>
+            <span>Abrir Panel de Planificación <span aria-hidden="true">→</span></span>
           </Link>
         </motion.div>
 
@@ -177,40 +182,34 @@ export default function HomePage() {
           >
             La Visión
           </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-xl md:text-2xl font-light leading-relaxed mb-10"
-            style={{ fontFamily: "'Georgia', serif", color: '#C7C0B6' }}
-          >
-            {weddingData.story.vision}
-          </motion.p>
+          <div className="mx-auto mb-10 max-w-2xl space-y-5">
+            {visionParagraphs.slice(0, 2).map((paragraph, index) => (
+              <motion.p
+                key={paragraph}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: index * 0.08 }}
+                className="text-base font-light leading-[1.9] sm:text-lg"
+                style={{ fontFamily: "'Georgia', serif", color: '#C7C0B6' }}
+              >
+                {paragraph}
+              </motion.p>
+            ))}
+          </div>
 
           <OrnamentalDivider variant="diamond" />
 
-          <motion.div
+          <motion.blockquote
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-3 mt-4"
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mt-8 text-xl italic leading-relaxed sm:text-2xl"
+            style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
           >
-            {weddingData.story.moodKeywords.map((kw) => (
-              <span
-                key={kw}
-                className="text-xs uppercase tracking-widest px-4 py-2 rounded-full border"
-                style={{
-                  borderColor: 'rgba(176,141,87,0.2)',
-                  color: 'rgba(176,141,87,0.7)',
-                  background: 'rgba(176,141,87,0.05)',
-                }}
-              >
-                {kw}
-              </span>
-            ))}
-          </motion.div>
+            {weddingData.story.manifesto}
+          </motion.blockquote>
         </div>
       </section>
 
@@ -307,5 +306,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </MotionConfig>
   );
 }

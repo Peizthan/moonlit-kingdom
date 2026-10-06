@@ -1,167 +1,227 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { MapPin, Phone, Mail, Globe } from 'lucide-react';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
-import { ImagePlaceholder } from '@/components/ui/ImagePlaceholder';
 import { weddingData } from '@/data/wedding-data';
-import { MapPin, Users, Globe, Phone, Mail } from 'lucide-react';
 
 const { venue } = weddingData;
 
+const venuePhotos = [
+  {
+    src: '/images/venue/perez-uribe-exterior.jpg',
+    alt: 'Exterior y acceso al Salón de Honor Óscar Pérez Uribe',
+    caption: 'Llegada — Club Centenario',
+  },
+  {
+    src: '/images/venue/perez-uribe-empty.jpg',
+    alt: 'Salón de Honor Óscar Pérez Uribe vacío, antes del montaje',
+    caption: 'El espacio antes de transformarse',
+  },
+  {
+    src: '/images/venue/perez-uribe-event.jpg',
+    alt: 'Salón de Honor Óscar Pérez Uribe preparado para un evento',
+    caption: 'El potencial de una noche completamente distinta',
+  },
+];
+
 export function VenueSection() {
+  const shouldReduceMotion = useReducedMotion();
+  const reveal = (y: number, delay = 0) => ({
+    initial: shouldReduceMotion ? false : { opacity: 0, y },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: shouldReduceMotion ? 0 : 0.7, delay: shouldReduceMotion ? 0 : delay },
+  });
+
   return (
     <section
       id="venue"
-      className="relative py-32 px-6"
+      className="relative overflow-hidden px-6 py-24 md:py-32"
       style={{
         background: 'linear-gradient(160deg, #171515 0%, #10261D 50%, #121C2E 100%)',
       }}
     >
-      <div className="max-w-6xl mx-auto">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="text-center text-xs uppercase tracking-[0.35em] mb-8"
-          style={{ color: 'rgba(176,141,87,0.7)' }}
-        >
-          Capítulo Dos
-        </motion.p>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-center text-4xl md:text-6xl font-light mb-16"
-          style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-        >
-          El Salón
-        </motion.h2>
-
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Image placeholder */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.15 }}
+      <div className="mx-auto max-w-6xl">
+        <motion.div {...reveal(10)} className="mb-12 md:mb-16">
+          <p
+            className="mb-4 text-xs uppercase tracking-[0.35em]"
+            style={{ color: 'rgba(176,141,87,0.75)' }}
           >
-            <ImagePlaceholder
-              label={venue.name}
-              aspectRatio="landscape"
-              gradientFrom="#10261D"
-              gradientTo="#121C2E"
-              icon="◐"
-            />
-            <div className="grid grid-cols-2 gap-3 mt-3">
-              <ImagePlaceholder
-                label="Capilla Privada"
-                aspectRatio="square"
-                gradientFrom="#1D4A3A"
-                gradientTo="#121C2E"
-                icon="☽"
-              />
-              <ImagePlaceholder
-                label="Gran Salón"
-                aspectRatio="square"
-                gradientFrom="#171515"
-                gradientTo="#4E1F2D"
-                icon="✦"
-              />
+            Capítulo dos
+          </p>
+          <h2
+            className="text-4xl font-light leading-tight sm:text-5xl md:text-6xl"
+            style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+          >
+            El Salón
+          </h2>
+          <div className="mt-7 h-px w-20" style={{ background: 'rgba(176,141,87,0.55)' }} />
+        </motion.div>
+
+        <div className="grid items-start gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
+          <motion.div {...reveal(10, 0.08)} className="space-y-5">
+            <VenuePhoto photo={venuePhotos[0]} aspect="aspect-[4/3]" />
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
+              {venuePhotos.slice(1).map((photo) => (
+                <VenuePhoto key={photo.src} photo={photo} aspect="aspect-[4/3]" />
+              ))}
             </div>
           </motion.div>
 
-          {/* Venue details */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-          >
+          <motion.div {...reveal(10, 0.14)}>
+            <p
+              className="mb-3 text-xs uppercase leading-relaxed tracking-[0.2em]"
+              style={{ color: '#B08D57' }}
+            >
+              Club Centenario · Asunción
+            </p>
             <h3
-              className="text-3xl font-light mb-2"
+              className="mb-7 text-3xl font-light leading-snug sm:text-4xl"
               style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
             >
               {venue.name}
             </h3>
-            <p className="text-xs uppercase tracking-widest mb-6" style={{ color: '#B08D57' }}>
-              {venue.city} · {venue.country}
-            </p>
 
-            <p
-              className="text-base leading-loose mb-8"
-              style={{ color: '#C7C0B6', fontFamily: "'Georgia', serif" }}
-            >
-              {venue.description}
-            </p>
-
-            {/* Details grid */}
-            <div
-              className="grid grid-cols-2 gap-4 mb-8 p-5 rounded-sm border"
-              style={{
-                borderColor: 'rgba(176,141,87,0.2)',
-                background: 'rgba(176,141,87,0.04)',
-              }}
-            >
-              <div>
-                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Tipo
+            <div className="space-y-5">
+              {venue.description.split('\n\n').map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="text-base font-light leading-[1.85]"
+                  style={{ color: '#C7C0B6', fontFamily: "'Georgia', serif" }}
+                >
+                  {paragraph}
                 </p>
-                <p className="text-sm" style={{ color: '#C7C0B6' }}>{venue.indoorOutdoor}</p>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Capacidad
-                </p>
-                <p className="text-sm" style={{ color: '#C7C0B6' }}>{venue.capacity} invitados</p>
-              </div>
-              <div className="col-span-2">
-                <p className="text-xs uppercase tracking-widest mb-1" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                  Dirección
-                </p>
-                <p className="text-sm flex items-center gap-2" style={{ color: '#C7C0B6' }}>
-                  <MapPin size={12} style={{ color: 'rgba(176,141,87,0.6)' }} />
-                  {venue.address}, {venue.city}, {venue.country}
-                </p>
-              </div>
+              ))}
             </div>
 
-            {/* Coordinator */}
-            <div>
-              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: 'rgba(176,141,87,0.5)' }}>
-                Coordinadora del Salón
+            <dl className="my-9 grid grid-cols-2 gap-x-5 gap-y-7 border-y py-7 sm:gap-x-8"
+              style={{ borderColor: 'rgba(176,141,87,0.22)' }}
+            >
+              <VenueFact label="Área útil publicada" value={venue.area} />
+              <VenueFact label="Capacidad publicada" value={venue.capacityNote} />
+              <VenueFact label="Dimensiones" value={venue.dimensions} />
+              <VenueFact
+                label="Producción"
+                value={venue.productionNotes?.join(' ')}
+              />
+            </dl>
+
+            <blockquote
+              className="my-9 border-l pl-5 sm:pl-7"
+              style={{ borderColor: 'rgba(176,141,87,0.55)' }}
+            >
+              <p
+                className="text-2xl font-light italic leading-snug sm:text-3xl"
+                style={{ fontFamily: "'Georgia', serif", color: '#F3EBDD' }}
+              >
+                Un lienzo para construir el bosque bajo las estrellas.
               </p>
-              <p className="text-sm font-medium mb-2" style={{ color: '#D8C3A5' }}>
-                {venue.coordinator}
+            </blockquote>
+
+            <div className="space-y-3 border-t pt-6" style={{ borderColor: 'rgba(176,141,87,0.18)' }}>
+              <p className="text-xs uppercase tracking-[0.25em]" style={{ color: 'rgba(176,141,87,0.65)' }}>
+                Información del salón
               </p>
-              <div className="space-y-2">
+              <p className="flex items-start gap-2 text-sm" style={{ color: '#C7C0B6' }}>
+                <MapPin aria-hidden="true" size={15} className="mt-0.5 shrink-0" style={{ color: '#B08D57' }} />
+                {venue.address}, {venue.city}, {venue.country}
+              </p>
+              <p className="text-sm" style={{ color: '#D8C3A5' }}>{venue.coordinator}</p>
+              <a
+                href={`mailto:${venue.coordinatorEmail}`}
+                className="flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
+                style={{ color: '#C7C0B6', outlineColor: '#B08D57' }}
+              >
+                <Mail aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+                {venue.coordinatorEmail}
+              </a>
+              <p className="flex items-center gap-2 text-sm" style={{ color: '#C7C0B6' }}>
+                <Phone aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+                {venue.coordinatorPhone}
+              </p>
+              {venue.website && (
                 <a
-                  href={`mailto:${venue.coordinatorEmail}`}
-                  className="flex items-center gap-2 text-sm transition-opacity hover:opacity-80"
-                  style={{ color: '#8E8A86' }}
+                  href={venue.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
+                  style={{ color: '#C7C0B6', outlineColor: '#B08D57' }}
                 >
-                  <Mail size={12} style={{ color: 'rgba(176,141,87,0.5)' }} />
-                  {venue.coordinatorEmail}
+                  <Globe aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+                  Sitio web del Club Centenario
                 </a>
-                <div className="flex items-center gap-2 text-sm" style={{ color: '#8E8A86' }}>
-                  <Phone size={12} style={{ color: 'rgba(176,141,87,0.5)' }} />
-                  {venue.coordinatorPhone}
-                </div>
-                {venue.website && (
-                  <div className="flex items-center gap-2 text-sm" style={{ color: '#8E8A86' }}>
-                    <Globe size={12} style={{ color: 'rgba(176,141,87,0.5)' }} />
-                    {venue.website}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </motion.div>
         </div>
       </div>
 
-      <OrnamentalDivider variant="moon" className="max-w-6xl mx-auto mt-16" />
+      <OrnamentalDivider variant="moon" className="mx-auto mt-16 max-w-6xl" />
     </section>
+  );
+}
+
+function VenueFact({ label, value }: { label: string; value?: string }) {
+  if (!value) return null;
+
+  return (
+    <div>
+      <dt className="mb-2 text-[0.65rem] uppercase tracking-[0.2em]" style={{ color: 'rgba(176,141,87,0.7)' }}>
+        {label}
+      </dt>
+      <dd className="text-sm leading-relaxed" style={{ color: '#C7C0B6' }}>
+        {value}
+      </dd>
+    </div>
+  );
+}
+
+function VenuePhoto({
+  photo,
+  aspect,
+}: {
+  photo: (typeof venuePhotos)[number];
+  aspect: string;
+}) {
+  const [unavailable, setUnavailable] = useState(false);
+  const filename = photo.src.split('/').at(-1);
+
+  return (
+    <figure>
+      <div
+        className={`relative ${aspect} overflow-hidden border`}
+        style={{ borderColor: 'rgba(176,141,87,0.32)', background: '#121C2E' }}
+      >
+        {unavailable ? (
+          <div
+            role="img"
+            aria-label={`Fotografía pendiente. Añadir ${filename} en public/images/venue.`}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 text-center"
+            style={{ background: 'linear-gradient(145deg, rgba(29,74,58,0.45), #121C2E 70%)' }}
+          >
+            <span aria-hidden="true" className="text-xl" style={{ color: 'rgba(176,141,87,0.65)' }}>✦</span>
+            <span className="text-xs uppercase tracking-[0.18em]" style={{ color: '#D8C3A5' }}>
+              Fotografía pendiente
+            </span>
+            <code className="text-[0.65rem]" style={{ color: '#8E8A86' }}>{filename}</code>
+          </div>
+        ) : (
+          <Image
+            src={photo.src}
+            alt={photo.alt}
+            fill
+            sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 55vw"
+            className="object-cover"
+            onError={() => setUnavailable(true)}
+          />
+        )}
+      </div>
+      <figcaption className="mt-3 text-xs leading-relaxed" style={{ color: '#A7A19A' }}>
+        {photo.caption}
+      </figcaption>
+    </figure>
   );
 }

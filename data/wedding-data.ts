@@ -5,7 +5,7 @@ export const weddingData: WeddingData = {
     partner1: 'Constanza Martinez',
     partner2: 'Ivan Kostianovsky',
     weddingDate: '28 de agosto de 2027',
-    location: 'Salón Oscar Pérez Uribe, Club Centenario',
+    location: 'Salón de Honor Óscar Pérez Uribe, Club Centenario',
     version: '3.5',
     lastUpdated: 'octubre de 2026',
   },
@@ -13,31 +13,50 @@ export const weddingData: WeddingData = {
   story: {
     howWeMet: '',
     proposal: '',
-    vision:
-      'Imaginamos nuestra boda como un viaje encantado a través de un bosque celestial — un mundo suspendido entre el crepúsculo y la luz de las estrellas, donde la nobleza del mundo antiguo se encuentra con el misterio de la naturaleza, y donde cada detalle parece haber sido descubierto en lugar de diseñado. Queremos que nuestros invitados sientan que han ingresado a un cuento de hadas vivo: uno de romance, maravilla y elegancia atemporal.',
+    vision: `Moonlit Kingdom es nuestra forma de imaginar una noche fuera del tiempo.
+
+Queremos que al cruzar la entrada nuestros invitados sientan que dejaron atrás el mundo cotidiano y llegaron a un lugar que sólo podría existir por unas horas: un jardín nocturno suspendido entre bosque y cielo, iluminado por velas, estrellas y pequeños destellos.
+
+No buscamos recrear un cuento conocido, sino construir el nuestro. Un mundo donde la naturaleza crece entre arquitectura antigua, las flores parecen silvestres, los objetos guardan historias y cada rincón invita a descubrir algo.
+
+La oscuridad será profunda pero cálida; la elegancia, imperfecta y orgánica. Habrá misterio sin solemnidad excesiva, fantasía sin artificio y detalles inesperados que hablen de nosotros.
+
+Más que una boda temática, queremos crear una noche que se sienta como un recuerdo de un lugar en el que nunca estuvimos: íntima, extraña, romántica y completamente nuestra.`,
+    principle: 'La oscuridad es el escenario.\nLa luz es la magia.',
+    manifesto: 'Bosque. Luna. Velas. Flores. Sombras. Oro antiguo. Historias escondidas.',
     moodKeywords: [
       'Encantado',
+      'Nocturno',
       'Celestial',
-      'Etéreo',
+      'Botánico',
       'Romántico',
       'Misterioso',
-      'Luminoso',
-      'Ancestral',
-      'Noble',
+      'Antiguo',
       'Íntimo',
       'Cinematográfico',
     ],
   },
 
   venue: {
-    name: 'Salón Perez Uribe',
+    name: 'Salón de Honor Óscar Pérez Uribe',
     address: 'Av. Mariscal López 2351',
     city: 'Asunción',
     country: 'Paraguay',
     capacity: 500,
     indoorOutdoor: 'Interior y Exterior',
-    description:
-      'El Salón Pérez Uribe del Club Centenario es un espacio de gran elegancia arquitectónica, con techos de roble labrado, ventanales que dan a los jardines históricos del club y una terraza rodeada de árboles centenarios. El salón cuenta con una capilla privada, un gran salón de recepción y jardines aterrazados perfectos para una recepción nocturna bajo las estrellas.',
+    description: `Un gran espacio de celebración concebido para transformarse.
+
+Su escala longitudinal y arquitectura neutra ofrecen el lienzo ideal para construir Moonlit Kingdom desde cero: vegetación que invada la sala, luz cálida suspendida, textiles, flores, sombras y estructuras escenográficas capaces de cambiar por completo la percepción del espacio.
+
+Renovado con infraestructura contemporánea de iluminación y producción, el salón permite pensar la boda no solamente como una decoración, sino como una experiencia inmersiva: desde la llegada y la ceremonia hasta la cena y una pista que evoluciona con la noche.
+
+Nuestro objetivo será hacer que, al caer la luz, el salón deje de sentirse como un salón y se convierta en el bosque bajo las estrellas.`,
+    area: 'Aprox. 930 m²',
+    capacityNote: 'Hasta aprox. 700 invitados con pista; montaje final a confirmar con el salón.',
+    dimensions: 'Salón principal: aprox. 13 × 56 m · Galería: aprox. 4,4 × 49,5 m',
+    productionNotes: [
+      'Infraestructura eléctrica contemporánea, iluminación LED y puntos de conexión en techo para producción de eventos.',
+    ],
     coordinator: 'Verónica',
     coordinatorEmail: 'info@clubcentenario.org.py',
     coordinatorPhone: '(+595 21) 247 0000',
