@@ -6,7 +6,7 @@ import { useAdmin } from '@/lib/AdminContext';
 
 export function AdminToolbar() {
   const router = useRouter();
-  const { isEditMode, toggleEditMode, resetOverrides, overrideCount } = useAdmin();
+  const { isEditMode, toggleEditMode, resetOverrides, overrideCount, dirtyCount, saveStatus, lastSavedAt, save } = useAdmin();
   const [loggingOut, setLoggingOut] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -51,11 +51,28 @@ export function AdminToolbar() {
           <span>{isEditMode ? 'Editando' : 'Solo lectura'}</span>
         </button>
 
-        {overrideCount > 0 && (
-          <span className="text-xs" style={{ color: 'rgba(176,141,87,0.5)' }}>
-            {overrideCount} campo{overrideCount !== 1 ? 's' : ''} editado{overrideCount !== 1 ? 's' : ''} · guardado
-          </span>
-        )}
+        <button
+          onClick={() => void save()}
+          disabled={dirtyCount === 0 || saveStatus === 'saving'}
+          className="px-4 py-1.5 text-xs uppercase tracking-widest transition-all duration-200 rounded-sm disabled:opacity-40"
+          style={{
+            background: dirtyCount > 0 ? 'rgba(176,141,87,0.25)' : 'transparent',
+            border: '1px solid rgba(176,141,87,0.5)',
+            color: '#D8C3A5',
+          }}
+        >
+          {saveStatus === 'saving' ? 'Guardando…' : 'Guardar'}
+        </button>
+
+        <span className="text-xs" style={{ color: saveStatus === 'error' ? '#C98A8A' : 'rgba(176,141,87,0.6)' }}>
+          {saveStatus === 'error'
+            ? 'Error al sincronizar · reintentá'
+            : dirtyCount > 0
+              ? `${dirtyCount} cambio${dirtyCount !== 1 ? 's' : ''} sin guardar`
+              : lastSavedAt
+                ? 'Todo guardado'
+                : `${overrideCount} campo${overrideCount !== 1 ? 's' : ''} editado${overrideCount !== 1 ? 's' : ''}`}
+        </span>
       </div>
 
       {/* Right: reset + logout */}
