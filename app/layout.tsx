@@ -1,7 +1,23 @@
 import type { Metadata } from 'next';
+import { Cormorant_Garamond, Cormorant_SC } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+
+const display = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+const smallCaps = Cormorant_SC({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-small-caps',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Moonlit Kingdom — Una noche fuera del tiempo',
@@ -15,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" className={`${display.variable} ${smallCaps.variable} h-full antialiased`}>
       <body
         className="min-h-full flex flex-col"
         style={{ background: '#10261D', color: '#F3EBDD' }}

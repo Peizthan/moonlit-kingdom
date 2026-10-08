@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { CrescentMark } from '@/components/brand/CrescentMark';
 
 const navLinks = [
   { href: '/', label: 'Portada' },
@@ -15,77 +16,57 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isPublicPage = pathname === '/' || pathname === '/presentation';
 
   return (
     <motion.nav
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed top-0 left-0 right-0 z-50 no-print"
-      style={{
-        background: 'linear-gradient(to bottom, rgba(16,38,29,0.95) 0%, rgba(16,38,29,0) 100%)',
-        backdropFilter: 'blur(12px)',
-      }}
+      className={`fixed top-0 left-0 right-0 z-50 border-b no-print ${
+        isPublicPage ? 'mk-nav-public' : 'mk-nav-night'
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="group flex items-center gap-3">
-          <span
-            className="text-base animate-gentle-pulse"
-            style={{ color: '#B08D57' }}
-          >
-            ☽
-          </span>
-          <span
-            className="text-sm uppercase tracking-[0.25em] font-light"
-            style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
-          >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8">
+        <Link href="/" className="group flex items-center gap-2.5">
+          <CrescentMark className="h-6 w-6" />
+          <span className="mk-nav-wordmark text-[0.7rem] font-semibold uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.24em]" style={{ fontFamily: 'var(--mk-font-display)' }}>
             Moonlit Kingdom
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-xs uppercase tracking-[0.2em] transition-all duration-300 relative group"
-              style={{
-                color: pathname === link.href ? '#B08D57' : '#8E8A86',
-              }}
+              aria-current={pathname === link.href ? 'page' : undefined}
+              className="mk-nav-link group relative pb-0.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] transition-colors duration-300"
+              style={{ fontFamily: 'var(--mk-font-display)' }}
             >
               {link.label}
-              <span
-                className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full"
-                style={{ background: 'rgba(176,141,87,0.5)' }}
-              />
             </Link>
           ))}
         </div>
 
-        {/* Mobile toggle */}
         <button
-          className="md:hidden p-1"
-          style={{ color: '#B08D57' }}
+          className="mk-nav-toggle p-1 md:hidden"
           onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
+          aria-controls="public-navigation"
+          aria-expanded={open}
+          aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
         >
-          {open ? <X size={20} /> : <Menu size={20} />}
+          {open ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden border-t"
-          style={{
-            background: 'rgba(16,38,29,0.98)',
-            borderColor: 'rgba(176,141,87,0.2)',
-          }}
+          id="public-navigation"
+          className="mk-nav-menu border-t md:hidden"
         >
           <div className="px-6 py-4 flex flex-col gap-4">
             {navLinks.map((link) => (
@@ -93,10 +74,8 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="text-xs uppercase tracking-[0.2em] py-2"
-                style={{
-                  color: pathname === link.href ? '#B08D57' : '#8E8A86',
-                }}
+                aria-current={pathname === link.href ? 'page' : undefined}
+                className="mk-nav-link py-2 text-xs uppercase tracking-[0.2em]"
               >
                 {link.label}
               </Link>
