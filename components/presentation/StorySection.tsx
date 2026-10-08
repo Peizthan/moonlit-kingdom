@@ -12,7 +12,7 @@ export function StorySection() {
       id="story"
       className="relative py-32 px-6"
       style={{
-        background: 'linear-gradient(160deg, #10261D 0%, #121C2E 100%)',
+        background: 'linear-gradient(160deg, var(--tone-base) 0%, var(--tone-base) 100%)',
       }}
     >
       <div className="max-w-4xl mx-auto">
@@ -23,7 +23,7 @@ export function StorySection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center text-xs uppercase tracking-[0.35em] mb-8"
-          style={{ color: 'rgba(176,141,87,0.7)' }}
+          style={{ color: 'var(--tone-accent)' }}
         >
           Capítulo Uno
         </motion.p>
@@ -34,7 +34,7 @@ export function StorySection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="text-center text-4xl md:text-6xl font-light mb-16"
-          style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+          style={{ fontFamily: 'var(--mk-font-display)', color: 'var(--tone-fg)' }}
         >
           Nuestra Historia
         </motion.h2>
@@ -48,17 +48,17 @@ export function StorySection() {
             transition={{ duration: 0.7, delay: 0.2 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <span style={{ color: '#B08D57', fontSize: '1.2rem' }}>✦</span>
+              <span style={{ color: 'var(--tone-accent)', fontSize: '1.2rem' }}>✦</span>
               <h3
                 className="text-lg font-light uppercase tracking-[0.15em]"
-                style={{ color: '#B08D57' }}
+                style={{ color: 'var(--tone-accent)' }}
               >
                 Cómo Nos Conocimos
               </h3>
             </div>
             <p
               className="text-base leading-loose"
-              style={{ color: '#C7C0B6', fontFamily: "'Georgia', serif" }}
+              style={{ color: 'var(--tone-soft)', fontFamily: 'var(--mk-font-display)' }}
             >
               {story.howWeMet}
             </p>
@@ -72,17 +72,17 @@ export function StorySection() {
             transition={{ duration: 0.7, delay: 0.35 }}
           >
             <div className="flex items-center gap-3 mb-6">
-              <span style={{ color: '#B08D57', fontSize: '1.2rem' }}>☽</span>
+              <span style={{ color: 'var(--tone-accent)', fontSize: '1.2rem' }}>☽</span>
               <h3
                 className="text-lg font-light uppercase tracking-[0.15em]"
-                style={{ color: '#B08D57' }}
+                style={{ color: 'var(--tone-accent)' }}
               >
                 La Propuesta
               </h3>
             </div>
             <p
               className="text-base leading-loose"
-              style={{ color: '#C7C0B6', fontFamily: "'Georgia', serif" }}
+              style={{ color: 'var(--tone-soft)', fontFamily: 'var(--mk-font-display)' }}
             >
               {story.proposal}
             </p>
@@ -101,13 +101,13 @@ export function StorySection() {
         >
           <p
             className="text-3xl md:text-4xl font-light"
-            style={{ fontFamily: "'Georgia', serif", color: 'rgba(176,141,87,0.5)' }}
+            style={{ fontFamily: 'var(--mk-font-display)', color: 'var(--tone-accent)' }}
           >
             {couple.partner1}
-            <span className="mx-6" style={{ color: 'rgba(176,141,87,0.3)' }}>&</span>
+            <span className="mx-6" style={{ color: 'var(--tone-accent)' }}>&</span>
             {couple.partner2}
           </p>
-          <p className="mt-3 text-sm uppercase tracking-[0.25em]" style={{ color: '#8E8A86' }}>
+          <p className="mt-3 text-sm uppercase tracking-[0.25em]" style={{ color: 'var(--tone-muted)' }}>
             {couple.weddingDate}
           </p>
         </motion.div>

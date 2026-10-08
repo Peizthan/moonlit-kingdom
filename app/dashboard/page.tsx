@@ -167,14 +167,11 @@ function DashboardContent() {
   const completedActions = actionsList.items.filter((a) => a.status === 'complete').length;
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ background: 'linear-gradient(160deg, #10261D 0%, #121C2E 100%)' }}
-    >
+    <div className="min-h-screen">
       {/* Header */}
       <div
         className="pt-24 pb-10 px-6 border-b"
-        style={{ borderColor: 'rgba(176,141,87,0.15)' }}
+        style={{ borderColor: 'rgb(var(--tone-line)/0.15)' }}
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -182,23 +179,23 @@ function DashboardContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <p className="text-xs uppercase tracking-[0.35em] mb-3" style={{ color: 'rgba(176,141,87,0.6)' }}>
+            <p className="mk-chapter-eyebrow mb-3" style={{ fontSize: '0.75rem' }}>
               Panel de Planificación
             </p>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h1
-                  className="text-3xl md:text-4xl font-light mb-1"
-                  style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+                  className="mk-chapter-title text-4xl md:text-5xl mb-1"
+                  
                 >
                   Moonlit Kingdom
                 </h1>
-                <p className="text-sm" style={{ color: '#8E8A86' }}>
+                <p className="text-sm" style={{ color: 'var(--tone-muted)' }}>
                   {couple.partner1} & {couple.partner2} · {couple.weddingDate} · {couple.location}
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs" style={{ color: '#8E8A86' }}>Actualizado {couple.lastUpdated}</span>
+                <span className="text-xs" style={{ color: 'var(--tone-muted)' }}>Actualizado {couple.lastUpdated}</span>
               </div>
             </div>
           </motion.div>
@@ -209,8 +206,8 @@ function DashboardContent() {
       <div
         className="sticky top-16 z-30 border-b overflow-x-auto no-print"
         style={{
-          background: 'rgba(16,38,29,0.95)',
-          borderColor: 'rgba(176,141,87,0.12)',
+          background: 'rgb(var(--tone-base-rgb)/0.94)',
+          borderColor: 'rgb(var(--tone-line)/0.12)',
           backdropFilter: 'blur(12px)',
         }}
       >
@@ -220,10 +217,10 @@ function DashboardContent() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className="flex items-center gap-2 px-4 py-4 text-xs uppercase tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap"
+                className="mk-focus flex items-center gap-2 px-4 py-4 text-xs uppercase tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap"
                 style={{
-                  color: activeTab === tab.id ? '#B08D57' : '#8E8A86',
-                  borderBottomColor: activeTab === tab.id ? '#B08D57' : 'transparent',
+                  color: activeTab === tab.id ? 'var(--tone-fg)' : '#9A958E',
+                  borderBottomColor: activeTab === tab.id ? 'var(--tone-accent)' : 'transparent',
                 }}
               >
                 {tab.icon}
@@ -286,7 +283,7 @@ function DashboardContent() {
             <div className="mt-10">
               <h3
                 className="text-lg font-light mb-6 uppercase tracking-[0.15em]"
-                style={{ color: '#B08D57' }}
+                style={{ color: 'var(--tone-accent)' }}
               >
                 Acciones de Alta Prioridad
               </h3>
@@ -302,7 +299,7 @@ function DashboardContent() {
             <div className="mt-10">
               <h3
                 className="text-lg font-light mb-6 uppercase tracking-[0.15em]"
-                style={{ color: '#B08D57' }}
+                style={{ color: 'var(--tone-accent)' }}
               >
                 Riesgos Abiertos
               </h3>
@@ -328,8 +325,8 @@ function DashboardContent() {
             <div
               className="rounded-sm border p-6 md:p-10"
               style={{
-                borderColor: 'rgba(176,141,87,0.15)',
-                background: 'rgba(18,28,46,0.3)',
+                borderColor: 'rgb(var(--tone-line)/0.15)',
+                background: 'rgb(var(--tone-surface)/0.3)',
               }}
             >
               <TimelineBlock events={timeline} />
@@ -354,8 +351,8 @@ function DashboardContent() {
             <div
               className="rounded-sm border overflow-hidden"
               style={{
-                borderColor: 'rgba(176,141,87,0.15)',
-                background: 'rgba(18,28,46,0.3)',
+                borderColor: 'rgb(var(--tone-line)/0.15)',
+                background: 'rgb(var(--tone-surface)/0.3)',
               }}
             >
               <VendorTable vendors={vendorsList.items} onAdd={addVendor} onDelete={vendorsList.removeItem} />
@@ -372,12 +369,12 @@ function DashboardContent() {
             transition={{ duration: 0.5 }}
           >
             <div className="mb-10">
-              <p className="text-xs uppercase tracking-[0.3em] mb-2" style={{ color: 'rgba(176,141,87,0.6)' }}>
+              <p className="text-xs uppercase tracking-[0.3em] mb-2" style={{ color: 'var(--tone-accent)' }}>
                 Resumen Financiero
               </p>
               <h2
-                className="text-3xl font-light"
-                style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+                className="mk-chapter-title text-4xl"
+                
               >
                 Planilla de Presupuesto
               </h2>
@@ -493,8 +490,8 @@ function DashboardContent() {
             <div
               className="rounded-sm border overflow-hidden"
               style={{
-                borderColor: 'rgba(176,141,87,0.15)',
-                background: 'rgba(18,28,46,0.3)',
+                borderColor: 'rgb(var(--tone-line)/0.15)',
+                background: 'rgb(var(--tone-surface)/0.3)',
               }}
             >
               <TechnicalPlan items={technicalList.items} onAdd={addTechnicalItem} onDelete={technicalList.removeItem} />

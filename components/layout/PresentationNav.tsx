@@ -54,7 +54,7 @@ export function PresentationNav({ sections }: PresentationNavProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 8 }}
                 className="text-xs uppercase tracking-widest"
-                style={{ color: '#B08D57', fontSize: '0.6rem' }}
+                style={{ color: 'var(--tone-accent)', fontSize: '0.6rem' }}
               >
                 {section.label}
               </motion.span>
@@ -65,7 +65,7 @@ export function PresentationNav({ sections }: PresentationNavProps) {
             style={{
               width: activeId === section.id ? '8px' : '5px',
               height: activeId === section.id ? '8px' : '5px',
-              background: activeId === section.id ? '#B08D57' : 'rgba(176,141,87,0.35)',
+              background: activeId === section.id ? 'var(--tone-accent)' : 'rgb(var(--tone-line)/0.35)',
             }}
           />
         </button>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { MapPin, Phone, Mail, Globe } from 'lucide-react';
 import { OrnamentalDivider } from '@/components/ui/OrnamentalDivider';
+import { ChapterHeading } from '@/components/brand/ChapterHeading';
 import { weddingData } from '@/data/wedding-data';
 
 const { venue } = weddingData;
@@ -40,26 +41,11 @@ export function VenueSection() {
     <section
       id="venue"
       className="relative overflow-hidden px-6 py-24 md:py-32"
-      style={{
-        background: 'linear-gradient(160deg, #171515 0%, #10261D 50%, #121C2E 100%)',
-      }}
     >
       <div className="mx-auto max-w-6xl">
-        <motion.div {...reveal(10)} className="mb-12 md:mb-16">
-          <p
-            className="mb-4 text-xs uppercase tracking-[0.35em]"
-            style={{ color: 'rgba(176,141,87,0.75)' }}
-          >
-            Capítulo dos
-          </p>
-          <h2
-            className="text-4xl font-light leading-tight sm:text-5xl md:text-6xl"
-            style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-          >
-            El Salón
-          </h2>
-          <div className="mt-7 h-px w-20" style={{ background: 'rgba(176,141,87,0.55)' }} />
-        </motion.div>
+        <div className="mb-12 md:mb-16">
+          <ChapterHeading eyebrow="Capítulo dos" title="El Salón" />
+        </div>
 
         <div className="grid items-start gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16">
           <motion.div {...reveal(10, 0.08)} className="space-y-5">
@@ -72,33 +58,23 @@ export function VenueSection() {
           </motion.div>
 
           <motion.div {...reveal(10, 0.14)}>
-            <p
-              className="mb-3 text-xs uppercase leading-relaxed tracking-[0.2em]"
-              style={{ color: '#B08D57' }}
-            >
+            <p className="mk-label mb-3 leading-relaxed">
               Club Centenario · Asunción
             </p>
-            <h3
-              className="mb-7 text-3xl font-light leading-snug sm:text-4xl"
-              style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-            >
+            <h3 className="mk-chapter-title mb-7 text-[clamp(2rem,4.5vw,2.9rem)] leading-tight">
               {venue.name}
             </h3>
 
             <div className="space-y-5">
               {venue.description.split('\n\n').map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="text-base font-light leading-[1.85]"
-                  style={{ color: '#C7C0B6', fontFamily: "'Georgia', serif" }}
-                >
+                <p key={paragraph} className="mk-prose">
                   {paragraph}
                 </p>
               ))}
             </div>
 
             <dl className="my-9 grid grid-cols-2 gap-x-5 gap-y-7 border-y py-7 sm:gap-x-8"
-              style={{ borderColor: 'rgba(176,141,87,0.22)' }}
+              style={{ borderColor: 'rgb(var(--tone-line)/0.22)' }}
             >
               <VenueFact label="Área útil publicada" value={venue.area} />
               <VenueFact label="Capacidad publicada" value={venue.capacityNote} />
@@ -111,35 +87,32 @@ export function VenueSection() {
 
             <blockquote
               className="my-9 border-l pl-5 sm:pl-7"
-              style={{ borderColor: 'rgba(176,141,87,0.55)' }}
+              style={{ borderColor: 'rgb(var(--tone-line)/0.55)' }}
             >
-              <p
-                className="text-2xl font-light italic leading-snug sm:text-3xl"
-                style={{ fontFamily: "'Georgia', serif", color: '#F3EBDD' }}
-              >
+              <p className="mk-quote text-[clamp(1.7rem,3.6vw,2.4rem)]">
                 Un lienzo para construir el bosque bajo las estrellas.
               </p>
             </blockquote>
 
-            <div className="space-y-3 border-t pt-6" style={{ borderColor: 'rgba(176,141,87,0.18)' }}>
-              <p className="text-xs uppercase tracking-[0.25em]" style={{ color: 'rgba(176,141,87,0.65)' }}>
+            <div className="space-y-3 border-t pt-6" style={{ borderColor: 'rgb(var(--tone-line)/0.18)' }}>
+              <p className="text-xs uppercase tracking-[0.25em]" style={{ color: 'var(--tone-accent)' }}>
                 Información del salón
               </p>
-              <p className="flex items-start gap-2 text-sm" style={{ color: '#C7C0B6' }}>
-                <MapPin aria-hidden="true" size={15} className="mt-0.5 shrink-0" style={{ color: '#B08D57' }} />
+              <p className="flex items-start gap-2 text-sm" style={{ color: 'var(--tone-soft)' }}>
+                <MapPin aria-hidden="true" size={15} className="mt-0.5 shrink-0" style={{ color: 'var(--tone-accent)' }} />
                 {venue.address}, {venue.city}, {venue.country}
               </p>
-              <p className="text-sm" style={{ color: '#D8C3A5' }}>{venue.coordinator}</p>
+              <p className="text-sm" style={{ color: 'var(--tone-fg)' }}>{venue.coordinator}</p>
               <a
                 href={`mailto:${venue.coordinatorEmail}`}
                 className="flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
-                style={{ color: '#C7C0B6', outlineColor: '#B08D57' }}
+                style={{ color: 'var(--tone-soft)', outlineColor: 'var(--tone-accent)' }}
               >
-                <Mail aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+                <Mail aria-hidden="true" size={14} style={{ color: 'var(--tone-accent)' }} />
                 {venue.coordinatorEmail}
               </a>
-              <p className="flex items-center gap-2 text-sm" style={{ color: '#C7C0B6' }}>
-                <Phone aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+              <p className="flex items-center gap-2 text-sm" style={{ color: 'var(--tone-soft)' }}>
+                <Phone aria-hidden="true" size={14} style={{ color: 'var(--tone-accent)' }} />
                 {venue.coordinatorPhone}
               </p>
               {venue.website && (
@@ -148,9 +121,9 @@ export function VenueSection() {
                   target="_blank"
                   rel="noreferrer"
                   className="flex w-fit items-center gap-2 text-sm transition-opacity hover:opacity-75 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4"
-                  style={{ color: '#C7C0B6', outlineColor: '#B08D57' }}
+                  style={{ color: 'var(--tone-soft)', outlineColor: 'var(--tone-accent)' }}
                 >
-                  <Globe aria-hidden="true" size={14} style={{ color: '#B08D57' }} />
+                  <Globe aria-hidden="true" size={14} style={{ color: 'var(--tone-accent)' }} />
                   Sitio web del Club Centenario
                 </a>
               )}
@@ -169,10 +142,10 @@ function VenueFact({ label, value }: { label: string; value?: string }) {
 
   return (
     <div>
-      <dt className="mb-2 text-[0.65rem] uppercase tracking-[0.2em]" style={{ color: 'rgba(176,141,87,0.7)' }}>
+      <dt className="mk-label mb-2" style={{ fontSize: '0.72rem' }}>
         {label}
       </dt>
-      <dd className="text-sm leading-relaxed" style={{ color: '#C7C0B6' }}>
+      <dd className="text-sm leading-relaxed" style={{ color: 'var(--tone-soft)' }}>
         {value}
       </dd>
     </div>
@@ -193,20 +166,20 @@ function VenuePhoto({
     <figure>
       <div
         className={`relative ${aspect} overflow-hidden border`}
-        style={{ borderColor: 'rgba(176,141,87,0.32)', background: '#121C2E' }}
+        style={{ borderColor: 'rgb(var(--tone-line)/0.32)', background: 'var(--tone-base)' }}
       >
         {unavailable ? (
           <div
             role="img"
             aria-label={`Fotografía pendiente. Añadir ${filename} en public/images/venue.`}
             className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 text-center"
-            style={{ background: 'linear-gradient(145deg, rgba(29,74,58,0.45), #121C2E 70%)' }}
+            style={{ background: 'linear-gradient(145deg, rgba(29,74,58,0.45), var(--tone-base) 70%)' }}
           >
-            <span aria-hidden="true" className="text-xl" style={{ color: 'rgba(176,141,87,0.65)' }}>✦</span>
-            <span className="text-xs uppercase tracking-[0.18em]" style={{ color: '#D8C3A5' }}>
+            <span aria-hidden="true" className="text-xl" style={{ color: 'var(--tone-accent)' }}>✦</span>
+            <span className="text-xs uppercase tracking-[0.18em]" style={{ color: 'var(--tone-fg)' }}>
               Fotografía pendiente
             </span>
-            <code className="text-[0.65rem]" style={{ color: '#8E8A86' }}>{filename}</code>
+            <code className="text-[0.65rem]" style={{ color: 'var(--tone-muted)' }}>{filename}</code>
           </div>
         ) : (
           <Image

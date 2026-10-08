@@ -37,7 +37,7 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
         </div>
       )}
       {tables.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todav?a no hay mesas. Activ? el modo edici?n para agregar.
         </p>
       )}
@@ -51,35 +51,35 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
             transition={{ duration: 0.5, delay: i * 0.08 }}
             className="rounded-sm border p-5"
             style={{
-              borderColor: 'rgba(176,141,87,0.2)',
-              background: 'linear-gradient(135deg, rgba(29,74,58,0.2) 0%, rgba(18,28,46,0.3) 100%)',
+              borderColor: 'rgb(var(--tone-line)/0.2)',
+              background: 'linear-gradient(135deg, rgba(29,74,58,0.2) 0%, rgb(var(--tone-surface)/0.3) 100%)',
             }}
           >
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h3
                   className="text-base font-medium"
-                  style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
+                  style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)' }}
                 >
-                  <EditableField id={`seating:${table.id}:tableName`} value={table.tableName} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
+                  <EditableField id={`seating:${table.id}:tableName`} value={table.tableName} style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontWeight: '500' }} />
                 </h3>
-                <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'rgba(176,141,87,0.5)' }}>
+                <p className="text-xs uppercase tracking-widest mt-0.5" style={{ color: 'var(--tone-accent)' }}>
                   Mesa {table.tableNumber}
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <div
                   className="flex flex-col items-end text-xs"
-                  style={{ color: '#8E8A86' }}
+                  style={{ color: 'var(--tone-muted)' }}
                 >
-                  <span style={{ color: '#B08D57' }}>{guestsOf(table).length}</span>
+                  <span style={{ color: 'var(--tone-accent)' }}>{guestsOf(table).length}</span>
                   <span className="flex items-center gap-1">
                     /{' '}
                     <EditableField
                       id={`seating:${table.id}:capacity`}
                       value={table.capacity}
                       type="number"
-                      style={{ color: '#8E8A86', fontSize: '0.75rem', width: '3.5rem' }}
+                      style={{ color: 'var(--tone-muted)', fontSize: '0.75rem', width: '3.5rem' }}
                     />{' '}
                     lugares
                   </span>
@@ -93,13 +93,13 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
             {/* Guest capacity bar */}
             <div
               className="h-1 rounded-full mb-4 overflow-hidden"
-              style={{ background: 'rgba(176,141,87,0.1)' }}
+              style={{ background: 'rgb(var(--tone-line)/0.1)' }}
             >
               <div
                 className="h-full rounded-full"
                 style={{
                   width: `${capacityOf(table) > 0 ? Math.min(100, (guestsOf(table).length / capacityOf(table)) * 100) : 0}%`,
-                  background: 'linear-gradient(to right, #B08D57, #8C6A3C)',
+                  background: 'linear-gradient(to right, var(--tone-accent), #8C6A3C)',
                 }}
               />
             </div>
@@ -109,9 +109,9 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
                 <li
                   key={gi}
                   className="flex items-center gap-2 text-sm"
-                  style={{ color: '#C7C0B6' }}
+                  style={{ color: 'var(--tone-soft)' }}
                 >
-                  <span style={{ color: 'rgba(176,141,87,0.3)', fontSize: '0.5rem' }}>◆</span>
+                  <span style={{ color: 'var(--tone-accent)', fontSize: '0.5rem' }}>◆</span>
                   {isEditMode ? (
                     <>
                       <input
@@ -122,12 +122,12 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
                         onKeyDown={(e) => e.key === 'Enter' && (e.target as HTMLElement).blur()}
                         className="flex-1 min-w-0"
                         style={{
-                          background: 'rgba(176,141,87,0.06)',
-                          border: '1px solid rgba(176,141,87,0.4)',
+                          background: 'rgb(var(--tone-line)/0.06)',
+                          border: '1px solid rgb(var(--tone-line)/0.4)',
                           borderRadius: '2px',
                           padding: '2px 6px',
                           outline: 'none',
-                          color: '#C7C0B6',
+                          color: 'var(--tone-soft)',
                           fontSize: '0.875rem',
                         }}
                       />
@@ -147,8 +147,8 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
             )}
 
             {(table.notes || isEditMode) && (
-              <p className="mt-4 text-xs italic" style={{ color: 'rgba(176,141,87,0.4)' }}>
-                <EditableField id={`seating:${table.id}:notes`} value={table.notes ?? ''} type="textarea" style={{ color: 'rgba(176,141,87,0.4)', fontSize: '0.75rem', fontStyle: 'italic' }} />
+              <p className="mt-4 text-xs italic" style={{ color: 'var(--tone-accent)' }}>
+                <EditableField id={`seating:${table.id}:notes`} value={table.notes ?? ''} type="textarea" style={{ color: 'var(--tone-accent)', fontSize: '0.75rem', fontStyle: 'italic' }} />
               </p>
             )}
           </motion.div>

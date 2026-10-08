@@ -1,6 +1,8 @@
 'use client';
 
 import { PresentationNav } from '@/components/layout/PresentationNav';
+import { CrescentMark } from '@/components/brand/CrescentMark';
+import { CelestialOrnament } from '@/components/brand/CelestialOrnament';
 import { VisionSection } from '@/components/presentation/VisionSection';
 import { VenueSection } from '@/components/presentation/VenueSection';
 import { TimelineSection } from '@/components/presentation/TimelineSection';
@@ -19,41 +21,21 @@ const sections = [
 export default function PresentationPage() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="relative" style={{ background: '#10261D' }}>
+      <div className="relative">
         <PresentationNav sections={sections} />
 
-        <header
-          className="relative flex min-h-[22rem] items-center justify-center overflow-hidden px-6 pb-10 pt-24 text-center md:min-h-[26rem]"
-          style={{
-            background: 'linear-gradient(160deg, #10261D 0%, #121C2E 60%, #10261D 100%)',
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(ellipse 80% 70% at 50% 100%, rgba(176,141,87,0.08) 0%, transparent 70%)',
-            }}
-          />
+        <header className="mk-tone-paper relative flex min-h-[24rem] items-center justify-center overflow-hidden px-6 pb-14 pt-28 text-center md:min-h-[30rem]">
           <div className="relative max-w-3xl">
-            <p className="mb-4 text-xs uppercase tracking-[0.4em]" style={{ color: 'rgba(176,141,87,0.7)' }}>
-              Moonlit Kingdom
-            </p>
-            <h1
-              className="text-4xl font-light leading-tight sm:text-5xl md:text-6xl"
-              style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-            >
+            <CrescentMark className="mx-auto mb-5 h-9 w-9" style={{ color: 'var(--tone-accent)' }} />
+            <p className="mk-chapter-eyebrow mb-5">Moonlit Kingdom</p>
+            <h1 className="mk-chapter-title text-[clamp(2.7rem,9vw,5.5rem)]">
               Una noche fuera del tiempo
             </h1>
-            <p className="mt-6 text-sm leading-relaxed sm:text-base" style={{ color: '#D8C3A5' }}>
+            <CelestialOrnament className="mx-auto mt-7 h-3 w-44" style={{ color: 'var(--tone-accent)' }} />
+            <p className="mk-display mt-6 text-2xl font-semibold sm:text-3xl" style={{ color: 'var(--tone-fg)' }}>
               {couple.partner1} & {couple.partner2}
             </p>
-            <p className="mt-1 text-xs uppercase tracking-[0.2em]" style={{ color: '#8E8A86' }}>
-              {couple.weddingDate}
-            </p>
-            <p className="mt-6 text-xs uppercase tracking-[0.25em]" style={{ color: 'rgba(176,141,87,0.75)' }}>
-              Visión · Atmósfera · Experiencia
-            </p>
+            <p className="mk-label mt-2">{couple.weddingDate}</p>
           </div>
         </header>
 

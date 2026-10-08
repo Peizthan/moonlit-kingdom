@@ -27,15 +27,15 @@
   }
 
   body {
-    background-color: #10261D;
-    color: #F3EBDD;
+    background-color: var(--mk-paper-art);
+    color: var(--mk-ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   ::selection {
-    background-color: #B08D57;
-    color: #10261D;
+    background-color: var(--mk-wisteria);
+    color: var(--mk-ivory);
   }
 
   ::-webkit-scrollbar {
@@ -43,17 +43,28 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #10261D;
+    background: var(--mk-paper-light);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #B08D57;
+    background: var(--mk-bronze);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #D8C3A5;
+    background: var(--mk-wisteria-dark);
   }
+}
+
+/* Page-level paper: fixed to the viewport so long pages never show tiling seams. */
+.mk-page {
+  background-color: var(--mk-paper-art);
+  background-attachment: fixed;
+  background-image:
+    radial-gradient(ellipse at 47% 20%, rgba(255, 248, 225, 0.3), transparent 55%),
+    radial-gradient(ellipse at 4% 13%, rgba(112, 79, 45, 0.14), transparent 35%),
+    radial-gradient(ellipse at 95% 60%, rgba(117, 77, 44, 0.12), transparent 38%),
+    radial-gradient(ellipse at 19% 90%, rgba(125, 88, 49, 0.1), transparent 37%);
 }
 
 /* Reusable parchment surface: the paper is the page, not a card. */
@@ -66,6 +77,127 @@
     radial-gradient(ellipse at 95% 39%, rgba(117, 77, 44, 0.13), transparent 38%),
     radial-gradient(ellipse at 19% 82%, rgba(125, 88, 49, 0.1), transparent 37%),
     radial-gradient(ellipse at 79% 91%, rgba(255, 245, 218, 0.15), transparent 42%);
+}
+
+/* ---------- Shared tones: sections read colours from these, never hardcode them ---------- */
+:root,
+.mk-tone-paper {
+  --tone-strong: var(--mk-ink);
+  --tone-fg: var(--mk-ink);
+  --tone-soft: var(--mk-ink-soft);
+  --tone-muted: #5E4F3E;
+  --tone-accent: #6B4E26;
+  --tone-rule: rgba(73, 58, 41, 0.38);
+  --tone-line: 73 58 41;
+  --tone-surface: 255 248 225;
+  --tone-base: #E7D4B2;
+  --tone-base-rgb: 222 197 156;
+  --tone-focus: var(--mk-wisteria-dark);
+  color: var(--tone-fg);
+}
+
+.mk-tone-night {
+  --tone-strong: var(--mk-ivory);
+  --tone-fg: #D8C3A5;
+  --tone-soft: #C7C0B6;
+  --tone-muted: #9A958E;
+  --tone-accent: #B08D57;
+  --tone-rule: rgba(176, 141, 87, 0.3);
+  --tone-line: 176 141 87;
+  --tone-surface: 18 28 46;
+  --tone-base: #121C2E;
+  --tone-base-rgb: 18 28 46;
+  --tone-focus: #D8C3A5;
+  color: var(--tone-fg);
+}
+
+.mk-display {
+  font-family: var(--mk-font-display);
+}
+
+.mk-prose {
+  font-family: var(--mk-font-display);
+  font-size: clamp(1.15rem, 1rem + 0.5vw, 1.4rem);
+  font-weight: 500;
+  line-height: 1.7;
+  color: var(--tone-soft);
+}
+
+.mk-chapter-eyebrow {
+  font-family: var(--mk-font-small-caps);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--tone-accent);
+}
+
+.mk-chapter-title {
+  font-family: var(--mk-font-display);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  color: var(--tone-strong);
+  text-wrap: balance;
+}
+
+.mk-quote {
+  font-family: var(--mk-font-display);
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--tone-strong);
+}
+
+.mk-label {
+  font-family: var(--mk-font-small-caps);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--tone-accent);
+}
+
+.mk-rule {
+  display: block;
+  height: 1px;
+  background: var(--tone-rule);
+}
+
+.mk-focus:focus-visible,
+.mk-tone-paper a:focus-visible,
+.mk-tone-night a:focus-visible,
+.mk-tone-paper button:focus-visible,
+.mk-tone-night button:focus-visible {
+  outline: 2px solid var(--tone-focus, var(--mk-bronze));
+  outline-offset: 4px;
+}
+
+.mk-login-input {
+  width: 100%;
+  padding: 12px 40px 12px 16px;
+  background: rgb(var(--tone-surface) / 0.7);
+  border: 1px solid rgb(var(--tone-line) / 0.45);
+  color: var(--tone-fg);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  outline: none;
+}
+
+.mk-login-input:focus-visible {
+  border-color: var(--tone-accent);
+  outline: 2px solid var(--tone-accent);
+  outline-offset: 2px;
+}
+
+.mk-footer-band {
+  display: block;
+  width: 100%;
+  height: clamp(56px, 9vw, 118px);
+  object-fit: cover;
+  object-position: center bottom;
+  -webkit-mask-image: linear-gradient(0deg, #000 45%, transparent 100%);
+  mask-image: linear-gradient(0deg, #000 45%, transparent 100%);
 }
 
 /* ---------- Homepage hero: live HTML over a decorative frame art ---------- */
@@ -89,10 +221,9 @@
   height: clamp(60px, 7.5vw, 120px);
   background: linear-gradient(
     180deg,
-    rgba(27, 33, 28, 0) 0%,
-    rgba(27, 33, 28, 0.3) 38%,
-    rgba(27, 33, 28, 0.82) 78%,
-    #1b211c 100%
+    rgba(205, 178, 142, 0) 0%,
+    rgba(205, 178, 142, 0.55) 55%,
+    var(--mk-paper-art) 100%
   );
   content: "";
   pointer-events: none;

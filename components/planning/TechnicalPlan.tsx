@@ -15,7 +15,7 @@ interface TechnicalPlanProps {
 const statusColors: Record<TechnicalItem['status'], string> = {
   confirmed: '#1D4A3A',
   pending: '#4E1F2D',
-  tbc: '#121C2E',
+  tbc: 'var(--tone-base)',
 };
 
 const statusLabels: Record<TechnicalItem['status'], string> = {
@@ -47,19 +47,19 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
   return (
     <div>
       {isEditMode && onAdd && (
-        <div className="flex justify-end p-3" style={{ borderBottom: '1px solid rgba(176,141,87,0.1)' }}>
+        <div className="flex justify-end p-3" style={{ borderBottom: '1px solid rgb(var(--tone-line)/0.1)' }}>
           <AddButton label="Agregar ítem" onClick={onAdd} />
         </div>
       )}
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
           <thead>
-            <tr style={{ borderBottom: '1px solid rgba(176,141,87,0.2)' }}>
+            <tr style={{ borderBottom: '1px solid rgb(var(--tone-line)/0.2)' }}>
               {['Categoría', 'Artículo', 'Cant.', 'Proveedor', 'Estado', 'Notas', ''].map((h) => (
                 <th
                   key={h}
                   className="text-left py-3 px-4 text-xs uppercase tracking-widest"
-                  style={{ color: '#B08D57' }}
+                  style={{ color: 'var(--tone-accent)' }}
                 >
                   {h}
                 </th>
@@ -74,9 +74,9 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
                     colSpan={7}
                     className="py-2.5 px-4 text-xs uppercase tracking-widest"
                     style={{
-                      color: '#B08D57',
-                      background: 'rgba(176,141,87,0.04)',
-                      borderTop: '1px solid rgba(176,141,87,0.12)',
+                      color: 'var(--tone-accent)',
+                      background: 'rgb(var(--tone-line)/0.04)',
+                      borderTop: '1px solid rgb(var(--tone-line)/0.12)',
                     }}
                   >
                     {cat}
@@ -89,20 +89,20 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: i * 0.04 }}
-                    className="hover:bg-[rgba(176,141,87,0.04)] transition-colors duration-200"
-                    style={{ borderBottom: '1px solid rgba(176,141,87,0.07)' }}
+                    className="hover:bg-[rgb(var(--tone-line)/0.04)] transition-colors duration-200"
+                    style={{ borderBottom: '1px solid rgb(var(--tone-line)/0.07)' }}
                   >
-                    <td className="py-2.5 px-4 text-xs" style={{ color: 'rgba(176,141,87,0.4)' }}>
+                    <td className="py-2.5 px-4 text-xs" style={{ color: 'var(--tone-accent)' }}>
                       {item.category}
                     </td>
-                    <td className="py-2.5 px-4" style={{ color: '#D8C3A5' }}>
-                      <EditableField id={`tech:${item.id}:item`} value={item.item} style={{ color: '#D8C3A5', fontSize: '0.875rem' }} />
+                    <td className="py-2.5 px-4" style={{ color: 'var(--tone-fg)' }}>
+                      <EditableField id={`tech:${item.id}:item`} value={item.item} style={{ color: 'var(--tone-fg)', fontSize: '0.875rem' }} />
                     </td>
-                    <td className="py-2.5 px-4 text-center" style={{ color: '#B08D57' }}>
+                    <td className="py-2.5 px-4 text-center" style={{ color: 'var(--tone-accent)' }}>
                       {item.quantity}
                     </td>
-                    <td className="py-2.5 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                      <EditableField id={`tech:${item.id}:supplier`} value={item.supplier ?? '—'} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
+                    <td className="py-2.5 px-4 text-xs" style={{ color: 'var(--tone-muted)' }}>
+                      <EditableField id={`tech:${item.id}:supplier`} value={item.supplier ?? '—'} style={{ color: 'var(--tone-muted)', fontSize: '0.75rem' }} />
                     </td>
                     <td className="py-2.5 px-4">
                       {(() => {
@@ -114,7 +114,7 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
                             onClick={isEditMode ? () => cycleStatus(item) : undefined}
                             style={{
                               background: `${statusColors[s]}50`,
-                              color: '#C7C0B6',
+                              color: 'var(--tone-soft)',
                               border: `1px solid ${statusColors[s]}`,
                               fontSize: '0.6rem',
                             }}
@@ -124,8 +124,8 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
                         );
                       })()}
                     </td>
-                    <td className="py-2.5 px-4 text-xs" style={{ color: '#8E8A86' }}>
-                      <EditableField id={`tech:${item.id}:notes`} value={item.notes ?? ''} style={{ color: '#8E8A86', fontSize: '0.75rem' }} />
+                    <td className="py-2.5 px-4 text-xs" style={{ color: 'var(--tone-muted)' }}>
+                      <EditableField id={`tech:${item.id}:notes`} value={item.notes ?? ''} style={{ color: 'var(--tone-muted)', fontSize: '0.75rem' }} />
                     </td>
                     <td className="py-2.5 px-4 text-center">
                       {isEditMode && onDelete && (
@@ -140,7 +140,7 @@ export function TechnicalPlan({ items, onAdd, onDelete }: TechnicalPlanProps) {
         </table>
       </div>
       {items.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todavía no hay ítems técnicos. Activá el modo edición para agregar.
         </p>
       )}

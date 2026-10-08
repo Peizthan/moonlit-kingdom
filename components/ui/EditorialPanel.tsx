@@ -34,8 +34,8 @@ export function EditorialPanel({
         ${className}
       `}
       style={{
-        background: 'linear-gradient(135deg, rgba(29,74,58,0.25) 0%, rgba(18,28,46,0.35) 100%)',
-        borderColor: bordered ? 'rgba(176,141,87,0.2)' : 'transparent',
+        background: 'linear-gradient(135deg, rgba(29,74,58,0.25) 0%, rgb(var(--tone-surface)/0.35) 100%)',
+        borderColor: bordered ? 'rgb(var(--tone-line)/0.2)' : 'transparent',
         backdropFilter: 'blur(8px)',
       }}
     >

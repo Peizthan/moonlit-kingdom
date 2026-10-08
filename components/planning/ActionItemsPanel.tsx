@@ -14,22 +14,22 @@ interface ActionItemsPanelProps {
 }
 
 const priorityColors: Record<ActionItem['priority'], string> = {
-  high: '#B08D57',
+  high: 'var(--tone-accent)',
   medium: '#8C6A3C',
-  low: '#8E8A86',
+  low: 'var(--tone-muted)',
 };
 
 const statusIcons: Record<ActionItem['status'], React.ReactNode> = {
-  complete: <CheckCircle size={14} style={{ color: '#B08D57' }} />,
+  complete: <CheckCircle size={14} style={{ color: 'var(--tone-accent)' }} />,
   'in-progress': <Clock size={14} style={{ color: '#8C6A3C' }} />,
-  'not-started': <Circle size={14} style={{ color: '#8E8A86' }} />,
+  'not-started': <Circle size={14} style={{ color: 'var(--tone-muted)' }} />,
   blocked: <AlertCircle size={14} style={{ color: '#4E1F2D' }} />,
 };
 
 const statusBg: Record<ActionItem['status'], string> = {
-  complete: 'rgba(176,141,87,0.08)',
+  complete: 'rgb(var(--tone-line)/0.08)',
   'in-progress': 'rgba(140,106,60,0.1)',
-  'not-started': 'rgba(142,138,134,0.06)',
+  'not-started': 'rgb(var(--tone-line)/0.06)',
   blocked: 'rgba(78,31,45,0.15)',
 };
 
@@ -74,7 +74,7 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
         </div>
       )}
       {displayList.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todav?a no hay acciones. Activ? el modo edici?n para agregar.
         </p>
       )}
@@ -85,10 +85,10 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: i * 0.05 }}
-          className="flex gap-4 items-start p-4 rounded-sm mb-2 border transition-all duration-300 hover:border-[rgba(176,141,87,0.25)]"
+          className="flex gap-4 items-start p-4 rounded-sm mb-2 border transition-all duration-300 hover:border-[rgb(var(--tone-line)/0.25)]"
           style={{
             background: statusBg[item.status],
-            borderColor: 'rgba(176,141,87,0.1)',
+            borderColor: 'rgb(var(--tone-line)/0.1)',
             opacity: !isEditMode && item.status === 'complete' ? 0.6 : 1,
           }}
         >
@@ -108,9 +108,9 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
                 value={item.title}
                 tag="span"
                 style={{
-                  color: item.status === 'complete' && !isEditMode ? '#8E8A86' : '#D8C3A5',
+                  color: item.status === 'complete' && !isEditMode ? 'var(--tone-muted)' : 'var(--tone-fg)',
                   textDecoration: !isEditMode && item.status === 'complete' ? 'line-through' : 'none',
-                  fontFamily: "'Georgia', serif",
+                  fontFamily: 'var(--mk-font-display)',
                   fontSize: '0.875rem',
                   fontWeight: 500,
                 }}
@@ -129,9 +129,9 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
               <span
                 className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
                 style={{
-                  background: 'rgba(142,138,134,0.1)',
-                  color: '#8E8A86',
-                  border: '1px solid rgba(142,138,134,0.2)',
+                  background: 'rgb(var(--tone-line)/0.1)',
+                  color: 'var(--tone-muted)',
+                  border: '1px solid rgb(var(--tone-line)/0.2)',
                   fontSize: '0.6rem',
                 }}
               >
@@ -142,8 +142,8 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
                   className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide cursor-pointer"
                   style={{
                     background: statusBg[item.status],
-                    color: '#B08D57',
-                    border: '1px solid rgba(176,141,87,0.3)',
+                    color: 'var(--tone-accent)',
+                    border: '1px solid rgb(var(--tone-line)/0.3)',
                     fontSize: '0.6rem',
                   }}
                   onClick={() => cycleStatus(item)}
@@ -160,17 +160,17 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
                 value={item.description}
                 type="textarea"
                 tag="p"
-                style={{ color: '#8E8A86', fontSize: '0.75rem' }}
+                style={{ color: 'var(--tone-muted)', fontSize: '0.75rem' }}
               />
             )}
 
-            <div className="flex flex-wrap gap-4 text-xs mt-2" style={{ color: 'rgba(176,141,87,0.5)' }}>
+            <div className="flex flex-wrap gap-4 text-xs mt-2" style={{ color: 'var(--tone-accent)' }}>
               <span>
                 Responsable:{' '}
                 <EditableField
                   id={`action:${item.id}:owner`}
                   value={item.owner}
-                  style={{ color: 'rgba(176,141,87,0.5)', fontSize: '0.75rem', display: 'inline' }}
+                  style={{ color: 'var(--tone-accent)', fontSize: '0.75rem', display: 'inline' }}
                 />
               </span>
               <span>
@@ -178,7 +178,7 @@ export function ActionItemsPanel({ items, onAdd, onDelete }: ActionItemsPanelPro
                 <EditableField
                   id={`action:${item.id}:dueDate`}
                   value={item.dueDate}
-                  style={{ color: 'rgba(176,141,87,0.5)', fontSize: '0.75rem', display: 'inline' }}
+                  style={{ color: 'var(--tone-accent)', fontSize: '0.75rem', display: 'inline' }}
                 />
               </span>
             </div>

@@ -16,16 +16,13 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const isPublicPage = pathname === '/' || pathname === '/presentation';
 
   return (
     <motion.nav
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 border-b no-print ${
-        isPublicPage ? 'mk-nav-public' : 'mk-nav-night'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 border-b no-print mk-nav-public"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8">
         <Link href="/" className="group flex items-center gap-2.5">

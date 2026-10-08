@@ -15,7 +15,7 @@ interface DecisionLogTableProps {
 const statusColors: Record<Decision['status'], string> = {
   final: '#1D4A3A',
   provisional: '#4E1F2D',
-  'under-review': '#121C2E',
+  'under-review': 'var(--tone-base)',
 };
 
 const statusLabels: Record<Decision['status'], string> = {
@@ -43,7 +43,7 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
         </div>
       )}
       {decisions.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todav?a no hay decisiones. Activ? el modo edici?n para agregar.
         </p>
       )}
@@ -54,16 +54,16 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: i * 0.06 }}
-          className="rounded-sm border p-4 hover:border-[rgba(176,141,87,0.3)] transition-colors duration-300"
+          className="rounded-sm border p-4 hover:border-[rgb(var(--tone-line)/0.3)] transition-colors duration-300"
           style={{
-            borderColor: 'rgba(176,141,87,0.12)',
-            background: 'rgba(18,28,46,0.25)',
+            borderColor: 'rgb(var(--tone-line)/0.12)',
+            background: 'rgb(var(--tone-surface)/0.25)',
           }}
         >
           <div className="flex flex-wrap items-start gap-3 mb-2">
             <div className="flex-1">
-              <p className="font-medium text-sm" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-                <EditableField id={`decision:${d.id}:decision`} value={d.decision} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
+              <p className="font-medium text-sm" style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)' }}>
+                <EditableField id={`decision:${d.id}:decision`} value={d.decision} style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontWeight: '500', fontSize: '0.875rem' }} />
               </p>
             </div>
             {(() => {
@@ -75,7 +75,7 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
                   onClick={isEditMode ? () => cycleStatus(d) : undefined}
                   style={{
                     backgroundColor: `${statusColors[s]}60`,
-                    color: '#C7C0B6',
+                    color: 'var(--tone-soft)',
                     border: `1px solid ${statusColors[s]}`,
                     fontSize: '0.65rem',
                   }}
@@ -89,11 +89,11 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
             )}
           </div>
           {d.rationale && (
-            <p className="text-sm mb-2" style={{ color: '#8E8A86' }}>
-              <EditableField id={`decision:${d.id}:rationale`} value={d.rationale} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
+            <p className="text-sm mb-2" style={{ color: 'var(--tone-muted)' }}>
+              <EditableField id={`decision:${d.id}:rationale`} value={d.rationale} type="textarea" style={{ color: 'var(--tone-muted)', fontSize: '0.875rem' }} />
             </p>
           )}
-          <div className="flex flex-wrap gap-4 text-xs" style={{ color: 'rgba(176,141,87,0.5)' }}>
+          <div className="flex flex-wrap gap-4 text-xs" style={{ color: 'var(--tone-accent)' }}>
             <span>{d.date}</span>
             <span>{d.category}</span>
             <span>Decidió: {d.decidedBy}</span>

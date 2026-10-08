@@ -32,20 +32,13 @@ export function SectionHeader({
       className={`mb-12 ${alignClass}`}
     >
       {eyebrow && (
-        <p
-          className="text-xs uppercase tracking-[0.3em] mb-4 font-medium"
-          style={{ color: '#B08D57' }}
-        >
+        <p className="mk-chapter-eyebrow mb-4" >
           {eyebrow}
         </p>
       )}
       <h2
-        className="text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight"
-        style={{
-          fontFamily: "'Georgia', serif",
-          color: light ? '#F3EBDD' : '#D8C3A5',
-          textShadow: '0 0 40px rgba(176, 141, 87, 0.15)',
-        }}
+        className="mk-chapter-title text-4xl md:text-5xl lg:text-[3.5rem] mb-4"
+        style={{ ['--tone-strong' as string]: light ? 'var(--tone-strong)' : 'var(--tone-fg)' }}
       >
         {title}
       </h2>
@@ -53,7 +46,7 @@ export function SectionHeader({
         <p
           className="text-base md:text-lg font-light leading-relaxed max-w-2xl"
           style={{
-            color: '#8E8A86',
+            color: 'var(--tone-muted)',
             ...(align === 'center' ? { margin: '0 auto' } : {}),
           }}
         >

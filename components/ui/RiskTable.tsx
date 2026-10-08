@@ -13,7 +13,7 @@ interface RiskTableProps {
 }
 
 const impactColors = {
-  high: '#B08D57',
+  high: 'var(--tone-accent)',
   medium: '#8C6A3C',
   low: '#1D4A3A',
 };
@@ -21,7 +21,7 @@ const impactColors = {
 const statusColors = {
   open: '#4E1F2D',
   mitigated: '#1D4A3A',
-  closed: '#8E8A86',
+  closed: 'var(--tone-muted)',
 };
 
 const statusLabels = { open: 'Abierto', mitigated: 'Mitigado', closed: 'Cerrado' };
@@ -44,7 +44,7 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
         </div>
       )}
       {risks.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todav?a no hay riesgos. Activ? el modo edici?n para agregar.
         </p>
       )}
@@ -57,13 +57,13 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
           transition={{ duration: 0.5, delay: i * 0.06 }}
           className="rounded-sm border p-4"
           style={{
-            borderColor: 'rgba(176,141,87,0.15)',
-            background: 'rgba(18,28,46,0.3)',
+            borderColor: 'rgb(var(--tone-line)/0.15)',
+            background: 'rgb(var(--tone-surface)/0.3)',
           }}
         >
           <div className="flex flex-wrap items-start gap-3 mb-3">
-            <h4 className="flex-1 font-medium text-sm" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-              <EditableField id={`risk:${risk.id}:risk`} value={risk.risk} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
+            <h4 className="flex-1 font-medium text-sm" style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)' }}>
+              <EditableField id={`risk:${risk.id}:risk`} value={risk.risk} style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontWeight: '500', fontSize: '0.875rem' }} />
             </h4>
             <div className="flex gap-2 flex-shrink-0">
               <span
@@ -97,7 +97,7 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
                     onClick={isEditMode ? () => cycleStatus(risk) : undefined}
                     style={{
                       backgroundColor: `${statusColors[s]}60`,
-                      color: '#C7C0B6',
+                      color: 'var(--tone-soft)',
                       border: `1px solid ${statusColors[s]}`,
                       fontSize: '0.65rem',
                     }}
@@ -111,11 +111,11 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
               )}
             </div>
           </div>
-          <p className="text-sm mb-2" style={{ color: '#8E8A86' }}>
-            <span className="text-xs uppercase tracking-wide" style={{ color: 'rgba(176,141,87,0.6)' }}>Mitigación: </span>
-            <EditableField id={`risk:${risk.id}:mitigation`} value={risk.mitigation} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
+          <p className="text-sm mb-2" style={{ color: 'var(--tone-muted)' }}>
+            <span className="text-xs uppercase tracking-wide" style={{ color: 'var(--tone-accent)' }}>Mitigación: </span>
+            <EditableField id={`risk:${risk.id}:mitigation`} value={risk.mitigation} type="textarea" style={{ color: 'var(--tone-muted)', fontSize: '0.875rem' }} />
           </p>
-          <p className="text-xs" style={{ color: 'rgba(176,141,87,0.5)' }}>
+          <p className="text-xs" style={{ color: 'var(--tone-accent)' }}>
             Responsable: {risk.owner} · Categoría: {risk.category}
           </p>
         </motion.div>

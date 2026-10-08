@@ -32,10 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${display.variable} ${smallCaps.variable} h-full antialiased`}>
-      <body
-        className="min-h-full flex flex-col"
-        style={{ background: '#10261D', color: '#F3EBDD' }}
-      >
+      <body className="mk-page mk-tone-paper min-h-full flex flex-col">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

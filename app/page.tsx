@@ -18,7 +18,7 @@ const fadeIn = (delay: number) => ({
 export default function HomePage() {
   return (
     <MotionConfig reducedMotion="user">
-      <div className="relative flex min-h-screen flex-col bg-[var(--mk-night)]">
+      <div className="relative flex min-h-screen flex-col">
         <section className="mk-hero paper-surface">
           <div className="mk-hero-stage">
             {/* Decorative frame art. A <picture> serves one pre-optimized asset per breakpoint; the empty alt keeps it out of the accessibility tree. */}
@@ -76,14 +76,14 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="mk-night-transition relative z-0 -mt-1 overflow-hidden px-6 pb-20 pt-24 text-center sm:pb-28 sm:pt-32">
+        <section className="relative z-0 overflow-hidden px-6 pb-20 pt-20 text-center sm:pb-28 sm:pt-28">
           <div className="relative mx-auto max-w-3xl">
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="mb-6 text-[0.65rem] uppercase tracking-[0.3em] text-[#C5A771] sm:text-xs sm:tracking-[0.38em]"
+              className="mk-chapter-eyebrow mb-6"
             >
               La Visión
             </motion.p>
@@ -95,8 +95,7 @@ export default function HomePage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.08 }}
-                  className="text-base font-light leading-[1.9] text-[#D3CABC] sm:text-lg"
-                  style={{ fontFamily: "'Georgia', serif" }}
+                  className="mk-prose"
                 >
                   {paragraph}
                 </motion.p>
@@ -108,8 +107,8 @@ export default function HomePage() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65 }}
-              className="mx-auto mt-10 max-w-2xl border-y border-[rgba(176,141,87,0.24)] py-7 text-xl italic leading-relaxed text-[#E6D5B7] sm:mt-12 sm:py-9 sm:text-2xl"
-              style={{ fontFamily: "'Georgia', serif" }}
+              className="mk-quote mx-auto mt-10 max-w-2xl border-y py-7 text-[clamp(1.5rem,3.4vw,2.1rem)] sm:mt-12 sm:py-9"
+              style={{ borderColor: 'var(--tone-rule)' }}
             >
               {weddingData.story.manifesto}
             </motion.blockquote>
@@ -155,21 +154,18 @@ function ChapterLink({
   return (
     <Link
       href={href}
-      className="group border-t border-[rgba(176,141,87,0.28)] py-7 transition-colors hover:border-[rgba(216,195,165,0.65)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B08D57] md:py-8"
+      className="group border-t py-7 transition-colors hover:border-[rgb(var(--tone-line)/0.65)] md:py-8"
+      style={{ borderColor: 'var(--tone-rule)' }}
     >
-      <span className="mb-3 block text-[0.6rem] uppercase tracking-[0.3em] text-[rgba(216,195,165,0.7)]">
-        {chapter}
-      </span>
-      <span className="mb-3 flex items-baseline justify-between gap-4 text-2xl text-[#D8C3A5] sm:text-3xl" style={{ fontFamily: "'Georgia', serif" }}>
+      <span className="mk-label mb-3 block">{chapter}</span>
+      <span className="mk-display mb-3 flex items-baseline justify-between gap-4 text-[clamp(1.9rem,4vw,2.5rem)] font-medium leading-tight" style={{ color: 'var(--tone-strong)' }}>
         {title}
-        <span aria-hidden="true" className="text-base text-[#B08D57] transition-transform group-hover:translate-x-1">→</span>
+        <span aria-hidden="true" className="text-base transition-transform group-hover:translate-x-1" style={{ color: 'var(--tone-accent)' }}>→</span>
       </span>
-      <span className="mb-5 block max-w-lg text-sm leading-relaxed text-[#BDB5A9]">
+      <span className="mk-prose mb-5 block max-w-lg" style={{ fontSize: '1.15rem', lineHeight: 1.55 }}>
         {description}
       </span>
-      <span className="text-[0.65rem] uppercase tracking-[0.22em] text-[#C5A771]">
-        {action}
-      </span>
+      <span className="mk-label">{action}</span>
     </Link>
   );
 }

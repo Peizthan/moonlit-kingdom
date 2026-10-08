@@ -22,7 +22,7 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
         </div>
       )}
       {notes.length === 0 && (
-        <p className="py-12 text-sm text-center" style={{ color: '#8E8A86' }}>
+        <p className="py-12 text-sm text-center" style={{ color: 'var(--tone-muted)' }}>
           Todav?a no hay actas. Activ? el modo edici?n para agregar.
         </p>
       )}
@@ -35,21 +35,21 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
           transition={{ duration: 0.5, delay: i * 0.08 }}
           className="rounded-sm border p-6"
           style={{
-            borderColor: 'rgba(176,141,87,0.15)',
-            background: 'linear-gradient(135deg, rgba(29,74,58,0.15) 0%, rgba(18,28,46,0.25) 100%)',
+            borderColor: 'rgb(var(--tone-line)/0.15)',
+            background: 'linear-gradient(135deg, rgba(29,74,58,0.15) 0%, rgb(var(--tone-surface)/0.25) 100%)',
           }}
         >
           <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
             <div>
-              <h3 className="font-medium mb-1" style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}>
-                <EditableField id={`note:${note.id}:title`} value={note.title} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500' }} />
+              <h3 className="font-medium mb-1" style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)' }}>
+                <EditableField id={`note:${note.id}:title`} value={note.title} style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontWeight: '500' }} />
               </h3>
-              <p className="text-xs uppercase tracking-widest" style={{ color: 'rgba(176,141,87,0.6)' }}>
+              <p className="text-xs uppercase tracking-widest" style={{ color: 'var(--tone-accent)' }}>
                 {note.date}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <div className="text-xs" style={{ color: '#8E8A86' }}>
+              <div className="text-xs" style={{ color: 'var(--tone-muted)' }}>
                 {note.attendees.join(' · ')}
               </div>
               {isEditMode && onDelete && (
@@ -58,20 +58,20 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
             </div>
           </div>
 
-          <p className="text-sm mb-4 leading-relaxed" style={{ color: '#8E8A86' }}>
-            <EditableField id={`note:${note.id}:summary`} value={note.summary} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
+          <p className="text-sm mb-4 leading-relaxed" style={{ color: 'var(--tone-muted)' }}>
+            <EditableField id={`note:${note.id}:summary`} value={note.summary} type="textarea" style={{ color: 'var(--tone-muted)', fontSize: '0.875rem' }} />
           </p>
 
           {note.decisions.length > 0 && (
             <div className="mb-3">
-              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: '#B08D57' }}>
+              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: 'var(--tone-accent)' }}>
                 Decisiones Tomadas
               </p>
               <ul className="space-y-1">
                 {note.decisions.map((d, di) => (
-                  <li key={di} className="flex gap-2 text-sm" style={{ color: '#C7C0B6' }}>
-                    <span style={{ color: 'rgba(176,141,87,0.5)' }}>◆</span>
-                    <EditableField id={`note:${note.id}:decision:${di}`} value={d} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
+                  <li key={di} className="flex gap-2 text-sm" style={{ color: 'var(--tone-soft)' }}>
+                    <span style={{ color: 'var(--tone-accent)' }}>◆</span>
+                    <EditableField id={`note:${note.id}:decision:${di}`} value={d} style={{ color: 'var(--tone-soft)', fontSize: '0.875rem' }} />
                   </li>
                 ))}
               </ul>
@@ -80,14 +80,14 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
 
           {note.actionItems.length > 0 && (
             <div>
-              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: '#B08D57' }}>
+              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: 'var(--tone-accent)' }}>
                 Acciones a Tomar
               </p>
               <ul className="space-y-1">
                 {note.actionItems.map((a, ai) => (
-                  <li key={ai} className="flex gap-2 text-sm" style={{ color: '#C7C0B6' }}>
-                    <span style={{ color: 'rgba(176,141,87,0.5)' }}>→</span>
-                    <EditableField id={`note:${note.id}:action:${ai}`} value={a} style={{ color: '#C7C0B6', fontSize: '0.875rem' }} />
+                  <li key={ai} className="flex gap-2 text-sm" style={{ color: 'var(--tone-soft)' }}>
+                    <span style={{ color: 'var(--tone-accent)' }}>→</span>
+                    <EditableField id={`note:${note.id}:action:${ai}`} value={a} style={{ color: 'var(--tone-soft)', fontSize: '0.875rem' }} />
                   </li>
                 ))}
               </ul>

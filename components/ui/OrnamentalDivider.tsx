@@ -32,17 +32,18 @@ export function OrnamentalDivider({
     >
       <div
         className="flex-1 h-px"
-        style={{ background: 'linear-gradient(to right, transparent, rgba(176,141,87,0.4))' }}
+        style={{ background: 'linear-gradient(to right, transparent, var(--tone-rule, rgb(var(--tone-line)/0.4)))' }}
       />
       <span
+        aria-hidden="true"
         className="text-sm animate-gentle-pulse"
-        style={{ color: '#B08D57', fontSize: '0.75rem' }}
+        style={{ color: 'var(--tone-accent, var(--tone-accent))', fontSize: '0.75rem' }}
       >
         {icon}
       </span>
       <div
         className="flex-1 h-px"
-        style={{ background: 'linear-gradient(to left, transparent, rgba(176,141,87,0.4))' }}
+        style={{ background: 'linear-gradient(to left, transparent, var(--tone-rule, rgb(var(--tone-line)/0.4)))' }}
       />
     </motion.div>
   );

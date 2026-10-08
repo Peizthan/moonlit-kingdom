@@ -3,15 +3,18 @@ type Variant = 'divider' | 'compass';
 export function CelestialOrnament({
   variant = 'divider',
   className = '',
+  style,
 }: {
   variant?: Variant;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   if (variant === 'compass') {
     return (
       <svg
         aria-hidden="true"
         className={className}
+        style={style}
         viewBox="0 0 160 56"
         fill="none"
         focusable="false"
@@ -33,6 +36,7 @@ export function CelestialOrnament({
     <svg
       aria-hidden="true"
       className={className}
+      style={style}
       viewBox="0 0 260 16"
       fill="none"
       focusable="false"

@@ -1,22 +1,10 @@
 'use client';
 
-import { useState, FormEvent, CSSProperties } from 'react';
+import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
-import { StarField } from '@/components/layout/StarField';
-
-const inputStyle: CSSProperties = {
-  background: 'rgba(18,28,46,0.6)',
-  border: '1px solid rgba(176,141,87,0.25)',
-  color: '#D8C3A5',
-  outline: 'none',
-  width: '100%',
-  padding: '12px 40px 12px 16px',
-  fontSize: '0.875rem',
-  letterSpacing: '0.02em',
-  fontFamily: "'Georgia', 'Times New Roman', serif",
-};
+import { CrescentMark } from '@/components/brand/CrescentMark';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -58,19 +46,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div
-      className="relative min-h-screen flex items-center justify-center px-6"
-      style={{ background: 'linear-gradient(160deg, #10261D 0%, #121C2E 50%, #10261D 100%)' }}
-    >
-      <StarField count={100} />
-
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(176,141,87,0.05) 0%, transparent 70%)',
-        }}
-      />
-
+    <div className="relative min-h-screen flex items-center justify-center px-6 pt-16">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -78,35 +54,21 @@ export default function LoginPage() {
         className="relative w-full max-w-sm"
       >
         <div className="flex justify-center mb-8">
-          <svg width="52" height="52" viewBox="0 0 80 80" fill="none">
-            <path
-              d="M48 16C34.7 16 24 26.7 24 40C24 53.3 34.7 64 48 64C41.4 64 36 58.6 36 52C36 45.4 41.4 40 48 40C54.6 40 60 45.4 60 52C60 58.6 54.6 64 48 64C61.3 64 72 53.3 72 40C72 26.7 61.3 16 48 16Z"
-              stroke="#B08D57"
-              strokeWidth="1"
-              fill="none"
-              opacity="0.85"
-            />
-          </svg>
+          <CrescentMark className="h-12 w-12" style={{ color: 'var(--tone-accent)' }} />
         </div>
 
         <div
           className="rounded-sm border px-8 py-10"
           style={{
-            borderColor: 'rgba(176,141,87,0.2)',
-            background: 'rgba(16,38,29,0.6)',
-            backdropFilter: 'blur(12px)',
+            borderColor: 'rgb(var(--tone-line)/0.4)',
+            background: 'rgb(var(--tone-surface)/0.45)',
+            boxShadow: '0 1px 0 rgb(255 250 235/0.5) inset, 0 18px 40px -24px rgb(var(--tone-line)/0.5)',
           }}
         >
-          <p
-            className="text-xs uppercase tracking-[0.3em] text-center mb-2"
-            style={{ color: 'rgba(176,141,87,0.6)' }}
-          >
+          <p className="mk-chapter-eyebrow text-center mb-2" style={{ fontSize: '0.75rem' }}>
             Acceso Administrativo
           </p>
-          <h1
-            className="text-2xl font-light text-center mb-8"
-            style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
-          >
+          <h1 className="mk-chapter-title text-center text-4xl mb-8" >
             Moonlit Kingdom
           </h1>
 
@@ -115,7 +77,7 @@ export default function LoginPage() {
               <label
                 htmlFor="password"
                 className="block text-xs uppercase tracking-widest mb-2"
-                style={{ color: 'rgba(176,141,87,0.5)' }}
+                style={{ color: 'var(--tone-accent)' }}
               >
                 Contraseña
               </label>
@@ -128,15 +90,14 @@ export default function LoginPage() {
                   autoFocus
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={inputStyle}
+                  className="mk-login-input"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  tabIndex={-1}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
-                  style={{ color: 'rgba(176,141,87,0.55)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  className="mk-focus absolute right-3 top-1/2 -translate-y-1/2 transition-opacity duration-200 hover:opacity-80"
+                  style={{ color: 'var(--tone-accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                   aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
@@ -149,7 +110,7 @@ export default function LoginPage() {
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="text-xs text-center py-2 px-3 rounded-sm"
-                style={{ color: '#D8C3A5', background: 'rgba(78,31,45,0.4)', border: '1px solid rgba(78,31,45,0.6)' }}
+                style={{ color: 'var(--tone-fg)', background: 'rgba(78,31,45,0.4)', border: '1px solid rgba(78,31,45,0.6)' }}
               >
                 {error}
               </motion.p>
@@ -158,11 +119,11 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 mt-2 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
+              className="mk-focus w-full py-3 mt-2 text-xs uppercase tracking-[0.25em] transition-all duration-300 disabled:opacity-50"
               style={{
-                background: loading ? 'rgba(176,141,87,0.1)' : 'rgba(176,141,87,0.15)',
-                border: '1px solid rgba(176,141,87,0.35)',
-                color: '#B08D57',
+                background: loading ? 'rgb(var(--tone-line)/0.1)' : 'rgb(var(--tone-line)/0.15)',
+                border: '1px solid rgb(var(--tone-line)/0.35)',
+                color: 'var(--tone-fg)',
                 cursor: loading ? 'not-allowed' : 'pointer',
               }}
             >

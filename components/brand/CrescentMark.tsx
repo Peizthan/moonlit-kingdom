@@ -1,8 +1,15 @@
-﻿export function CrescentMark({ className = '' }: { className?: string }) {
+﻿export function CrescentMark({
+  className = '',
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <svg
       aria-hidden="true"
       className={`mk-crescent-mark ${className}`}
+      style={style}
       viewBox="0 0 48 48"
       fill="none"
       focusable="false"

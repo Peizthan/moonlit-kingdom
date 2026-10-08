@@ -17,8 +17,8 @@ interface EditableFieldProps {
 }
 
 const editInputStyle: CSSProperties = {
-  background: 'rgba(176,141,87,0.06)',
-  border: '1px solid rgba(176,141,87,0.4)',
+  background: 'rgb(var(--tone-line)/0.06)',
+  border: '1px solid rgb(var(--tone-line)/0.4)',
   borderRadius: '2px',
   padding: '2px 6px',
   outline: 'none',
@@ -69,7 +69,7 @@ export function EditableField({
 
   const combinedStyle: CSSProperties = {
     ...editInputStyle,
-    color: style?.color ?? '#D8C3A5',
+    color: style?.color ?? 'var(--tone-fg)',
     fontSize: style?.fontSize ?? 'inherit',
     fontFamily: style?.fontFamily ?? 'inherit',
   };

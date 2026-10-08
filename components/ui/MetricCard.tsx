@@ -17,7 +17,7 @@ export function MetricCard({
   value,
   subValue,
   icon,
-  accentColor = '#B08D57',
+  accentColor = 'var(--tone-accent)',
   delay = 0,
 }: MetricCardProps) {
   return (
@@ -28,8 +28,8 @@ export function MetricCard({
       transition={{ duration: 0.6, ease: 'easeOut', delay }}
       className="rounded-sm p-6 border relative overflow-hidden group"
       style={{
-        background: 'linear-gradient(135deg, rgba(29,74,58,0.3) 0%, rgba(18,28,46,0.4) 100%)',
-        borderColor: 'rgba(176,141,87,0.2)',
+        background: 'linear-gradient(135deg, rgba(29,74,58,0.3) 0%, rgb(var(--tone-surface)/0.4) 100%)',
+        borderColor: 'rgb(var(--tone-line)/0.2)',
       }}
     >
       {/* Subtle hover glow */}
@@ -45,15 +45,15 @@ export function MetricCard({
         )}
         <div
           className="text-3xl font-light mb-1"
-          style={{ fontFamily: "'Georgia', serif", color: accentColor }}
+          style={{ fontFamily: 'var(--mk-font-display)', color: accentColor }}
         >
           {value}
         </div>
-        <div className="text-sm uppercase tracking-widest" style={{ color: '#8E8A86' }}>
+        <div className="text-sm uppercase tracking-widest" style={{ color: 'var(--tone-muted)' }}>
           {label}
         </div>
         {subValue && (
-          <div className="text-xs mt-2" style={{ color: '#8E8A86' }}>
+          <div className="text-xs mt-2" style={{ color: 'var(--tone-muted)' }}>
             {subValue}
           </div>
         )}

@@ -10,10 +10,10 @@ interface TimelineBlockProps {
 }
 
 const categoryColors: Record<TimelineEvent['category'], string> = {
-  ceremony: '#B08D57',
+  ceremony: 'var(--tone-accent)',
   reception: '#8C6A3C',
   preparation: '#1D4A3A',
-  logistics: '#8E8A86',
+  logistics: 'var(--tone-muted)',
   entertainment: '#4E1F2D',
 };
 
@@ -32,7 +32,7 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
       {/* Vertical line */}
       <div
         className="absolute left-[88px] top-0 bottom-0 w-px hidden md:block"
-        style={{ background: 'linear-gradient(to bottom, transparent, rgba(176,141,87,0.3), transparent)' }}
+        style={{ background: 'linear-gradient(to bottom, transparent, rgb(var(--tone-line)/0.3), transparent)' }}
       />
       <div className="space-y-1">
         {events.map((event, i) => (
@@ -42,15 +42,15 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.05 }}
-            className="flex gap-6 items-start py-4 px-4 rounded-sm border border-transparent hover:border-[rgba(176,141,87,0.15)] transition-all duration-300 group"
+            className="flex gap-6 items-start py-4 px-4 rounded-sm border border-transparent hover:border-[rgb(var(--tone-line)/0.15)] transition-all duration-300 group"
             style={{ background: 'transparent' }}
           >
             {/* Time */}
             <div
               className="w-16 text-right flex-shrink-0 pt-1"
-              style={{ color: '#B08D57', fontFamily: "'Georgia', serif", fontSize: '0.875rem' }}
+              style={{ color: 'var(--tone-accent)', fontFamily: 'var(--mk-font-display)', fontSize: '1.05rem', fontWeight: 600 }}
             >
-              <EditableField id={`timeline:${event.id}:time`} value={event.time} style={{ color: '#B08D57', fontFamily: "'Georgia', serif", fontSize: '0.875rem', textAlign: 'right' }} />
+              <EditableField id={`timeline:${event.id}:time`} value={event.time} style={{ color: 'var(--tone-accent)', fontFamily: 'var(--mk-font-display)', fontSize: '1.05rem', fontWeight: 600, textAlign: 'right' }} />
             </div>
             {/* Dot */}
             <div className="relative flex-shrink-0 hidden md:flex items-start pt-2">
@@ -66,10 +66,10 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-3 mb-1">
                 <h4
-                  className="font-medium text-sm"
-                  style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
+                  className="font-medium"
+                  style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontSize: '1.15rem' }}
                 >
-                  <EditableField id={`timeline:${event.id}:title`} value={event.title} style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif", fontWeight: '500', fontSize: '0.875rem' }} />
+                  <EditableField id={`timeline:${event.id}:title`} value={event.title} style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)', fontWeight: '600', fontSize: '1.15rem' }} />
                 </h4>
                 <span
                   className="text-xs px-2 py-0.5 rounded-full uppercase tracking-wide"
@@ -83,12 +83,12 @@ export function TimelineBlock({ events }: TimelineBlockProps) {
                   {categoryLabels[event.category]}
                 </span>
               </div>
-              <p className="text-sm mb-1" style={{ color: '#8E8A86' }}>
-                <EditableField id={`timeline:${event.id}:description`} value={event.description} type="textarea" style={{ color: '#8E8A86', fontSize: '0.875rem' }} />
+              <p className="text-sm mb-1" style={{ color: 'var(--tone-muted)' }}>
+                <EditableField id={`timeline:${event.id}:description`} value={event.description} type="textarea" style={{ color: 'var(--tone-muted)', fontSize: '0.875rem' }} />
               </p>
               {(event.location || isEditMode) && (
-                <p className="text-xs" style={{ color: 'rgba(176,141,87,0.6)' }}>
-                  ◎ <EditableField id={`timeline:${event.id}:location`} value={event.location ?? ''} style={{ color: 'rgba(176,141,87,0.6)', fontSize: '0.75rem' }} />
+                <p className="text-xs" style={{ color: 'var(--tone-accent)' }}>
+                  ◎ <EditableField id={`timeline:${event.id}:location`} value={event.location ?? ''} style={{ color: 'var(--tone-accent)', fontSize: '0.75rem' }} />
                 </p>
               )}
             </div>

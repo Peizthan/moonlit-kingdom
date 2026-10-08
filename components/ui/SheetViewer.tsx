@@ -11,7 +11,7 @@ interface SheetViewerProps {
   onRefresh: () => void;
 }
 
-const gold = 'rgba(176,141,87,0.6)';
+const gold = 'rgb(var(--tone-line)/0.6)';
 
 export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProps) {
   const [activeGid, setActiveGid] = useState<string | null>(null);
@@ -30,9 +30,9 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
               onClick={() => setActiveGid(tab.gid)}
               className="px-4 py-2 text-xs uppercase tracking-[0.15em] border rounded-sm transition-all duration-300"
               style={{
-                color: tab.gid === active?.gid ? '#B08D57' : '#8E8A86',
-                borderColor: tab.gid === active?.gid ? 'rgba(176,141,87,0.5)' : 'rgba(176,141,87,0.15)',
-                background: tab.gid === active?.gid ? 'rgba(176,141,87,0.1)' : 'transparent',
+                color: tab.gid === active?.gid ? 'var(--tone-accent)' : 'var(--tone-muted)',
+                borderColor: tab.gid === active?.gid ? 'rgb(var(--tone-line)/0.5)' : 'rgb(var(--tone-line)/0.15)',
+                background: tab.gid === active?.gid ? 'rgb(var(--tone-line)/0.1)' : 'transparent',
               }}
             >
               {tab.title}
@@ -45,7 +45,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
             onClick={onRefresh}
             disabled={loading}
             className="flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-[0.15em] border rounded-sm disabled:opacity-50"
-            style={{ color: '#D8C3A5', borderColor: 'rgba(176,141,87,0.25)' }}
+            style={{ color: 'var(--tone-fg)', borderColor: 'rgb(var(--tone-line)/0.25)' }}
           >
             <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
             Actualizar
@@ -56,7 +56,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-[0.15em] border rounded-sm"
-              style={{ color: '#B08D57', borderColor: 'rgba(176,141,87,0.4)', background: 'rgba(176,141,87,0.12)' }}
+              style={{ color: 'var(--tone-accent)', borderColor: 'rgb(var(--tone-line)/0.4)', background: 'rgb(var(--tone-line)/0.12)' }}
             >
               <ExternalLink size={12} />
               Editar en Google Sheets
@@ -68,7 +68,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
       {error && (
         <p
           className="text-xs py-3 px-4 mb-4 rounded-sm"
-          style={{ color: '#D8C3A5', background: 'rgba(78,31,45,0.4)', border: '1px solid rgba(78,31,45,0.6)' }}
+          style={{ color: 'var(--tone-fg)', background: 'rgba(78,31,45,0.4)', border: '1px solid rgba(78,31,45,0.6)' }}
         >
           ⚠ {error}
           {data ? ' — mostrando la última versión cargada.' : ''}
@@ -76,7 +76,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
       )}
 
       {loading && !data && (
-        <p className="text-sm py-12 text-center" style={{ color: '#8E8A86' }}>
+        <p className="text-sm py-12 text-center" style={{ color: 'var(--tone-muted)' }}>
           Cargando planilla…
         </p>
       )}
@@ -84,10 +84,10 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
       {active && (
         <div
           className="rounded-sm border overflow-x-auto"
-          style={{ borderColor: 'rgba(176,141,87,0.15)', background: 'rgba(18,28,46,0.3)' }}
+          style={{ borderColor: 'rgb(var(--tone-line)/0.15)', background: 'rgb(var(--tone-surface)/0.3)' }}
         >
           {active.rows.length === 0 ? (
-            <p className="text-sm py-12 text-center" style={{ color: '#8E8A86' }}>
+            <p className="text-sm py-12 text-center" style={{ color: 'var(--tone-muted)' }}>
               Esta hoja está vacía.
             </p>
           ) : (
@@ -99,7 +99,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
                     <tr
                       key={r}
                       style={{
-                        borderBottom: '1px solid rgba(176,141,87,0.08)',
+                        borderBottom: '1px solid rgb(var(--tone-line)/0.08)',
                         height: spacer ? 16 : undefined,
                       }}
                     >
@@ -108,7 +108,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
                           key={c}
                           className="px-4 py-2 align-top whitespace-pre-wrap"
                           style={{
-                            color: r === 0 ? gold : c === 0 ? '#D8C3A5' : '#C7C0B6',
+                            color: r === 0 ? gold : c === 0 ? 'var(--tone-fg)' : 'var(--tone-soft)',
                             fontWeight: r === 0 ? 500 : 400,
                             letterSpacing: r === 0 ? '0.08em' : undefined,
                             textTransform: r === 0 ? 'uppercase' : undefined,
@@ -128,7 +128,7 @@ export function SheetViewer({ data, loading, error, onRefresh }: SheetViewerProp
       )}
 
       {data && (
-        <p className="text-xs mt-3" style={{ color: 'rgba(142,138,134,0.6)' }}>
+        <p className="text-xs mt-3" style={{ color: 'var(--tone-muted)' }}>
           ✓ Sincronizado con Google Sheets · {new Date(data.fetchedAt).toLocaleTimeString('es-PY')}. Los
           cambios se editan en la planilla y se ven aquí al actualizar.
         </p>

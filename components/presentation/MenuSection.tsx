@@ -8,8 +8,8 @@ const { menu } = weddingData;
 
 const dietaryColors: Record<string, string> = {
   Vegetariano: 'rgba(29,74,58,0.7)',
-  Vegano: 'rgba(16,38,29,0.8)',
-  'Sin Gluten': 'rgba(176,141,87,0.15)',
+  Vegano: 'rgb(var(--tone-surface)/0.8)',
+  'Sin Gluten': 'rgb(var(--tone-line)/0.15)',
   'Contiene Gluten': 'rgba(78,31,45,0.5)',
 };
 
@@ -19,7 +19,7 @@ export function MenuSection() {
       id="menu"
       className="relative py-32 px-6"
       style={{
-        background: 'linear-gradient(160deg, #171515 0%, #121C2E 50%, #10261D 100%)',
+        background: 'linear-gradient(160deg, var(--tone-base) 0%, var(--tone-base) 50%, var(--tone-base) 100%)',
       }}
     >
       <div className="max-w-4xl mx-auto">
@@ -29,7 +29,7 @@ export function MenuSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
           className="text-center text-xs uppercase tracking-[0.35em] mb-8"
-          style={{ color: 'rgba(176,141,87,0.7)' }}
+          style={{ color: 'var(--tone-accent)' }}
         >
           Capítulo Cinco
         </motion.p>
@@ -40,7 +40,7 @@ export function MenuSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="text-center text-4xl md:text-6xl font-light mb-4"
-          style={{ fontFamily: "'Georgia', serif", color: '#D8C3A5' }}
+          style={{ fontFamily: 'var(--mk-font-display)', color: 'var(--tone-fg)' }}
         >
           Gastronomía y Menú
         </motion.h2>
@@ -51,7 +51,7 @@ export function MenuSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.2 }}
           className="text-center text-sm uppercase tracking-widest mb-16"
-          style={{ color: '#8E8A86' }}
+          style={{ color: 'var(--tone-muted)' }}
         >
           Cocina del Centenario · Chef Andrés Petit
         </motion.p>
@@ -69,17 +69,17 @@ export function MenuSection() {
               <div className="flex items-center gap-4 mb-4">
                 <div
                   className="flex-1 h-px"
-                  style={{ background: 'linear-gradient(to right, rgba(176,141,87,0.3), transparent)' }}
+                  style={{ background: 'linear-gradient(to right, rgb(var(--tone-line)/0.3), transparent)' }}
                 />
                 <h3
                   className="text-xs uppercase tracking-[0.3em] px-4"
-                  style={{ color: '#B08D57' }}
+                  style={{ color: 'var(--tone-accent)' }}
                 >
                   {course.course}
                 </h3>
                 <div
                   className="flex-1 h-px"
-                  style={{ background: 'linear-gradient(to left, rgba(176,141,87,0.3), transparent)' }}
+                  style={{ background: 'linear-gradient(to left, rgb(var(--tone-line)/0.3), transparent)' }}
                 />
               </div>
 
@@ -88,19 +88,19 @@ export function MenuSection() {
                 {course.options.map((option) => (
                   <div
                     key={option.name}
-                    className="rounded-sm border p-5 group hover:border-[rgba(176,141,87,0.25)] transition-all duration-300"
+                    className="rounded-sm border p-5 group hover:border-[rgb(var(--tone-line)/0.25)] transition-all duration-300"
                     style={{
-                      borderColor: 'rgba(176,141,87,0.12)',
-                      background: 'rgba(18,28,46,0.25)',
+                      borderColor: 'rgb(var(--tone-line)/0.12)',
+                      background: 'rgb(var(--tone-surface)/0.25)',
                     }}
                   >
                     <h4
                       className="text-base font-medium mb-2"
-                      style={{ color: '#D8C3A5', fontFamily: "'Georgia', serif" }}
+                      style={{ color: 'var(--tone-fg)', fontFamily: 'var(--mk-font-display)' }}
                     >
                       {option.name}
                     </h4>
-                    <p className="text-sm leading-relaxed mb-3" style={{ color: '#8E8A86' }}>
+                    <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--tone-muted)' }}>
                       {option.description}
                     </p>
                     {option.dietary && option.dietary.length > 0 && (
@@ -110,9 +110,9 @@ export function MenuSection() {
                             key={d}
                             className="text-xs px-2 py-0.5 rounded-full"
                             style={{
-                              background: dietaryColors[d] ?? 'rgba(142,138,134,0.2)',
-                              border: '1px solid rgba(176,141,87,0.15)',
-                              color: '#C7C0B6',
+                              background: dietaryColors[d] ?? 'rgb(var(--tone-line)/0.2)',
+                              border: '1px solid rgb(var(--tone-line)/0.15)',
+                              color: 'var(--tone-soft)',
                               fontSize: '0.65rem',
                             }}
                           >
@@ -126,7 +126,7 @@ export function MenuSection() {
               </div>
 
               {course.dietaryNotes && (
-                <p className="mt-3 text-xs italic" style={{ color: 'rgba(176,141,87,0.45)' }}>
+                <p className="mt-3 text-xs italic" style={{ color: 'var(--tone-accent)' }}>
                   {course.dietaryNotes}
                 </p>
               )}

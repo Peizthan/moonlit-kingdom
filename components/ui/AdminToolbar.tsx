@@ -31,8 +31,8 @@ export function AdminToolbar() {
     <div
       className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 no-print"
       style={{
-        background: 'rgba(16,38,29,0.97)',
-        borderTop: '1px solid rgba(176,141,87,0.2)',
+        background: 'rgb(var(--tone-surface)/0.97)',
+        borderTop: '1px solid rgb(var(--tone-line)/0.2)',
         backdropFilter: 'blur(12px)',
       }}
     >
@@ -42,9 +42,9 @@ export function AdminToolbar() {
           onClick={toggleEditMode}
           className="flex items-center gap-2 px-4 py-1.5 text-xs uppercase tracking-widest transition-all duration-200 rounded-sm"
           style={{
-            background: isEditMode ? 'rgba(176,141,87,0.2)' : 'rgba(142,138,134,0.08)',
-            border: isEditMode ? '1px solid rgba(176,141,87,0.5)' : '1px solid rgba(142,138,134,0.2)',
-            color: isEditMode ? '#B08D57' : '#8E8A86',
+            background: isEditMode ? 'rgb(var(--tone-line)/0.2)' : 'rgb(var(--tone-line)/0.08)',
+            border: isEditMode ? '1px solid rgb(var(--tone-line)/0.5)' : '1px solid rgb(var(--tone-line)/0.2)',
+            color: isEditMode ? 'var(--tone-accent)' : 'var(--tone-muted)',
           }}
         >
           <span>{isEditMode ? '✏️' : '👁'}</span>
@@ -56,15 +56,15 @@ export function AdminToolbar() {
           disabled={dirtyCount === 0 || saveStatus === 'saving'}
           className="px-4 py-1.5 text-xs uppercase tracking-widest transition-all duration-200 rounded-sm disabled:opacity-40"
           style={{
-            background: dirtyCount > 0 ? 'rgba(176,141,87,0.25)' : 'transparent',
-            border: '1px solid rgba(176,141,87,0.5)',
-            color: '#D8C3A5',
+            background: dirtyCount > 0 ? 'rgb(var(--tone-line)/0.25)' : 'transparent',
+            border: '1px solid rgb(var(--tone-line)/0.5)',
+            color: 'var(--tone-fg)',
           }}
         >
           {saveStatus === 'saving' ? 'Guardando…' : 'Guardar'}
         </button>
 
-        <span className="text-xs" style={{ color: saveStatus === 'error' ? '#C98A8A' : 'rgba(176,141,87,0.6)' }}>
+        <span className="text-xs" style={{ color: saveStatus === 'error' ? '#C98A8A' : 'rgb(var(--tone-line)/0.6)' }}>
           {saveStatus === 'error'
             ? 'Error al sincronizar · reintentá'
             : dirtyCount > 0
@@ -83,8 +83,8 @@ export function AdminToolbar() {
             className="px-3 py-1.5 text-xs uppercase tracking-widest transition-all duration-200 rounded-sm"
             style={{
               background: confirmReset ? 'rgba(78,31,45,0.3)' : 'transparent',
-              border: `1px solid ${confirmReset ? 'rgba(78,31,45,0.6)' : 'rgba(142,138,134,0.2)'}`,
-              color: confirmReset ? '#D8C3A5' : '#8E8A86',
+              border: `1px solid ${confirmReset ? 'rgba(78,31,45,0.6)' : 'rgb(var(--tone-line)/0.2)'}`,
+              color: confirmReset ? 'var(--tone-fg)' : 'var(--tone-muted)',
             }}
           >
             {confirmReset ? '¿Confirmar reset?' : 'Restablecer'}
@@ -96,8 +96,8 @@ export function AdminToolbar() {
           disabled={loggingOut}
           className="px-4 py-1.5 text-xs uppercase tracking-widest transition-all duration-200 rounded-sm disabled:opacity-50"
           style={{
-            border: '1px solid rgba(142,138,134,0.2)',
-            color: '#8E8A86',
+            border: '1px solid rgb(var(--tone-line)/0.2)',
+            color: 'var(--tone-muted)',
           }}
         >
           {loggingOut ? 'Saliendo…' : 'Cerrar sesión'}
