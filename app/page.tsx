@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { MotionConfig, motion } from 'framer-motion';
@@ -10,7 +10,7 @@ const visionParagraphs = weddingData.story.vision.split('\n\n');
 const venueLines = couple.location.split(', ');
 
 const fadeIn = (delay: number) => ({
-  initial: { opacity: 0, y: 6 },
+  initial: false,
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, delay },
 });
@@ -23,8 +23,8 @@ export default function HomePage() {
           <div className="mk-hero-stage">
             {/* Decorative frame art. A <picture> serves one pre-optimized asset per breakpoint; the empty alt keeps it out of the accessibility tree. */}
             <picture className="mk-hero-art">
-              <source media="(min-width: 640px)" srcSet="/brand/hero-frame-desktop-blend.webp" />
-              <img src="/brand/hero-frame-mobile-blend.webp" alt="" fetchPriority="high" decoding="async" />
+              <source media="(min-width: 640px)" srcSet="/brand/hero-frame-desktop.webp" />
+              <img src="/brand/hero-frame-mobile.webp" alt="" fetchPriority="high" decoding="async" />
             </picture>
 
             <div className="mk-hero-content">
@@ -79,7 +79,7 @@ export default function HomePage() {
         <section className="mk-section mk-section-first z-0 overflow-hidden px-6 pb-20 pt-24 text-center sm:pb-28 sm:pt-36">
           <SideVines set="vision" />
           <div className="relative mx-auto max-w-5xl">
-            <motion.p
+            <motion.h2
               initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -87,7 +87,7 @@ export default function HomePage() {
               className="mk-chapter-eyebrow mb-6"
             >
               La Visión
-            </motion.p>
+            </motion.h2>
             <div className="mx-auto mb-9 max-w-3xl space-y-6">
               {visionParagraphs.slice(0, 2).map((paragraph, index) => (
                 <motion.p
@@ -144,23 +144,8 @@ export default function HomePage() {
 function SideVines({ set }: { set: 'vision' | 'chapters' }) {
   return (
     <>
-      {/* Decorative only: side frames cropped from the key visual. */}
-      <img
-        src={`/brand/${set}-vines-left-tapered.webp`}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className={`mk-vines mk-vines-${set} mk-vines-left`}
-      />
-      <img
-        src={`/brand/${set}-vines-right-tapered.webp`}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-        className={`mk-vines mk-vines-${set} mk-vines-right`}
-      />
+      <div aria-hidden="true" className={`mk-vines mk-vines-${set} mk-vines-left`} />
+      <div aria-hidden="true" className={`mk-vines mk-vines-${set} mk-vines-right`} />
     </>
   );
 }

@@ -28,7 +28,7 @@ export function MetricCard({
       transition={{ duration: 0.6, ease: 'easeOut', delay }}
       className="rounded-sm p-6 border relative overflow-hidden group"
       style={{
-        background: 'linear-gradient(135deg, rgba(29,74,58,0.3) 0%, rgb(var(--tone-surface)/0.4) 100%)',
+        background: 'rgb(var(--tone-surface))',
         borderColor: 'rgb(var(--tone-line)/0.2)',
       }}
     >

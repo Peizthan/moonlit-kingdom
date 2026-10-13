@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { weddingData } from '@/data/wedding-data';
 import { useSheet } from '@/lib/useSheet';
@@ -206,20 +207,21 @@ function DashboardContent() {
       <div
         className="sticky top-16 z-30 border-b overflow-x-auto no-print"
         style={{
-          background: 'rgb(var(--tone-base-rgb)/0.94)',
+          background: 'var(--tone-base)',
           borderColor: 'rgb(var(--tone-line)/0.12)',
           backdropFilter: 'blur(12px)',
         }}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex gap-0 min-w-max">
+            <Link href="/dashboard/invitados" className="mk-focus flex items-center gap-2 border-b-2 border-transparent px-4 py-4 text-xs uppercase tracking-[0.15em]" style={{ color: 'var(--tone-fg)' }}><Users size={14} aria-hidden="true" />Invitados</Link>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className="mk-focus flex items-center gap-2 px-4 py-4 text-xs uppercase tracking-[0.15em] border-b-2 transition-all duration-300 whitespace-nowrap"
                 style={{
-                  color: activeTab === tab.id ? 'var(--tone-fg)' : '#9A958E',
+                  color: activeTab === tab.id ? 'var(--tone-fg)' : 'var(--tone-muted)',
                   borderBottomColor: activeTab === tab.id ? 'var(--tone-accent)' : 'transparent',
                 }}
               >
@@ -326,7 +328,7 @@ function DashboardContent() {
               className="rounded-sm border p-6 md:p-10"
               style={{
                 borderColor: 'rgb(var(--tone-line)/0.15)',
-                background: 'rgb(var(--tone-surface)/0.3)',
+                background: 'rgb(var(--tone-surface))',
               }}
             >
               <TimelineBlock events={timeline} />
@@ -352,7 +354,7 @@ function DashboardContent() {
               className="rounded-sm border overflow-hidden"
               style={{
                 borderColor: 'rgb(var(--tone-line)/0.15)',
-                background: 'rgb(var(--tone-surface)/0.3)',
+                background: 'rgb(var(--tone-surface))',
               }}
             >
               <VendorTable vendors={vendorsList.items} onAdd={addVendor} onDelete={vendorsList.removeItem} />
@@ -491,7 +493,7 @@ function DashboardContent() {
               className="rounded-sm border overflow-hidden"
               style={{
                 borderColor: 'rgb(var(--tone-line)/0.15)',
-                background: 'rgb(var(--tone-surface)/0.3)',
+                background: 'rgb(var(--tone-surface))',
               }}
             >
               <TechnicalPlan items={technicalList.items} onAdd={addTechnicalItem} onDelete={technicalList.removeItem} />

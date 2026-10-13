@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, KeyboardEvent, CSSProperties, ElementType } from 'react';
+import { useState, useRef, KeyboardEvent, CSSProperties, ElementType } from 'react';
 import { useAdmin } from '@/lib/AdminContext';
 
 interface EditableFieldProps {
@@ -36,29 +36,6 @@ export function EditableField({
 }: EditableFieldProps) {
   const { isEditMode, getOverride, setOverride } = useAdmin();
   const current = getOverride(id, value);
-  const [draft, setDraft] = useState<string | number>(current);
-
-  // Sync draft when override changes (e.g. after reset)
-  useEffect(() => {
-    setDraft(getOverride(id, value));
-  }, [id, value, getOverride]);
-
-  function commit(val: string) {
-    const committed = type === 'number' ? (parseFloat(val) || value) : val;
-    setOverride(id, committed);
-  }
-
-  function handleKeyDown(e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (e.key === 'Enter' && type !== 'textarea') {
-      e.preventDefault();
-      (e.target as HTMLElement).blur();
-    }
-    if (e.key === 'Escape') {
-      setDraft(getOverride(id, value));
-      (e.target as HTMLElement).blur();
-    }
-  }
-
   if (!isEditMode) {
     return (
       <Tag className={className} style={style}>
@@ -67,6 +44,30 @@ export function EditableField({
     );
   }
 
+  return <FieldEditor key={`${id}:${String(current)}`} id={id} current={current} value={value} type={type} className={className} style={style} setOverride={setOverride} />;
+}
+
+function FieldEditor({ id, current, value, type, className, style, setOverride }: {
+  id: string; current: string | number; value: string | number;
+  type: NonNullable<EditableFieldProps['type']>;
+  className?: string; style?: CSSProperties;
+  setOverride: (id: string, value: string | number) => void;
+}) {
+  const [draft, setDraft] = useState(current);
+  const cancelled = useRef(false);
+  function commit(val: string) {
+    if (cancelled.current) { cancelled.current = false; return; }
+    const numeric = Number.parseFloat(val);
+    setOverride(id, type === 'number' ? (Number.isFinite(numeric) ? numeric : value) : val);
+  }
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    if (event.key === 'Enter' && type !== 'textarea') {
+      event.preventDefault(); event.currentTarget.blur();
+    }
+    if (event.key === 'Escape') {
+      cancelled.current = true; setDraft(current); event.currentTarget.blur();
+    }
+  }
   const combinedStyle: CSSProperties = {
     ...editInputStyle,
     color: style?.color ?? 'var(--tone-fg)',

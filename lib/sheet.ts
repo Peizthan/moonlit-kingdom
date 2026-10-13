@@ -1,16 +1,18 @@
+export type SheetSource = 'budget' | 'guests';
+
 export interface SheetTab {
   gid: string;
   title: string;
   rows: string[][];
+  headerRow: number;
+  numericColumns: number[];
+  /** Original worksheet row numbers, for stable record identity. */
+  rowNumbers: number[];
 }
 
 export interface SheetData {
+  source: SheetSource;
   tabs: SheetTab[];
   sheetUrl: string;
   fetchedAt: string;
 }
-
-export const SHEET_ID =
-  process.env.NEXT_PUBLIC_BUDGET_SHEET_ID ?? '1dpwSrqkRMuzn46Xhnbh1irvTAoKJduSBedtpBONlRFg';
-
-export const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;

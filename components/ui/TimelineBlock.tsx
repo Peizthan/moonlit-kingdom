@@ -26,7 +26,7 @@ const categoryLabels: Record<TimelineEvent['category'], string> = {
 };
 
 export function TimelineBlock({ events }: TimelineBlockProps) {
-  const { isEditMode, getOverride } = useAdmin();
+  const { isEditMode } = useAdmin();
   return (
     <div className="relative">
       {/* Vertical line */}

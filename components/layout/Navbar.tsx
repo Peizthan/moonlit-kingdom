@@ -25,9 +25,9 @@ export function Navbar() {
       className="fixed top-0 left-0 right-0 z-50 border-b no-print mk-nav-public"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-2 sm:px-8">
-        <Link href="/" className="group flex items-center gap-2.5">
-          <CrescentMark className="h-6 w-6" />
-          <span className="mk-nav-wordmark text-[0.7rem] font-semibold uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.24em]" style={{ fontFamily: 'var(--mk-font-display)' }}>
+        <Link href="/" className="group flex min-w-0 items-center gap-2.5">
+          <CrescentMark className="h-6 w-6 shrink-0" />
+          <span className="mk-nav-wordmark truncate text-[0.7rem] font-semibold uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.24em]" style={{ fontFamily: 'var(--mk-font-display)' }}>
             Moonlit Kingdom
           </span>
         </Link>
@@ -47,7 +47,7 @@ export function Navbar() {
         </div>
 
         <button
-          className="mk-nav-toggle p-1 md:hidden"
+          className="mk-nav-toggle flex min-h-11 min-w-11 items-center justify-center md:hidden"
           onClick={() => setOpen(!open)}
           aria-controls="public-navigation"
           aria-expanded={open}

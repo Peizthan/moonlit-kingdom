@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moonlit Kingdom
 
-## Getting Started
+Next.js 16 / React 19 wedding presentation and authenticated planning panel. The existing Vercel project deploys `main`.
 
-First, run the development server:
+## Local development
 
-```bash
+Use Node.js 22.18 or newer (the data tests use native TypeScript stripping).
+
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `ADMIN_PASSWORD` and `SESSION_SECRET` in local environment configuration. Use the existing Supabase environment configuration for shared planning overrides. Do not commit credentials or guest exports.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run lint
+npm test
+npx tsc --noEmit
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Planning spreadsheets
 
-## Learn More
+The mirrors are read-only; edits remain in Google Sheets. `Actualizar` fetches the latest formatted values. A failed refresh retains the previous loaded data.
 
-To learn more about Next.js, take a look at the following resources:
+- Budget: `Presupuesto General` and `Cálculos Adicionales`, through `/api/sheet?source=budget`.
+- Guests: `Invitados` and `Resumen`, through `/api/sheet?source=guests` and `/dashboard/invitados`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`lib/sheet-sources.ts` contains the approved source IDs, exact tab IDs and expected headers. It is server-only. The former `NEXT_PUBLIC_BUDGET_SHEET_ID` variable is no longer used, so an old deployment variable cannot select the previous budget by accident.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Both API sources require the existing admin session before fetching data. Responses use `private, no-store`; neither guest records nor downloaded spreadsheet files are included in the repository. The current integration reads Google CSV exports and needs the existing spreadsheet link access to remain available. Spreadsheet sharing is managed separately in Google Drive.
 
-## Deploy on Vercel
+## Background and reading surfaces
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The base parchment color and the low-opacity page texture are independent in `app/globals.css`. The hero and margin botanicals use the intact approved artwork with CSS masks. Planning tables, cards and forms use solid parchment surfaces so the texture cannot interfere with the data. The hero date and 18:00 remain unchanged.

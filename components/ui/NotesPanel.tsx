@@ -13,7 +13,7 @@ interface NotesPanelProps {
 }
 
 export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
-  const { isEditMode, getOverride } = useAdmin();
+  const { isEditMode } = useAdmin();
   return (
     <div className="space-y-6">
       {isEditMode && onAdd && (
@@ -36,7 +36,7 @@ export function NotesPanel({ notes, onAdd, onDelete }: NotesPanelProps) {
           className="rounded-sm border p-6"
           style={{
             borderColor: 'rgb(var(--tone-line)/0.15)',
-            background: 'linear-gradient(135deg, rgba(29,74,58,0.15) 0%, rgb(var(--tone-surface)/0.25) 100%)',
+            background: 'rgb(var(--tone-surface))',
           }}
         >
           <div className="flex flex-wrap items-start justify-between gap-3 mb-4">

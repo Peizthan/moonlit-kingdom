@@ -36,14 +36,10 @@
   }
 
   body {
-    background-color: var(--mk-paper);
-    background-image:
-      linear-gradient(90deg, rgba(122, 84, 48, 0.16), transparent 16%, transparent 84%, rgba(122, 84, 48, 0.16)),
-      radial-gradient(ellipse at 50% 30%, rgba(255, 248, 225, 0.22), transparent 70%),
-      url("/brand/paper-tile.webp");
-    background-size: auto, auto, 248px 318px;
-    background-repeat: no-repeat, no-repeat, repeat;
-    background-attachment: fixed;
+    position: relative;
+    isolation: isolate;
+    background-color: var(--tone-base);
+    background-image: linear-gradient(90deg, rgba(122, 84, 48, 0.07), transparent 18%, transparent 82%, rgba(122, 84, 48, 0.07));
     color: var(--mk-ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -72,7 +68,19 @@
   }
 }
 
-/* The parchment texture and ambient lighting live only on <body>. Everything else stays transparent. */
+/* One quiet, independent texture layer. Opaque data surfaces cover it. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url("/brand/paper-tile.webp") repeat;
+  background-size: 496px 636px;
+  mix-blend-mode: multiply;
+  opacity: 0.14;
+}
+
 .mk-page,
 .paper-surface {
   color: var(--mk-ink);
@@ -112,60 +120,37 @@
   font-size: clamp(0.85rem, 0.75rem + 0.25vw, 1.05rem);
 }
 
-/* Botanical side frames: adapted per section, responsive across mobile and desktop */
+/* Use intact frame art, softly masked into the outer gutters. No paper-cutout derivatives. */
 .mk-vines {
-  --mk-vine-w: clamp(48px, 11vw, 80px);
+  display: none;
   position: absolute;
   z-index: -1;
-  display: block;
-  width: var(--mk-vine-w);
-  height: auto;
-  opacity: 0.6;
   pointer-events: none;
-  max-width: none;
+  height: min(80%, 36rem);
+  background-image: url("/brand/hero-frame-desktop.webp");
+  background-size: auto 140%;
+  background-repeat: no-repeat;
+  opacity: 0.55;
   mix-blend-mode: multiply;
 }
-
-/* Wide layouts: full side vines sit entirely inside the gutters beside the 64rem content column. */
+.mk-vines-left {
+  left: 0;
+  background-position: left -1rem center;
+  mask-image: linear-gradient(to right, #000, transparent), linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  mask-composite: intersect;
+}
+.mk-vines-right {
+  right: 0;
+  background-position: right -1rem center;
+  mask-image: linear-gradient(to left, #000, transparent), linear-gradient(transparent, #000 18%, #000 82%, transparent);
+  mask-composite: intersect;
+}
+.mk-vines-vision { top: 10%; }
+.mk-vines-chapters { bottom: 0; }
 @media (min-width: 1280px) {
   .mk-vines {
-    --mk-vine-w: clamp(96px, calc((100vw - 64rem) / 2 - 1rem), 320px);
-    opacity: 1;
-  }
-}
-
-/* Compact and medium layouts: small corner ornaments that stay inside the section's reserved padding. */
-.mk-vines-vision {
-  top: 0;
-}
-
-.mk-vines-vision.mk-vines-left,
-.mk-vines-chapters.mk-vines-left {
-  left: 0.5rem;
-}
-
-.mk-vines-vision.mk-vines-right,
-.mk-vines-chapters.mk-vines-right {
-  right: 0.5rem;
-}
-
-.mk-vines-chapters {
-  bottom: 0;
-}
-
-@media (min-width: 1280px) {
-  .mk-vines-vision {
-    top: 8%;
-  }
-
-  .mk-vines-vision.mk-vines-left,
-  .mk-vines-chapters.mk-vines-left {
-    left: max(0.5rem, calc((100vw - 64rem) / 2 - var(--mk-vine-w) - 0.5rem));
-  }
-
-  .mk-vines-vision.mk-vines-right,
-  .mk-vines-chapters.mk-vines-right {
-    right: max(0.5rem, calc((100vw - 64rem) / 2 - var(--mk-vine-w) - 0.5rem));
+    display: block;
+    width: min(12rem, calc((100% - 64rem) / 2 - 1rem));
   }
 }
 
@@ -195,7 +180,7 @@
   --tone-accent: #6B4E26;
   --tone-rule: rgba(73, 58, 41, 0.38);
   --tone-line: 73 58 41;
-  --tone-surface: 255 248 225;
+  --tone-surface: 246 233 212;
   --tone-base: #DEC59C;
   --tone-base-rgb: 222 197 156;
   --tone-focus: var(--mk-wisteria-dark);
@@ -282,7 +267,7 @@
 .mk-login-input {
   width: 100%;
   padding: 12px 40px 12px 16px;
-  background: rgb(var(--tone-surface) / 0.7);
+  background: rgb(var(--tone-surface));
   border: 1px solid rgb(var(--tone-line) / 0.45);
   color: var(--tone-fg);
   font-size: 1rem;
@@ -304,6 +289,8 @@
   max-height: 150px;
   object-fit: cover;
   object-position: center bottom;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(transparent, #000 60%);
 }
 
 /* ---------- Homepage hero: live HTML over a decorative frame art ---------- */
@@ -339,6 +326,10 @@
   pointer-events: none;
 }
 
+.mk-hero-art {
+  mask-image: linear-gradient(to bottom, #000 92%, transparent);
+}
+
 .mk-hero-art img {
   display: block;
   width: 100%;
@@ -361,6 +352,7 @@
   color: var(--mk-ink);
   font-family: var(--mk-font-display);
   text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .mk-eyebrow {
@@ -670,7 +662,8 @@
 
 @media (min-width: 1761px) {
   .mk-hero-art {
-    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent), linear-gradient(#000 92%, transparent);
+    mask-composite: intersect;
   }
 }
 
@@ -710,7 +703,7 @@
   right: 0;
   overflow-x: auto;
   border-block: 1px solid rgb(var(--tone-line) / 0.18);
-  background: rgb(var(--tone-surface) / 0.88);
+  background: rgb(var(--tone-surface));
   backdrop-filter: blur(8px);
 }
 
@@ -746,7 +739,7 @@
   scroll-margin-top: 6rem;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1536px) {
   .mk-presentation-nav {
     top: 50%;
     left: auto;
@@ -878,4 +871,88 @@
   .no-print {
     display: none !important;
   }
+}
+
+/* Planning data uses solid parchment, dark labels and generous touch targets. */
+.mk-data-surface, .mk-sheet-scroll {
+  background: rgb(var(--tone-surface));
+  border-color: rgb(var(--tone-line) / 0.3);
+  color: var(--tone-fg);
+}
+.mk-sheet-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgb(var(--tone-line) / 0.3);
+  border-radius: 2px;
+}
+.mk-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.mk-sheet-table th, .mk-sheet-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  white-space: pre-wrap;
+  min-width: 7rem;
+  max-width: 26rem;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid rgb(var(--tone-line) / 0.2);
+}
+.mk-sheet-table th {
+  background: #E5D2B2;
+  color: var(--tone-strong);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.mk-sheet-table tbody tr:nth-child(even) { background: rgb(var(--tone-line) / 0.025); }
+.mk-sheet-table .mk-numeric { text-align: right; font-variant-numeric: tabular-nums; }
+.mk-sheet-table .mk-number-value { white-space: nowrap; }
+.mk-sheet-table .mk-sheet-spacer { height: 1rem; padding: 0; }
+.mk-sheet-total { font-weight: 600; border-top: 2px solid var(--tone-rule); }
+.mk-guest-metrics { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
+.mk-guest-table { min-width: 100rem; }
+.mk-guest-table td:nth-child(3) { min-width: 12rem; font-weight: 600; }
+.mk-sheet-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgb(var(--tone-line) / 0.35);
+  border-radius: 2px;
+  background: rgb(var(--tone-surface));
+  color: var(--tone-fg);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  cursor: pointer;
+}
+.mk-sheet-button:hover, .mk-sheet-button[aria-pressed="true"] { background: #E5D2B2; }
+.mk-sheet-button[aria-pressed="true"] { border-color: var(--tone-accent); font-weight: 600; }
+.mk-sheet-button:disabled { opacity: 0.55; cursor: default; }
+.mk-sheet-input {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  background: #FFF8ED;
+  border: 1px solid rgb(var(--tone-line) / 0.45);
+  border-radius: 2px;
+  color: var(--tone-fg);
+  font-size: 1rem;
+}
+.mk-sheet-error { color: #4E1F2D; background: #F5E4D9; border: 1px solid #8C4B54; }
+.mk-sheet-input:focus-visible, .mk-sheet-scroll:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+@media (max-width: 767px) {
+  .mk-hero { padding-top: 3.75rem; }
 }

@@ -19,8 +19,8 @@ export function Footer() {
           Una noche fuera del tiempo · Asunción, Paraguay
         </p>
       </div>
-      {/* Decorative vine band cropped from the hero frame art; its paper fades to transparent so the page paper shows through. */}
-      <Image src="/brand/vine-band-blend.webp" alt="" width={1127} height={118} sizes="100vw" className="mk-footer-band" />
+      {/* Decorative vine band cropped from the hero frame art; CSS blends its upper edge into the shared page paper. */}
+      <Image src="/brand/vine-band.webp" alt="" width={1127} height={118} sizes="100vw" className="mk-footer-band" />
     </footer>
   );
 }

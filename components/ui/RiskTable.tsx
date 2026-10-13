@@ -58,7 +58,7 @@ export function RiskTable({ risks, onAdd, onDelete }: RiskTableProps) {
           className="rounded-sm border p-4"
           style={{
             borderColor: 'rgb(var(--tone-line)/0.15)',
-            background: 'rgb(var(--tone-surface)/0.3)',
+            background: 'rgb(var(--tone-surface))',
           }}
         >
           <div className="flex flex-wrap items-start gap-3 mb-3">

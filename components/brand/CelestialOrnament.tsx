@@ -13,7 +13,7 @@ export function CelestialOrnament({
     return (
       <svg
         aria-hidden="true"
-        className={className}
+        className={`max-w-full ${className}`}
         style={style}
         viewBox="0 0 160 56"
         fill="none"
@@ -35,7 +35,7 @@ export function CelestialOrnament({
   return (
     <svg
       aria-hidden="true"
-      className={className}
+      className={`max-w-full ${className}`}
       style={style}
       viewBox="0 0 260 16"
       fill="none"

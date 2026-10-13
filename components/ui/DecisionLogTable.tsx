@@ -57,7 +57,7 @@ export function DecisionLogTable({ decisions, onAdd, onDelete }: DecisionLogTabl
           className="rounded-sm border p-4 hover:border-[rgb(var(--tone-line)/0.3)] transition-colors duration-300"
           style={{
             borderColor: 'rgb(var(--tone-line)/0.12)',
-            background: 'rgb(var(--tone-surface)/0.25)',
+            background: 'rgb(var(--tone-surface))',
           }}
         >
           <div className="flex flex-wrap items-start gap-3 mb-2">

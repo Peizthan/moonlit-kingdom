@@ -52,7 +52,7 @@ export function SeatingPlan({ tables, onAdd, onDelete }: SeatingPlanProps) {
             className="rounded-sm border p-5"
             style={{
               borderColor: 'rgb(var(--tone-line)/0.2)',
-              background: 'linear-gradient(135deg, rgba(29,74,58,0.2) 0%, rgb(var(--tone-surface)/0.3) 100%)',
+              background: 'rgb(var(--tone-surface))',
             }}
           >
             <div className="flex items-start justify-between mb-4">
