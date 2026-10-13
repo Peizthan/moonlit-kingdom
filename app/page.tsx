@@ -76,8 +76,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-        <section className="relative z-0 overflow-hidden px-6 pb-20 pt-20 text-center sm:pb-28 sm:pt-28">
-          <div className="relative mx-auto max-w-3xl">
+        <section className="mk-section mk-section-first z-0 overflow-hidden px-6 pb-20 pt-24 text-center sm:pb-28 sm:pt-36">
+          <SideVines set="vision" />
+          <div className="relative mx-auto max-w-5xl">
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -87,7 +88,7 @@ export default function HomePage() {
             >
               La Visión
             </motion.p>
-            <div className="mx-auto mb-9 max-w-2xl space-y-5">
+            <div className="mx-auto mb-9 max-w-3xl space-y-6">
               {visionParagraphs.slice(0, 2).map((paragraph, index) => (
                 <motion.p
                   key={paragraph}
@@ -107,7 +108,7 @@ export default function HomePage() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65 }}
-              className="mk-quote mx-auto mt-10 max-w-2xl border-y py-7 text-[clamp(1.5rem,3.4vw,2.1rem)] sm:mt-12 sm:py-9"
+              className="mk-quote mx-auto mt-10 max-w-3xl border-y py-7 text-[clamp(1.75rem,3vw,3rem)] sm:mt-12 sm:py-9"
               style={{ borderColor: 'var(--tone-rule)' }}
             >
               {weddingData.story.manifesto}
@@ -115,8 +116,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="relative px-6 py-14 sm:py-20">
-          <div className="mx-auto grid max-w-5xl gap-x-12 md:grid-cols-2">
+        <section className="mk-section mk-section-last overflow-hidden px-6 pb-12 pt-8 sm:pb-16 sm:pt-12">
+          <SideVines set="chapters" />
+          <CelestialOrnament className="mx-auto mb-10 h-3 w-40 sm:mb-14" style={{ color: 'var(--tone-accent)' }} />
+          <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
             <ChapterLink
               href="/presentation"
               chapter="Capítulo I"
@@ -138,6 +141,30 @@ export default function HomePage() {
   );
 }
 
+function SideVines({ set }: { set: 'vision' | 'chapters' }) {
+  return (
+    <>
+      {/* Decorative only: side frames cropped from the key visual. */}
+      <img
+        src={`/brand/${set}-vines-left.webp?v=2`}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className={`mk-vines mk-vines-${set} mk-vines-left`}
+      />
+      <img
+        src={`/brand/${set}-vines-right.webp?v=2`}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className={`mk-vines mk-vines-${set} mk-vines-right`}
+      />
+    </>
+  );
+}
+
 function ChapterLink({
   href,
   chapter,
@@ -154,15 +181,14 @@ function ChapterLink({
   return (
     <Link
       href={href}
-      className="group border-t py-7 transition-colors hover:border-[rgb(var(--tone-line)/0.65)] md:py-8"
-      style={{ borderColor: 'var(--tone-rule)' }}
+      className="mk-chapter-card group px-7 py-8 md:px-9 md:py-10"
     >
       <span className="mk-label mb-3 block">{chapter}</span>
-      <span className="mk-display mb-3 flex items-baseline justify-between gap-4 text-[clamp(1.9rem,4vw,2.5rem)] font-medium leading-tight" style={{ color: 'var(--tone-strong)' }}>
+      <span className="mk-display mb-3 flex items-baseline justify-between gap-4 text-[clamp(2rem,3.4vw,3.25rem)] font-medium leading-tight" style={{ color: 'var(--tone-strong)' }}>
         {title}
         <span aria-hidden="true" className="text-base transition-transform group-hover:translate-x-1" style={{ color: 'var(--tone-accent)' }}>→</span>
       </span>
-      <span className="mk-prose mb-5 block max-w-lg" style={{ fontSize: '1.15rem', lineHeight: 1.55 }}>
+      <span className="mk-prose mb-5 block max-w-lg" style={{ fontSize: 'clamp(1.2rem, 0.9rem + 0.55vw, 1.55rem)', lineHeight: 1.55 }}>
         {description}
       </span>
       <span className="mk-label">{action}</span>

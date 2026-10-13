@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   --mk-paper: #D9C39E;
@@ -28,6 +28,15 @@
 
   body {
     background-color: var(--mk-paper-art);
+    background-image:
+      radial-gradient(ellipse at 50% 12%, rgba(255, 248, 225, 0.28), transparent 58%),
+      radial-gradient(ellipse at 3% 15%, rgba(112, 79, 45, 0.16), transparent 35%),
+      radial-gradient(ellipse at 97% 38%, rgba(117, 77, 44, 0.15), transparent 38%),
+      radial-gradient(ellipse at 15% 82%, rgba(125, 88, 49, 0.13), transparent 37%),
+      radial-gradient(ellipse at 85% 88%, rgba(255, 245, 218, 0.16), transparent 42%),
+      url("/brand/paper-tile.webp");
+    background-size: auto, auto, auto, auto, auto, 248px 318px;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
     color: var(--mk-ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -57,26 +66,173 @@
 }
 
 /* Page-level paper: fixed to the viewport so long pages never show tiling seams. */
-.mk-page {
-  background-color: var(--mk-paper-art);
-  background-attachment: fixed;
-  background-image:
-    radial-gradient(ellipse at 47% 20%, rgba(255, 248, 225, 0.3), transparent 55%),
-    radial-gradient(ellipse at 4% 13%, rgba(112, 79, 45, 0.14), transparent 35%),
-    radial-gradient(ellipse at 95% 60%, rgba(117, 77, 44, 0.12), transparent 38%),
-    radial-gradient(ellipse at 19% 90%, rgba(125, 88, 49, 0.1), transparent 37%);
-}
-
-/* Reusable parchment surface: the paper is the page, not a card. */
+.mk-page,
 .paper-surface {
   color: var(--mk-ink);
   background-color: var(--mk-paper-art);
   background-image:
-    radial-gradient(ellipse at 47% 25%, rgba(255, 248, 225, 0.3), transparent 55%),
-    radial-gradient(ellipse at 4% 13%, rgba(112, 79, 45, 0.16), transparent 35%),
-    radial-gradient(ellipse at 95% 39%, rgba(117, 77, 44, 0.13), transparent 38%),
-    radial-gradient(ellipse at 19% 82%, rgba(125, 88, 49, 0.1), transparent 37%),
-    radial-gradient(ellipse at 79% 91%, rgba(255, 245, 218, 0.15), transparent 42%);
+    radial-gradient(ellipse at 50% 12%, rgba(255, 248, 225, 0.28), transparent 58%),
+    radial-gradient(ellipse at 3% 15%, rgba(112, 79, 45, 0.16), transparent 35%),
+    radial-gradient(ellipse at 97% 38%, rgba(117, 77, 44, 0.15), transparent 38%),
+    radial-gradient(ellipse at 15% 82%, rgba(125, 88, 49, 0.13), transparent 37%),
+    radial-gradient(ellipse at 85% 88%, rgba(255, 245, 218, 0.16), transparent 42%),
+    url("/brand/paper-tile.webp");
+  background-size: auto, auto, auto, auto, auto, 248px 318px;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+}
+
+/* Homepage sections below the hero: sit directly on the seamless cracked paper texture with ambient side lighting */
+.mk-section {
+  position: relative;
+  isolation: isolate;
+  color: var(--mk-ink);
+}
+
+.mk-section::before {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  content: "";
+  background-image:
+    radial-gradient(ellipse at 50% 50%, rgba(255, 248, 225, 0.18), transparent 65%),
+    radial-gradient(ellipse at 0% 50%, rgba(112, 79, 45, 0.12), transparent 38%),
+    radial-gradient(ellipse at 100% 50%, rgba(117, 77, 44, 0.1), transparent 38%);
+  pointer-events: none;
+}
+
+.mk-footer-paper {
+  position: relative;
+  isolation: isolate;
+}
+
+.mk-footer-paper p:first-of-type {
+  font-size: clamp(0.85rem, 0.75rem + 0.25vw, 1.05rem);
+}
+
+.mk-footer-paper p:last-of-type {
+  font-size: clamp(1.05rem, 0.85rem + 0.5vw, 1.5rem);
+}
+
+/* Larger, viewport-scaled type for the home sections so they match the hero's proportions. */
+.mk-section .mk-prose {
+  font-size: clamp(1.3rem, 0.85rem + 0.95vw, 2rem);
+  line-height: 1.65;
+}
+
+.mk-section .mk-chapter-eyebrow {
+  font-size: clamp(0.95rem, 0.8rem + 0.3vw, 1.2rem);
+}
+
+.mk-section .mk-label {
+  font-size: clamp(0.85rem, 0.75rem + 0.25vw, 1.05rem);
+}
+
+/* Botanical side frames: adapted per section, responsive across mobile and desktop */
+.mk-vines {
+  position: absolute;
+  z-index: -1;
+  display: none;
+  pointer-events: none;
+  max-width: none;
+  mix-blend-mode: multiply;
+}
+
+@media (max-width: 639px) {
+  .mk-vines {
+    width: clamp(40px, 9vw, 65px);
+    opacity: 0.65;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .mk-vines {
+    width: clamp(100px, 14vw, 200px);
+    opacity: 0.85;
+  }
+}
+
+@media (min-width: 1200px) {
+  .mk-vines {
+    display: block;
+    width: clamp(200px, 18vw, 320px);
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1600px) {
+  .mk-vines {
+    width: clamp(280px, 20vw, 440px);
+    opacity: 1;
+  }
+}
+
+/* Vision section vines: frame the text vertically across full height */
+.mk-vines-vision {
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mk-vines-vision.mk-vines-left {
+  left: 0;
+  clip-path: inset(0 35% 0 0);
+  object-position: left center;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.mk-vines-vision.mk-vines-right {
+  right: 0;
+  clip-path: inset(0 0 0 35%);
+  object-position: right center;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Chapters section vines: frame cards and curve into the bottom footer band */
+.mk-vines-chapters {
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mk-vines-chapters.mk-vines-left {
+  left: 0;
+  clip-path: inset(0 35% 0 0);
+  object-position: left bottom;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.mk-vines-chapters.mk-vines-right {
+  right: 0;
+  clip-path: inset(0 0 0 35%);
+  object-position: right bottom;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.mk-chapter-card {
+  position: relative;
+  border: 1px solid rgb(var(--tone-line) / 0.3);
+  background: rgb(var(--tone-surface) / 0.18);
+  box-shadow: inset 0 0 0 5px rgb(var(--tone-surface) / 0.12), inset 0 0 0 6px rgb(var(--tone-line) / 0.18);
+  transition: border-color 0.25s, background-color 0.25s;
+}
+
+.mk-chapter-card:hover {
+  border-color: rgb(var(--tone-line) / 0.65);
+  background: rgb(var(--tone-surface) / 0.3);
 }
 
 /* ---------- Shared tones: sections read colours from these, never hardcode them ---------- */
@@ -213,20 +369,7 @@
 }
 
 .mk-hero::after {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: clamp(60px, 7.5vw, 120px);
-  background: linear-gradient(
-    180deg,
-    rgba(205, 178, 142, 0) 0%,
-    rgba(205, 178, 142, 0.55) 55%,
-    var(--mk-paper-art) 100%
-  );
-  content: "";
-  pointer-events: none;
+  content: none;
 }
 
 .mk-hero-stage {
@@ -243,6 +386,8 @@
   inset: 0;
   display: block;
   pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
 }
 
 .mk-hero-art img {
