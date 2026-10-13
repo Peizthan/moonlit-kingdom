@@ -21,22 +21,29 @@
   --mk-font-small-caps: var(--font-small-caps), 'Cormorant SC', var(--font-display), Georgia, serif;
 }
 
+.mk-chapter-card:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 5px;
+}
+
+.mk-chapter-card .mk-card-description {
+  flex: 1;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--mk-paper-art);
+    background-color: var(--mk-paper);
     background-image:
-      radial-gradient(ellipse at 50% 12%, rgba(255, 248, 225, 0.28), transparent 58%),
-      radial-gradient(ellipse at 3% 15%, rgba(112, 79, 45, 0.16), transparent 35%),
-      radial-gradient(ellipse at 97% 38%, rgba(117, 77, 44, 0.15), transparent 38%),
-      radial-gradient(ellipse at 15% 82%, rgba(125, 88, 49, 0.13), transparent 37%),
-      radial-gradient(ellipse at 85% 88%, rgba(255, 245, 218, 0.16), transparent 42%),
+      linear-gradient(90deg, rgba(122, 84, 48, 0.16), transparent 16%, transparent 84%, rgba(122, 84, 48, 0.16)),
+      radial-gradient(ellipse at 50% 30%, rgba(255, 248, 225, 0.22), transparent 70%),
       url("/brand/paper-tile.webp");
-    background-size: auto, auto, auto, auto, auto, 248px 318px;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-size: auto, auto, 248px 318px;
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-attachment: fixed;
     color: var(--mk-ink);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -65,39 +72,17 @@
   }
 }
 
-/* Page-level paper: fixed to the viewport so long pages never show tiling seams. */
+/* The parchment texture and ambient lighting live only on <body>. Everything else stays transparent. */
 .mk-page,
 .paper-surface {
   color: var(--mk-ink);
-  background-color: var(--mk-paper-art);
-  background-image:
-    radial-gradient(ellipse at 50% 12%, rgba(255, 248, 225, 0.28), transparent 58%),
-    radial-gradient(ellipse at 3% 15%, rgba(112, 79, 45, 0.16), transparent 35%),
-    radial-gradient(ellipse at 97% 38%, rgba(117, 77, 44, 0.15), transparent 38%),
-    radial-gradient(ellipse at 15% 82%, rgba(125, 88, 49, 0.13), transparent 37%),
-    radial-gradient(ellipse at 85% 88%, rgba(255, 245, 218, 0.16), transparent 42%),
-    url("/brand/paper-tile.webp");
-  background-size: auto, auto, auto, auto, auto, 248px 318px;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
 }
 
-/* Homepage sections below the hero: sit directly on the seamless cracked paper texture with ambient side lighting */
+/* Homepage sections sit directly on the shared page paper. */
 .mk-section {
   position: relative;
   isolation: isolate;
   color: var(--mk-ink);
-}
-
-.mk-section::before {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  content: "";
-  background-image:
-    radial-gradient(ellipse at 50% 50%, rgba(255, 248, 225, 0.18), transparent 65%),
-    radial-gradient(ellipse at 0% 50%, rgba(112, 79, 45, 0.12), transparent 38%),
-    radial-gradient(ellipse at 100% 50%, rgba(117, 77, 44, 0.1), transparent 38%);
-  pointer-events: none;
 }
 
 .mk-footer-paper {
@@ -109,7 +94,7 @@
   font-size: clamp(0.85rem, 0.75rem + 0.25vw, 1.05rem);
 }
 
-.mk-footer-paper p:last-of-type {
+.mk-footer-location {
   font-size: clamp(1.05rem, 0.85rem + 0.5vw, 1.5rem);
 }
 
@@ -129,97 +114,59 @@
 
 /* Botanical side frames: adapted per section, responsive across mobile and desktop */
 .mk-vines {
+  --mk-vine-w: clamp(48px, 11vw, 80px);
   position: absolute;
   z-index: -1;
-  display: none;
+  display: block;
+  width: var(--mk-vine-w);
+  height: auto;
+  opacity: 0.6;
   pointer-events: none;
   max-width: none;
   mix-blend-mode: multiply;
 }
 
-@media (max-width: 639px) {
+/* Wide layouts: full side vines sit entirely inside the gutters beside the 64rem content column. */
+@media (min-width: 1280px) {
   .mk-vines {
-    width: clamp(40px, 9vw, 65px);
-    opacity: 0.65;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 1199px) {
-  .mk-vines {
-    width: clamp(100px, 14vw, 200px);
-    opacity: 0.85;
-  }
-}
-
-@media (min-width: 1200px) {
-  .mk-vines {
-    display: block;
-    width: clamp(200px, 18vw, 320px);
+    --mk-vine-w: clamp(96px, calc((100vw - 64rem) / 2 - 1rem), 320px);
     opacity: 1;
   }
 }
 
-@media (min-width: 1600px) {
-  .mk-vines {
-    width: clamp(280px, 20vw, 440px);
-    opacity: 1;
-  }
-}
-
-/* Vision section vines: frame the text vertically across full height */
+/* Compact and medium layouts: small corner ornaments that stay inside the section's reserved padding. */
 .mk-vines-vision {
   top: 0;
-  bottom: 0;
-  height: 100%;
-  object-fit: contain;
 }
 
-.mk-vines-vision.mk-vines-left {
-  left: 0;
-  clip-path: inset(0 35% 0 0);
-  object-position: left center;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
-.mk-vines-vision.mk-vines-right {
-  right: 0;
-  clip-path: inset(0 0 0 35%);
-  object-position: right center;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 6%, #000 94%, transparent 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-}
-
-/* Chapters section vines: frame cards and curve into the bottom footer band */
-.mk-vines-chapters {
-  top: 0;
-  bottom: 0;
-  height: 100%;
-  object-fit: contain;
-}
-
+.mk-vines-vision.mk-vines-left,
 .mk-vines-chapters.mk-vines-left {
-  left: 0;
-  clip-path: inset(0 35% 0 0);
-  object-position: left bottom;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(90deg, #000 0, #000 70%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+  left: 0.5rem;
 }
 
+.mk-vines-vision.mk-vines-right,
 .mk-vines-chapters.mk-vines-right {
-  right: 0;
-  clip-path: inset(0 0 0 35%);
-  object-position: right bottom;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
-  mask-image: linear-gradient(180deg, transparent 0, #000 8%, #000 100%), linear-gradient(270deg, #000 0, #000 70%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+  right: 0.5rem;
+}
+
+.mk-vines-chapters {
+  bottom: 0;
+}
+
+@media (min-width: 1280px) {
+  .mk-vines-vision {
+    top: 8%;
+  }
+
+  .mk-vines-vision.mk-vines-left,
+  .mk-vines-chapters.mk-vines-left {
+    left: max(0.5rem, calc((100vw - 64rem) / 2 - var(--mk-vine-w) - 0.5rem));
+  }
+
+  .mk-vines-vision.mk-vines-right,
+  .mk-vines-chapters.mk-vines-right {
+    right: max(0.5rem, calc((100vw - 64rem) / 2 - var(--mk-vine-w) - 0.5rem));
+  }
 }
 
 .mk-chapter-card {
@@ -228,6 +175,9 @@
   background: rgb(var(--tone-surface) / 0.18);
   box-shadow: inset 0 0 0 5px rgb(var(--tone-surface) / 0.12), inset 0 0 0 6px rgb(var(--tone-line) / 0.18);
   transition: border-color 0.25s, background-color 0.25s;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
 }
 
 .mk-chapter-card:hover {
@@ -246,7 +196,7 @@
   --tone-rule: rgba(73, 58, 41, 0.38);
   --tone-line: 73 58 41;
   --tone-surface: 255 248 225;
-  --tone-base: #E7D4B2;
+  --tone-base: #DEC59C;
   --tone-base-rgb: 222 197 156;
   --tone-focus: var(--mk-wisteria-dark);
   color: var(--tone-fg);
@@ -349,11 +299,11 @@
 .mk-footer-band {
   display: block;
   width: 100%;
-  height: clamp(56px, 9vw, 118px);
+  height: auto;
+  min-height: 56px;
+  max-height: 150px;
   object-fit: cover;
   object-position: center bottom;
-  -webkit-mask-image: linear-gradient(0deg, #000 45%, transparent 100%);
-  mask-image: linear-gradient(0deg, #000 45%, transparent 100%);
 }
 
 /* ---------- Homepage hero: live HTML over a decorative frame art ---------- */
@@ -363,8 +313,9 @@
   z-index: 10;
   display: flex;
   justify-content: center;
-  min-height: 100svh;
+  min-height: max(100svh, 52rem);
   overflow: hidden;
+  padding-top: 2.75rem;
   isolation: isolate;
 }
 
@@ -386,8 +337,6 @@
   inset: 0;
   display: block;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 82%, transparent 100%);
 }
 
 .mk-hero-art img {
@@ -398,16 +347,17 @@
   object-position: center top;
 }
 
+/* In normal flow so the stage grows with its content; padding clears the arch (31.2% of the art height, expressed in cqw). */
 .mk-hero-content {
-  position: absolute;
+  position: relative;
   z-index: 2;
-  top: 31.2%;
-  left: 50%;
   display: flex;
   width: 66cqw;
   flex-direction: column;
   align-items: center;
-  transform: translateX(-50%);
+  margin-inline: auto;
+  padding-top: 79cqw;
+  padding-bottom: 8rem;
   color: var(--mk-ink);
   font-family: var(--mk-font-display);
   text-align: center;
@@ -471,7 +421,8 @@
 }
 
 .mk-names span {
-  white-space: nowrap;
+  max-width: 100%;
+  text-wrap: balance;
 }
 
 .mk-ampersand {
@@ -577,12 +528,14 @@
 @media (min-width: 640px) {
   .mk-hero-stage {
     max-width: 1760px;
-    min-height: 1040px;
+    min-height: clamp(900px, 78vw, 1160px);
     aspect-ratio: auto;
   }
 
   .mk-hero-content {
     width: 56cqw;
+    padding-top: calc(0.36 * clamp(900px, 78vw, 1160px));
+    padding-bottom: 6rem;
   }
 
   .mk-eyebrow {
@@ -655,6 +608,8 @@
 
   .mk-hero-content {
     width: 38cqw;
+    padding-top: 24.5cqw;
+    padding-bottom: 0;
   }
 
   .mk-eyebrow {
@@ -728,7 +683,8 @@
 .mk-nav-public {
   border-bottom: 1px solid rgba(37, 28, 22, 0.35);
   color: var(--mk-ink);
-  background: rgba(222, 197, 156, 0.97);
+  background: rgba(217, 195, 158, 0.94);
+  backdrop-filter: blur(8px);
 }
 
 .mk-nav-public .mk-nav-wordmark,
@@ -743,7 +699,81 @@
 
 .mk-nav-public .mk-nav-menu {
   border-color: rgba(37, 28, 22, 0.25);
-  background-color: #DEC59C;
+  background-color: rgba(217, 195, 158, 0.98);
+}
+
+.mk-presentation-nav {
+  position: fixed;
+  z-index: 40;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  overflow-x: auto;
+  border-block: 1px solid rgb(var(--tone-line) / 0.18);
+  background: rgb(var(--tone-surface) / 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.mk-presentation-nav-list {
+  display: flex;
+  min-width: max-content;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.35rem 1rem;
+}
+
+.mk-presentation-nav-link {
+  min-height: 2.5rem;
+  padding: 0.65rem 0.8rem;
+  color: var(--tone-muted);
+  font-family: var(--mk-font-small-caps);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.mk-presentation-nav-link[aria-current="location"] {
+  color: var(--tone-accent);
+  font-weight: 600;
+}
+
+.mk-presentation-nav-link:focus-visible {
+  outline: 2px solid var(--tone-focus);
+  outline-offset: 2px;
+}
+
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+@media (min-width: 1024px) {
+  .mk-presentation-nav {
+    top: 50%;
+    left: auto;
+    right: 1.5rem;
+    bottom: auto;
+    width: 7rem;
+    overflow: visible;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+
+  .mk-presentation-nav-list {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+    padding: 0;
+  }
+
+  .mk-presentation-nav-link {
+    min-height: 2.75rem;
+    padding: 0.7rem 0.5rem;
+    text-align: right;
+  }
 }
 
 .mk-nav-night {

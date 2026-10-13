@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface Section {
   id: string;
@@ -16,60 +15,39 @@ export function PresentationNav({ sections }: PresentationNavProps) {
   const [activeId, setActiveId] = useState<string>(sections[0]?.id ?? '');
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: '-40% 0px -55% 0px' }
-    );
+    const updateActive = () => {
+      const threshold = 96;
+      const passed = sections
+        .map(({ id }) => document.getElementById(id))
+        .filter((element): element is HTMLElement => Boolean(element))
+        .filter((element) => element.getBoundingClientRect().top <= threshold);
 
-    sections.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+      setActiveId(passed.at(-1)?.id ?? sections[0]?.id ?? '');
+    };
 
-    return () => observer.disconnect();
+    updateActive();
+    window.addEventListener('scroll', updateActive, { passive: true });
+    window.addEventListener('resize', updateActive);
+    return () => {
+      window.removeEventListener('scroll', updateActive);
+      window.removeEventListener('resize', updateActive);
+    };
   }, [sections]);
 
   return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-3 no-print">
-      {sections.map((section) => (
-        <button
-          key={section.id}
-          onClick={() => {
-            const el = document.getElementById(section.id);
-            el?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="group flex items-center gap-2 justify-end"
-          aria-label={section.label}
-        >
-          <AnimatePresence>
-            {activeId === section.id && (
-              <motion.span
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 8 }}
-                className="text-xs uppercase tracking-widest"
-                style={{ color: 'var(--tone-accent)', fontSize: '0.6rem' }}
-              >
-                {section.label}
-              </motion.span>
-            )}
-          </AnimatePresence>
-          <div
-            className="transition-all duration-300 rounded-full"
-            style={{
-              width: activeId === section.id ? '8px' : '5px',
-              height: activeId === section.id ? '8px' : '5px',
-              background: activeId === section.id ? 'var(--tone-accent)' : 'rgb(var(--tone-line)/0.35)',
-            }}
-          />
-        </button>
-      ))}
-    </div>
+    <nav aria-label="Índice de capítulos" className="mk-presentation-nav no-print">
+      <div className="mk-presentation-nav-list">
+        {sections.map((section) => (
+          <a
+            key={section.id}
+            href={`#${section.id}`}
+            aria-current={activeId === section.id ? 'location' : undefined}
+            className="mk-presentation-nav-link group"
+          >
+            <span>{section.label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 }

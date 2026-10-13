@@ -15,12 +15,12 @@ export function Footer() {
         <p className="mk-display text-base font-medium sm:text-lg" style={{ color: 'var(--tone-soft)' }}>
           {couple.partner1} &amp; {couple.partner2}
         </p>
-        <p className="mk-label mt-1 text-[0.72rem] tracking-[0.24em] opacity-80 sm:text-xs" style={{ color: 'var(--tone-accent)' }}>
+        <p className="mk-footer-location mk-label mt-1 text-[0.72rem] tracking-[0.18em] opacity-80 sm:text-xs" style={{ color: 'var(--tone-accent)' }}>
           Una noche fuera del tiempo · Asunción, Paraguay
         </p>
       </div>
-      {/* Decorative vine band, cropped from the hero frame art. */}
-      <Image src="/brand/vine-band.webp" alt="" width={1127} height={118} sizes="100vw" className="mk-footer-band" />
+      {/* Decorative vine band cropped from the hero frame art; its paper fades to transparent so the page paper shows through. */}
+      <Image src="/brand/vine-band-blend.webp" alt="" width={1127} height={118} sizes="100vw" className="mk-footer-band" />
     </footer>
   );
 }

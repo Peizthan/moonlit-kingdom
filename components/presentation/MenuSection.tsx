@@ -18,9 +18,6 @@ export function MenuSection() {
     <section
       id="menu"
       className="relative py-32 px-6"
-      style={{
-        background: 'linear-gradient(160deg, var(--tone-base) 0%, var(--tone-base) 50%, var(--tone-base) 100%)',
-      }}
     >
       <div className="max-w-4xl mx-auto">
         <motion.p

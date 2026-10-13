@@ -18,7 +18,7 @@ const moodGroups = [
 export function VisionSection() {
   const shouldReduceMotion = useReducedMotion();
   const reveal = (y: number, delay = 0) => ({
-    initial: shouldReduceMotion ? false : { opacity: 0, y },
+    initial: false,
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
     transition: { duration: shouldReduceMotion ? 0 : 0.7, delay: shouldReduceMotion ? 0 : delay },
@@ -30,7 +30,7 @@ export function VisionSection() {
       className="relative overflow-hidden px-6 pb-24 pt-6 md:pb-32"
     >
       <div className="relative mx-auto max-w-6xl">
-        <ChapterHeading eyebrow="Capítulo uno" title="Visión y Estética" />
+        <ChapterHeading as="h2" eyebrow="Capítulo uno" title="Visión y Estética" />
         <div className="mb-12 md:mb-16" />
 
         <div className="grid gap-12 md:grid-cols-[0.85fr_1.15fr] md:gap-20">
@@ -89,12 +89,12 @@ export function VisionSection() {
           <OrnamentalDivider variant="star" />
 
           <div id="palette" className="mt-14 scroll-mt-24 sm:mt-16">
-            <motion.h3
+            <motion.h2
               {...reveal(8)}
               className="mk-chapter-title mb-12 text-center text-[clamp(1.7rem,4vw,2.5rem)]"
             >
               La Paleta de Colores
-            </motion.h3>
+            </motion.h2>
 
             <ColorGroup label="Primarios" colors={primaryColors} columns="grid-cols-2 sm:grid-cols-3 md:grid-cols-5" />
             <ColorGroup label="Acentos" colors={accentColors} columns="grid-cols-2 sm:grid-cols-4" />
@@ -138,7 +138,7 @@ function ColorSwatch({
 
   return (
     <motion.div
-      initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.5, delay: shouldReduceMotion ? 0 : delay }}

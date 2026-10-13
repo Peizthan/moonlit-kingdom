@@ -31,7 +31,7 @@ const venuePhotos = [
 export function VenueSection() {
   const shouldReduceMotion = useReducedMotion();
   const reveal = (y: number, delay = 0) => ({
-    initial: shouldReduceMotion ? false : { opacity: 0, y },
+    initial: false,
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true },
     transition: { duration: shouldReduceMotion ? 0 : 0.7, delay: shouldReduceMotion ? 0 : delay },
@@ -192,7 +192,7 @@ function VenuePhoto({
           />
         )}
       </div>
-      <figcaption className="mt-3 text-xs leading-relaxed" style={{ color: '#A7A19A' }}>
+      <figcaption className="mk-prose mt-3 text-sm leading-relaxed" style={{ fontSize: '1rem', color: 'var(--tone-muted)' }}>
         {photo.caption}
       </figcaption>
     </figure>

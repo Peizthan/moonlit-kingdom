@@ -23,8 +23,8 @@ export default function HomePage() {
           <div className="mk-hero-stage">
             {/* Decorative frame art. A <picture> serves one pre-optimized asset per breakpoint; the empty alt keeps it out of the accessibility tree. */}
             <picture className="mk-hero-art">
-              <source media="(min-width: 640px)" srcSet="/brand/hero-frame-desktop.webp" />
-              <img src="/brand/hero-frame-mobile.webp" alt="" fetchPriority="high" decoding="async" />
+              <source media="(min-width: 640px)" srcSet="/brand/hero-frame-desktop-blend.webp" />
+              <img src="/brand/hero-frame-mobile-blend.webp" alt="" fetchPriority="high" decoding="async" />
             </picture>
 
             <div className="mk-hero-content">
@@ -80,7 +80,7 @@ export default function HomePage() {
           <SideVines set="vision" />
           <div className="relative mx-auto max-w-5xl">
             <motion.p
-              initial={{ opacity: 0, y: 8 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
@@ -92,7 +92,7 @@ export default function HomePage() {
               {visionParagraphs.slice(0, 2).map((paragraph, index) => (
                 <motion.p
                   key={paragraph}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={false}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.08 }}
@@ -104,7 +104,7 @@ export default function HomePage() {
             </div>
 
             <motion.blockquote
-              initial={{ opacity: 0 }}
+              initial={false}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.65 }}
@@ -116,7 +116,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="mk-section mk-section-last overflow-hidden px-6 pb-12 pt-8 sm:pb-16 sm:pt-12">
+        <section className="mk-section mk-section-last overflow-hidden px-6 pb-24 pt-8 sm:pb-36 sm:pt-12 xl:pb-16">
           <SideVines set="chapters" />
           <CelestialOrnament className="mx-auto mb-10 h-3 w-40 sm:mb-14" style={{ color: 'var(--tone-accent)' }} />
           <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
@@ -146,7 +146,7 @@ function SideVines({ set }: { set: 'vision' | 'chapters' }) {
     <>
       {/* Decorative only: side frames cropped from the key visual. */}
       <img
-        src={`/brand/${set}-vines-left.webp?v=2`}
+        src={`/brand/${set}-vines-left-tapered.webp`}
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -154,7 +154,7 @@ function SideVines({ set }: { set: 'vision' | 'chapters' }) {
         className={`mk-vines mk-vines-${set} mk-vines-left`}
       />
       <img
-        src={`/brand/${set}-vines-right.webp?v=2`}
+        src={`/brand/${set}-vines-right-tapered.webp`}
         alt=""
         aria-hidden="true"
         loading="lazy"
@@ -185,10 +185,10 @@ function ChapterLink({
     >
       <span className="mk-label mb-3 block">{chapter}</span>
       <span className="mk-display mb-3 flex items-baseline justify-between gap-4 text-[clamp(2rem,3.4vw,3.25rem)] font-medium leading-tight" style={{ color: 'var(--tone-strong)' }}>
-        {title}
-        <span aria-hidden="true" className="text-base transition-transform group-hover:translate-x-1" style={{ color: 'var(--tone-accent)' }}>→</span>
+        <span>{title}</span>
+        <span aria-hidden="true" className="shrink-0 text-base transition-transform group-hover:translate-x-1" style={{ color: 'var(--tone-accent)' }}>→</span>
       </span>
-      <span className="mk-prose mb-5 block max-w-lg" style={{ fontSize: 'clamp(1.2rem, 0.9rem + 0.55vw, 1.55rem)', lineHeight: 1.55 }}>
+      <span className="mk-card-description mk-prose mb-5 block max-w-lg" style={{ fontSize: 'clamp(1.2rem, 0.9rem + 0.55vw, 1.55rem)', lineHeight: 1.55 }}>
         {description}
       </span>
       <span className="mk-label">{action}</span>
